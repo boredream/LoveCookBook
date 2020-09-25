@@ -78,7 +78,7 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
                 ),
                 Text(
                   "Today",
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
                 SizedBox(
                   height: 12.0,

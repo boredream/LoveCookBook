@@ -54,18 +54,18 @@ class _ProjectScreenState extends State<ProjectsScreen> {
                       CircularImage(
                         path: "assets/images/profile_image.jpg",
                         width: 50.0,
-                        height: 60.0,
+                        height: 50.0,
                       ),
                       SizedBox(
                         height: 24.0,
                       ),
                       Text("Hello, Jane.",
-                          style: Theme.of(context).textTheme.body1),
+                          style: Theme.of(context).textTheme.bodyText2),
                       SizedBox(
                         height: 16.0,
                       ),
                       Text("Looks like feel good.",
-                          style: Theme.of(context).textTheme.body2),
+                          style: Theme.of(context).textTheme.bodyText1),
                       StoreConnector<CategoryState, int>(
                         converter: (store) => store.state.categories.fold(
                             0,
@@ -108,7 +108,7 @@ class _ProjectScreenState extends State<ProjectsScreen> {
                               });
                             },
                             alignment: Alignment.topCenter,
-                            separatorProvider: (position, _) => Size.fromWidth(12.0),
+                            separatorProvider: (position, _) => Size.fromWidth(16.0),
                             sizeProvider: (position, _) => itemSize,
                             padding: EdgeInsets.only(
                                 left: horizontalPadding,

@@ -1,19 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_todo/data_provider.dart';
-import 'package:flutter_todo/model.dart';
 import 'package:flutter_todo/projects_screen.dart';
 import 'package:redux/redux.dart';
 
+import 'pages/DishPage.dart';
+import 'pages/HttpLoad.dart';
+import 'pages/MainPage.dart';
+import 'pages/TodoDetailPage.dart';
+
 void main() {
-  final store = Store<CategoryState>(stateReducer,
-      initialState: CategoryState([
-        Category(0, Icons.person, Colors.blue, "Personal", [
-          Task(0, "Task", false),
-        ]),
-        Category(1, Icons.content_paste, Colors.orange, "Work", []),
-      ]));
-  runApp(FlutterReduxApp(store: store));
+//  final store = Store<CategoryState>(stateReducer,
+//      initialState: CategoryState([
+//        Category(0, Icons.cake, Colors.blue, "吃吃吃", [
+//          Task(0, "Task", false),
+//        ]),
+//        Category(1, Icons.content_paste, Colors.orange, "Work", []),
+//      ]));
+//  runApp(FlutterReduxApp(store: store));
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => MainPage(),
+        "dish": (context) => DishPage(),
+        "todoDetail": (context) => TodoDetailPage(),
+        "http": (context) => SampleAppPage(),
+      },
+      onGenerateRoute: (RouteSettings settings) {
+        return MaterialPageRoute(builder: (context) {
+          String routeName = settings.name;
+          print('~~~~~~~~~~' + routeName);
+          return MainPage();
+        });
+      },
+    );
+  }
 }
 
 class FlutterReduxApp extends StatelessWidget {
