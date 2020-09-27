@@ -1,10 +1,9 @@
 class Todo {
-  Todo(this.name);
   bool done;
   String name;
   String desc;
   TodoType type;
-  List<String> images;
+  List<String> images = [];
   String todoDate;
   String doneDate;
 }

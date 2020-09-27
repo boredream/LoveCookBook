@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/entity/Dish.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -11,19 +12,25 @@ class TodoDetailPage extends StatefulWidget {
 class _PageState extends State<TodoDetailPage> {
   TextEditingController _editingController;
   Todo _todo;
+  int _imageSize;
+
   final _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
+
+    // FIXME 如果 _todo关联setState会引起build，则不能在initState里直接调用，因为initState在build方法之前。
+    // FIXME 获取参数又不能在build里调用，因为多次build会重新赋值arguments。加一个flag判断?
+
     _editingController = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
-    _todo = ModalRoute.of(context).settings.arguments;
-    if (_todo != null) {
-      _editingController.text = _todo.name ?? "";
+    if (_todo == null) {
+      _todo = ModalRoute.of(context).settings.arguments ?? Todo();
+      _editingController.text = _todo.name;
     }
 
     return Scaffold(
@@ -39,6 +46,7 @@ class _PageState extends State<TodoDetailPage> {
         padding: EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: _editingController,
@@ -54,6 +62,51 @@ class _PageState extends State<TodoDetailPage> {
               decoration: InputDecoration(
                 labelText: "描述",
               ),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            GestureDetector(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "预计完成日期：",
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                  Text(
+                    date2str(_todo.todoDate),
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ],
+              ),
+              onTap: () {
+                selectData();
+              },
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "实际完成日期：",
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                  Text(
+                    date2str(_todo.doneDate),
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ],
+              ),
+              onTap: () {
+                selectData();
+              },
+            ),
+            SizedBox(
+              height: 16,
             ),
             Expanded(
               child: getGridImage(),
@@ -83,25 +136,29 @@ class _PageState extends State<TodoDetailPage> {
   }
 
   Widget getGridImage() {
-    int size = 1;
-    if (_todo != null && _todo.images != null) {
-      size += _todo.images.length;
-    }
-
+    getImageSize();
     return GridView.builder(
         physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.all(8),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
           childAspectRatio: 1,
         ),
-        itemCount: size,
+        itemCount: _imageSize,
         itemBuilder: (context, index) {
-          if (index == size - 1) {
+          if (index == _todo.images.length) {
             return GestureDetector(
-              child: Icon(Icons.add_a_photo),
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                child: Container(
+                  color: Colors.grey,
+                  child: Icon(
+                    Icons.add_a_photo,
+                    size: 48,
+                  ),
+                ),
+              ),
               onTap: () {
                 selectImage();
               },
@@ -113,8 +170,15 @@ class _PageState extends State<TodoDetailPage> {
   }
 
   getRow(int index) {
-    String imageUrl = _todo.images[index];
-    Image.network(imageUrl);
+    if (index < _todo.images.length) {
+      String imageUrl = _todo.images[index];
+      print("get row " + index.toString() + " = " + imageUrl);
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(16)),
+      child: Image.file(File(_todo.images[index]), fit: BoxFit.cover),
+    );
   }
 
   Future selectImage() async {
@@ -124,9 +188,30 @@ class _PageState extends State<TodoDetailPage> {
     setState(() {
       if (pickedFile != null) {
         _todo.images.add(pickedFile.path);
+        _imageSize = _todo.images.length + 1;
       } else {
         print('No image selected.');
       }
     });
+  }
+
+  void getImageSize() {
+    _imageSize = _todo.images.length + 1;
+    if (_imageSize > 9) {
+      _imageSize = 9;
+    }
+  }
+
+  void selectData() async {
+    var result = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100));
+    print('$result');
+  }
+
+  String date2str(String date) {
+    return date ?? "未填写";
   }
 }
