@@ -1,11 +1,18 @@
-import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'Todo.g.dart';
 
 @JsonSerializable()
 class Todo {
+
+  static const TYPE_EAT = "eat";
+  static const TYPE_VIDEO = "video";
+  static const TYPE_TRAVEL = "travel";
+  static const TYPE_OTHER = "other";
+
   Todo({this.done = false});
   bool done;
+  String type;
   String name;
   String desc;
   List<String> images = [];
@@ -24,11 +31,4 @@ class Todo {
     }
     return super == other;
   }
-}
-
-enum TodoType {
-  EAT,
-  VIDEO,
-  TRAVEL,
-  OTHER,
 }

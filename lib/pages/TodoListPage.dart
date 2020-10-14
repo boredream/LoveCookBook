@@ -27,10 +27,10 @@ class _PageState extends State<TabTodoListPage> {
         ),
         body: TabBarView(
           children: [
-            TodoList(TodoType.EAT),
-            TodoList(TodoType.VIDEO),
-            TodoList(TodoType.TRAVEL),
-            TodoList(TodoType.OTHER),
+            TodoList(Todo.TYPE_EAT),
+            TodoList(Todo.TYPE_VIDEO),
+            TodoList(Todo.TYPE_TRAVEL),
+            TodoList(Todo.TYPE_OTHER),
           ],
         ),
       ),
@@ -45,20 +45,6 @@ class TodoList extends StatefulWidget {
 
   @override
   _TodoListState createState() => _TodoListState(type);
-}
-
-class TodoTypeInheritedWidget extends InheritedWidget {
-  final TodoType type;
-
-  TodoTypeInheritedWidget(this.type, {Key key, Widget child})
-      : super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(TodoTypeInheritedWidget old) => type != old.type;
-
-  static TodoTypeInheritedWidget of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TodoTypeInheritedWidget>();
-  }
 }
 
 class _TodoListState extends State<TodoList> {
@@ -86,17 +72,14 @@ class _TodoListState extends State<TodoList> {
 
   @override
   Widget build(BuildContext context) {
-    return TodoTypeInheritedWidget(
-      type,
-      child: Scaffold(
-        body: getBody(),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.pushNamed(context, "todoDetail")
-                .then((value) => loadData());
-          },
-        ),
+    return Scaffold(
+      body: getBody(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.pushNamed(context, "todoDetail", arguments: {"type": type})
+              .then((value) => loadData());
+        },
       ),
     );
   }
@@ -126,7 +109,7 @@ class _TodoListState extends State<TodoList> {
             setState(() {
               todo.done = !todo.done;
             });
-            _helper.saveDataList(_todoList);
+            _helper.saveDataList(type, _todoList);
           },
         ),
         Expanded(
@@ -134,7 +117,8 @@ class _TodoListState extends State<TodoList> {
             child: Text(todo.name),
             onTap: () {
               // FIXME 使用通知一类的方案刷新
-              Navigator.pushNamed(context, "todoDetail", arguments: todo)
+              Navigator.pushNamed(context, "todoDetail",
+                      arguments: {"type": type, "todo": todo})
                   .then((value) => loadData());
             },
           ),

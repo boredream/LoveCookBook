@@ -14,7 +14,8 @@ class DataHelper {
 
   saveData(Todo data) async {
     final prefs = await SharedPreferences.getInstance();
-    var todoListJson = prefs.getString(KEY_TODO_LIST) ?? "[]";
+    var key = KEY_TODO_LIST + "_" + data.type;
+    var todoListJson = prefs.getString(key) ?? "[]";
     List<Todo> todoList = List<Todo>.from(
         (json.decode(todoListJson) as List).map((i) => Todo.fromJson(i)));
     var index = -1;
@@ -31,12 +32,13 @@ class DataHelper {
     }
 
     todoListJson = json.encode(todoList);
-    prefs.setString(KEY_TODO_LIST, todoListJson);
+    prefs.setString(key, todoListJson);
   }
 
   void delete(Todo data) async {
     final prefs = await SharedPreferences.getInstance();
-    var todoListJson = prefs.getString(KEY_TODO_LIST) ?? "[]";
+    var key = KEY_TODO_LIST + "_" + data.type;
+    var todoListJson = prefs.getString(key) ?? "[]";
     List<Todo> todoList = List<Todo>.from(
         (json.decode(todoListJson) as List).map((i) => Todo.fromJson(i)));
     var index = -1;
@@ -49,22 +51,22 @@ class DataHelper {
     }
 
     todoListJson = json.encode(todoList);
-    prefs.setString(KEY_TODO_LIST, todoListJson);
+    prefs.setString(key, todoListJson);
   }
 
-  Future<List<Todo>> loadData(TodoType type) async {
+  Future<List<Todo>> loadData(String type) async {
     final prefs = await SharedPreferences.getInstance();
-    var key = KEY_TODO_LIST + "_" + type.toString();
-    print("loadData " + key);
+    var key = KEY_TODO_LIST + "_" + type;
     var todoListJson = prefs.getString(key) ?? "[]";
     List<Todo> todoList = List<Todo>.from(
         (json.decode(todoListJson) as List).map((i) => Todo.fromJson(i)));
     return todoList;
   }
 
-  void saveDataList(List<Todo> todoList) async {
+  void saveDataList(String type, List<Todo> todoList) async {
     final prefs = await SharedPreferences.getInstance();
     var todoListJson = json.encode(todoList);
-    prefs.setString(KEY_TODO_LIST, todoListJson);
+    var key = KEY_TODO_LIST + "_" + type;
+    prefs.setString(key, todoListJson);
   }
 }

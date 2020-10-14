@@ -9,6 +9,7 @@ part of 'Todo.dart';
 Todo _$TodoFromJson(Map<String, dynamic> json) {
   return Todo()
     ..done = json['done'] as bool
+    ..type = json['type'] as String
     ..name = json['name'] as String
     ..desc = json['desc'] as String
     ..images = (json['images'] as List)?.map((e) => e as String)?.toList()
@@ -19,6 +20,7 @@ Todo _$TodoFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$TodoToJson(Todo instance) => <String, dynamic>{
       'done': instance.done,
+      'type': instance.type,
       'name': instance.name,
       'desc': instance.desc,
       'images': instance.images,

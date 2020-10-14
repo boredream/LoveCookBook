@@ -39,14 +39,13 @@ class _PageState extends State<TodoDetailPage> {
   @override
   Widget build(BuildContext context) {
     if (_todo == null) {
-      _todo = ModalRoute.of(context).settings.arguments ?? Todo();
+      Map args = ModalRoute.of(context).settings.arguments as Map;
+      _todo = args["todo"] ?? Todo();
       _titleController.text = _todo.name;
       _descController.text = _todo.desc;
 
-      var type = TodoTypeInheritedWidget.of(context).type;
-      print("TodoTypeInheritedWidget = " + type.toString());
+      _todo.type = args["type"];
     }
-    print(json.encode(_todo));
 
     return Scaffold(
       appBar: AppBar(
