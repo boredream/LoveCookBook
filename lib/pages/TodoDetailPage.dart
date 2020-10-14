@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:flutter_todo/pages/TodoListPage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -13,11 +14,15 @@ class TodoDetailPage extends StatefulWidget {
 }
 
 class _PageState extends State<TodoDetailPage> {
+  static const DATE_TYPE_TODO = 1;
+  static const DATE_TYPE_DONE = 2;
+
   Todo _todo;
   int _imageSize;
   ImagePicker _picker = ImagePicker();
   DataHelper _helper = DataHelper();
   TextEditingController _titleController;
+  TextEditingController _descController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   @override
@@ -28,6 +33,7 @@ class _PageState extends State<TodoDetailPage> {
     // FIXME 获取参数又不能在build里调用，因为多次build会重新赋值arguments。加一个flag判断?
 
     _titleController = TextEditingController();
+    _descController = TextEditingController();
   }
 
   @override
@@ -35,7 +41,12 @@ class _PageState extends State<TodoDetailPage> {
     if (_todo == null) {
       _todo = ModalRoute.of(context).settings.arguments ?? Todo();
       _titleController.text = _todo.name;
+      _descController.text = _todo.desc;
+
+      var type = TodoTypeInheritedWidget.of(context).type;
+      print("TodoTypeInheritedWidget = " + type.toString());
     }
+    print(json.encode(_todo));
 
     return Scaffold(
       appBar: AppBar(
@@ -68,6 +79,7 @@ class _PageState extends State<TodoDetailPage> {
               },
             ),
             TextFormField(
+              controller: _descController,
               keyboardType: TextInputType.multiline,
               textAlignVertical: TextAlignVertical.top,
               minLines: 1,
@@ -97,7 +109,7 @@ class _PageState extends State<TodoDetailPage> {
                 ],
               ),
               onTap: () {
-                selectData(1);
+                selectData(DATE_TYPE_TODO);
               },
             ),
             SizedBox(
@@ -118,7 +130,7 @@ class _PageState extends State<TodoDetailPage> {
                 ],
               ),
               onTap: () {
-                selectData(2);
+                selectData(DATE_TYPE_DONE);
               },
             ),
             SizedBox(
@@ -131,11 +143,11 @@ class _PageState extends State<TodoDetailPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FlatButton(
-                  child: Text("删除任务"),
+                  child: Text("删除"),
                   onPressed: () => deleteTodo(),
                 ),
                 FlatButton(
-                  child: Text("确认修改"),
+                  child: Text(_todo.createDate == null ? "新增" : "修改"),
                   onPressed: () => updateTodo(),
                 ),
               ],
@@ -215,16 +227,39 @@ class _PageState extends State<TodoDetailPage> {
         lastDate: DateTime(2100));
     var format = DateFormat("yyyy-MM-dd").format(date);
     setState(() {
-      if (dateType == 1) {
+      if (dateType == DATE_TYPE_TODO) {
         _todo.todoDate = format;
-      } else if (dateType == 2) {
+      } else if (dateType == DATE_TYPE_DONE) {
         _todo.doneDate = format;
       }
     });
   }
 
   deleteTodo() {
-    _helper.clearAll();
+    showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("提示"),
+          content: Text("您确定要删除吗?"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("取消"),
+              onPressed: () => Navigator.pop(context), // 关闭对话框
+            ),
+            FlatButton(
+              child: Text("删除"),
+              onPressed: () {
+                //关闭对话框并返回true
+                _helper.delete(_todo);
+                Navigator.pop(context, true);
+                Navigator.pop(context, true);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   updateTodo() {

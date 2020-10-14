@@ -13,7 +13,7 @@ class _PageState extends State<TabTodoListPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: TabBar(
@@ -21,14 +21,16 @@ class _PageState extends State<TabTodoListPage> {
               Tab(text: "吃吃吃"),
               Tab(text: "看剧"),
               Tab(text: "出游"),
+              Tab(text: "其他"),
             ],
           ),
         ),
         body: TabBarView(
           children: [
-            TodoList(),
-            Icon(Icons.directions_transit),
-            Icon(Icons.directions_bike),
+            TodoList(TodoType.EAT),
+            TodoList(TodoType.VIDEO),
+            TodoList(TodoType.TRAVEL),
+            TodoList(TodoType.OTHER),
           ],
         ),
       ),
@@ -37,13 +39,32 @@ class _PageState extends State<TabTodoListPage> {
 }
 
 class TodoList extends StatefulWidget {
-  TodoList({Key key}) : super(key: key);
+  TodoList(this.type, {Key key}) : super(key: key);
+
+  final type;
 
   @override
-  _TodoListState createState() => _TodoListState();
+  _TodoListState createState() => _TodoListState(type);
+}
+
+class TodoTypeInheritedWidget extends InheritedWidget {
+  final TodoType type;
+
+  TodoTypeInheritedWidget(this.type, {Key key, Widget child})
+      : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(TodoTypeInheritedWidget old) => type != old.type;
+
+  static TodoTypeInheritedWidget of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<TodoTypeInheritedWidget>();
+  }
 }
 
 class _TodoListState extends State<TodoList> {
+  _TodoListState(this.type);
+
+  final type;
   bool _hasLoadData = false;
   List<Todo> _todoList = [];
   DataHelper _helper = DataHelper();
@@ -55,7 +76,7 @@ class _TodoListState extends State<TodoList> {
   }
 
   void loadData() {
-    _helper.loadData().then((value) {
+    _helper.loadData(type).then((value) {
       setState(() {
         _hasLoadData = true;
         _todoList = value;
@@ -65,14 +86,17 @@ class _TodoListState extends State<TodoList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: getBody(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.pushNamed(context, "todoDetail")
-              .then((value) => loadData());
-        },
+    return TodoTypeInheritedWidget(
+      type,
+      child: Scaffold(
+        body: getBody(),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.pushNamed(context, "todoDetail")
+                .then((value) => loadData());
+          },
+        ),
       ),
     );
   }
@@ -109,6 +133,7 @@ class _TodoListState extends State<TodoList> {
           child: GestureDetector(
             child: Text(todo.name),
             onTap: () {
+              // FIXME 使用通知一类的方案刷新
               Navigator.pushNamed(context, "todoDetail", arguments: todo)
                   .then((value) => loadData());
             },
