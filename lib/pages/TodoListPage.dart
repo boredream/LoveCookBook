@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TabTodoListPage extends StatefulWidget {
   TabTodoListPage({Key key}) : super(key: key);
@@ -58,7 +57,6 @@ class _TodoListState extends State<TodoList> {
   void loadData() {
     _helper.loadData().then((value) {
       setState(() {
-        print("load data done");
         _hasLoadData = true;
         _todoList = value;
       });
@@ -72,7 +70,8 @@ class _TodoListState extends State<TodoList> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.pushNamed(context, "todoDetail");
+          Navigator.pushNamed(context, "todoDetail")
+              .then((value) => loadData());
         },
       ),
     );
@@ -99,10 +98,21 @@ class _TodoListState extends State<TodoList> {
       children: [
         Checkbox(
           value: todo.done,
-          onChanged: (value) {},
+          onChanged: (value) {
+            setState(() {
+              todo.done = !todo.done;
+            });
+            _helper.saveDataList(_todoList);
+          },
         ),
         Expanded(
-          child: Text(todo.name),
+          child: GestureDetector(
+            child: Text(todo.name),
+            onTap: () {
+              Navigator.pushNamed(context, "todoDetail", arguments: todo)
+                  .then((value) => loadData());
+            },
+          ),
         ),
       ],
     );
