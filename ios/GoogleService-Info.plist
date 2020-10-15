@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>209100174390-q5nkuvpucrvrp2dfgsjfuvshv7bv5eop.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.209100174390-q5nkuvpucrvrp2dfgsjfuvshv7bv5eop</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>209100174390-mcft4hjnrr7ch0jmepmn0jdl96kj4pvv.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCMou7yBgyX9F75ymSh-EKQ5i-BtftWzo4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>209100174390</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.boredream.lovecookbook</string>
+	<key>PROJECT_ID</key>
+	<string>lovecookbook-4e652</string>
+	<key>STORAGE_BUCKET</key>
+	<string>lovecookbook-4e652.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:209100174390:ios:6691f8a7b6ed87db13d497</string>
+	<key>DATABASE_URL</key>
+	<string>https://lovecookbook-4e652.firebaseio.com</string>
+</dict>
+</plist>

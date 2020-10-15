@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 const KEY_TODO_LIST = "todo_list";
 
@@ -12,27 +13,13 @@ class DataHelper {
     prefs.clear();
   }
 
-  saveData(Todo data) async {
-    final prefs = await SharedPreferences.getInstance();
-    var key = KEY_TODO_LIST + "_" + data.type;
-    var todoListJson = prefs.getString(key) ?? "[]";
-    List<Todo> todoList = List<Todo>.from(
-        (json.decode(todoListJson) as List).map((i) => Todo.fromJson(i)));
-    var index = -1;
-    if(data.createDate != null) {
-      index = todoList.indexOf(data);
-    }
-    if(index == -1) {
-      // 新数据 or 找不到匹配的
-      data.createDate = DateTime.now().toString();
-      todoList.insert(0, data);
-    } else {
-      // 更新数据
-      todoList[index] = data;
-    }
-
-    todoListJson = json.encode(todoList);
-    prefs.setString(key, todoListJson);
+  saveData(Todo data) {
+    // Create a CollectionReference called users that references the firestore collection
+    FirebaseFirestore.instance.collection('list')
+        .doc(data.createDate)
+        .set(data.toJson())
+        .then((value) => print("Added"))
+        .catchError((error) => print("Failed to add : $error"));
   }
 
   void delete(Todo data) async {
