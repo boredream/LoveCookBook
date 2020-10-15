@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "209100174390",
+    "firebase_url": "https://lovecookbook-4e652.firebaseio.com",
+    "project_id": "lovecookbook-4e652",
+    "storage_bucket": "lovecookbook-4e652.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209100174390:android:281f99993eb0fb4d13d497",
+        "android_client_info": {
+          "package_name": "com.boredream.lovecookbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209100174390-mcft4hjnrr7ch0jmepmn0jdl96kj4pvv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.boredream.lovecookbook",
+            "certificate_hash": "a8431b43f0219f0a7ec6b6a3b94b4bb4a5034a36"
+          }
+        },
+        {
+          "client_id": "209100174390-ccmev7dj29n7ttbnnk3qugl41fdn76qu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk82iHJhTJZ2gGZMmICLxMuMl53utYmZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209100174390-ccmev7dj29n7ttbnnk3qugl41fdn76qu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
