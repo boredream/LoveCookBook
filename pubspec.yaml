@@ -16,8 +16,6 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.2
-  flutter_redux: ^0.5.2
-  snaplist: ^0.1.3
   http: ^0.12.2
   image_picker: 0.6.7+11
   shared_preferences: 0.5.12
