@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class TabTodoListPage extends StatefulWidget {
   TabTodoListPage({Key key}) : super(key: key);
@@ -64,11 +65,16 @@ class _TodoListState extends State<TodoList> {
 
   void loadData() {
     _helper.loadData(type).then((value) {
+      if(!this.mounted) return;
       setState(() {
         _hasLoadData = true;
-        _todoList = value;
+        _todoList = value.docs.map((doc) => Todo.fromJson(doc.data())).toList();
       });
-    });
+    }).catchError(loadDataError);
+  }
+
+  loadDataError(error) {
+    Fluttertoast.showToast(msg: "加载失败 " + error.toString());
   }
 
   @override

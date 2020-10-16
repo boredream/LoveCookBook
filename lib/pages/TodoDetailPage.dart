@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -16,6 +17,7 @@ class _PageState extends State<TodoDetailPage> {
   static const DATE_TYPE_DONE = 2;
 
   Todo _todo;
+  bool _isUpdate = false;
   int _imageSize;
   ImagePicker _picker = ImagePicker();
   DataHelper _helper = DataHelper();
@@ -38,7 +40,14 @@ class _PageState extends State<TodoDetailPage> {
   Widget build(BuildContext context) {
     if (_todo == null) {
       Map args = ModalRoute.of(context).settings.arguments as Map;
-      _todo = args["todo"] ?? Todo();
+      _todo = args["todo"];
+      if (_todo == null) {
+        // 新增
+        _todo = Todo();
+      } else {
+        // 修改
+        _isUpdate = true;
+      }
       _titleController.text = _todo.name;
       _descController.text = _todo.desc;
 
@@ -144,7 +153,7 @@ class _PageState extends State<TodoDetailPage> {
                   onPressed: () => deleteTodo(),
                 ),
                 FlatButton(
-                  child: Text(_todo.createDate == null ? "新增" : "修改"),
+                  child: Text(_isUpdate ? "修改" : "新增"),
                   onPressed: () => updateTodo(),
                 ),
               ],
@@ -248,7 +257,11 @@ class _PageState extends State<TodoDetailPage> {
               child: Text("删除"),
               onPressed: () {
                 //关闭对话框并返回true
-                _helper.delete(_todo);
+                _helper
+                    .delete(_todo)
+                    .then(updateSuccess("删除"))
+                    .catchError((error) => updateError(error));
+
                 Navigator.pop(context, true);
                 Navigator.pop(context, true);
               },
@@ -263,8 +276,22 @@ class _PageState extends State<TodoDetailPage> {
     if (_formKey.currentState.validate()) {
       // 验证通过提交数据
       _formKey.currentState.save();
-      _helper.saveData(_todo);
-      Navigator.pop(context, true);
+      _helper
+          .saveData(_todo)
+          .then((value) => updateSuccess(_isUpdate ? "修改" : "新增"))
+          .catchError((error) => updateError(error));
     }
+  }
+
+  updateSuccess(String operation) {
+    var msg = operation + "成功";
+    Fluttertoast.showToast(msg: msg);
+    Navigator.pop(context, true);
+  }
+
+  updateError(error) {
+    var msg = "操作失败 " + error.toString();
+    Fluttertoast.showToast(msg: msg);
+    print(msg);
   }
 }

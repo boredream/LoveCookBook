@@ -8,46 +8,30 @@ const KEY_TODO_LIST = "todo_list";
 
 class DataHelper {
 
-  clearAll() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-  }
-
-  saveData(Todo data) {
-    // Create a CollectionReference called users that references the firestore collection
-    FirebaseFirestore.instance.collection('list')
+  Future<void> saveData(Todo data) {
+    if(data.createDate == null) {
+      // 新增，创建个日期
+      data.createDate = DateTime.now().toString();
+    }
+    return FirebaseFirestore.instance
+        .collection("list")
         .doc(data.createDate)
-        .set(data.toJson())
-        .then((value) => print("Added"))
-        .catchError((error) => print("Failed to add : $error"));
+        .set(data.toJson());
   }
 
-  void delete(Todo data) async {
-    final prefs = await SharedPreferences.getInstance();
-    var key = KEY_TODO_LIST + "_" + data.type;
-    var todoListJson = prefs.getString(key) ?? "[]";
-    List<Todo> todoList = List<Todo>.from(
-        (json.decode(todoListJson) as List).map((i) => Todo.fromJson(i)));
-    var index = -1;
-    if(data.createDate != null) {
-      index = todoList.indexOf(data);
-    }
-    if(index != -1) {
-      // 新数据 or 找不到匹配的不用管。匹配的直接删除
-      todoList.removeAt(index);
-    }
-
-    todoListJson = json.encode(todoList);
-    prefs.setString(key, todoListJson);
+  Future<QuerySnapshot> loadData(String type) {
+    // TODO 分页
+    return FirebaseFirestore.instance
+        .collection("list")
+        .where("type", isEqualTo: type)
+        .get();
   }
 
-  Future<List<Todo>> loadData(String type) async {
-    final prefs = await SharedPreferences.getInstance();
-    var key = KEY_TODO_LIST + "_" + type;
-    var todoListJson = prefs.getString(key) ?? "[]";
-    List<Todo> todoList = List<Todo>.from(
-        (json.decode(todoListJson) as List).map((i) => Todo.fromJson(i)));
-    return todoList;
+  Future<void> delete(Todo data) async {
+    return FirebaseFirestore.instance
+        .collection("list")
+        .doc(data.createDate)
+        .delete();
   }
 
   void saveDataList(String type, List<Todo> todoList) async {
