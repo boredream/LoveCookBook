@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +9,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 const KEY_TODO_LIST = "todo_list";
 
 class DataHelper {
+
+  Future<void> uploadFile(String filePath) async {
+    File file = File(filePath);
+    return FirebaseStorage.instance
+        .ref('uploads/file-to-upload.png')
+        .putFile(file);
+  }
 
   Future<void> saveData(Todo data) {
     if(data.createDate == null) {
