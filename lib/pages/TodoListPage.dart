@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
@@ -65,10 +65,17 @@ class _TodoListState extends State<TodoList> {
 
   void loadData() {
     _helper.loadData(type).then((value) {
-      if(!this.mounted) return;
+      if (!this.mounted) return;
+      if (value.code != null) {
+        loadDataError(value.message);
+        return;
+      }
+
       setState(() {
         _hasLoadData = true;
-        _todoList = value.docs.map((doc) => Todo.fromJson(doc.data())).toList();
+        _todoList = (value.data as List)
+            .map((e) => Todo.fromJson(new Map<String, dynamic>.from(e)))
+            .toList();
       });
     }).catchError(loadDataError);
   }
@@ -111,12 +118,13 @@ class _TodoListState extends State<TodoList> {
     return Row(
       children: [
         Checkbox(
-          value: todo.done,
+          value: todo.done ?? false,
           onChanged: (value) {
             setState(() {
               todo.done = !todo.done;
             });
-            _helper.saveDataList(type, _todoList);
+            // fixme
+            // _helper.saveDataList(type, _todoList);
           },
         ),
         Expanded(
