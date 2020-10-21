@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cloudbase_storage/cloudbase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/entity/ImageBean.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
@@ -20,7 +22,7 @@ class _PageState extends State<TodoDetailPage> {
 
   Todo _todo;
   bool _isUpdate = false;
-  var _images = [];
+  List<ImageBean> _images = [];
   ImagePicker _picker = ImagePicker();
   TextEditingController _titleController;
   TextEditingController _descController;
@@ -37,9 +39,7 @@ class _PageState extends State<TodoDetailPage> {
     _titleController = TextEditingController();
     _descController = TextEditingController();
     _dialog = ProgressDialog(context);
-    _dialog.style(
-      message: "请等待..."
-    );
+    _dialog.style(message: "请等待...");
   }
 
   @override
@@ -53,7 +53,9 @@ class _PageState extends State<TodoDetailPage> {
       } else {
         // 修改
         _isUpdate = true;
-        _images.addAll(_todo.images);
+        for (String url in _todo.images) {
+          _images.add(ImageBean(url: url));
+        }
       }
       _titleController.text = _todo.name;
       _descController.text = _todo.desc;
@@ -218,8 +220,10 @@ class _PageState extends State<TodoDetailPage> {
 
   getRow(int index) {
     return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(16)),
-      child: Image.file(File(_images[index]), fit: BoxFit.cover),
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+        child: _images[index].path != null
+            ? Image.file(File(_images[index].path), fit: BoxFit.cover)
+            : Image.network(_images[index].url, fit: BoxFit.cover)
     );
   }
 
@@ -234,7 +238,7 @@ class _PageState extends State<TodoDetailPage> {
     String sourcePath = pickedFile.path;
     setState(() {
       // 添加本地路径
-      _images.add(sourcePath);
+      _images.add(ImageBean(path: sourcePath));
     });
 
 //    // 创建临时文件
@@ -322,6 +326,40 @@ class _PageState extends State<TodoDetailPage> {
       _formKey.currentState.save();
 
       _dialog.show();
+
+      // 校验图片，上传未上传的
+      try {
+        for (int i = 0; i < _images.length; i++) {
+          if (_images[i].url == null) {
+            // 本地图片，上传之
+            String sourcePath = _images[i].path;
+            String filename = sourcePath.substring(
+                sourcePath.lastIndexOf("/") + 1);
+            String cloudPath = 'flutter/' + filename;
+
+            CloudBaseStorageRes<UploadRes> res =
+                await ImageHelper.uploadFile(sourcePath, cloudPath);
+            // 上传成功，替换地址
+            // field : cloud://lovecookbook-7gjn846l3db07924.6c6f-lovecookbook-7gjn846l3db07924-1253175673/flutter/image_picker_297004EB-44C4-4355-82AD-FFDA4553F8F4-28546-00000F1C08B97C8F.jpg
+            // url: https://6c6f-lovecookbook-7gjn846l3db07924-1253175673.tcb.qcloud.la/flutter/image_picker_297004EB-44C4-4355-82AD-FFDA4553F8F4-28546-00000F1C08B97C8F.jpg
+            _images[i].url = res.data.fileId.replaceFirst(
+                "cloud://lovecookbook-7gjn846l3db07924.6c6f-lovecookbook-7gjn846l3db07924-1253175673",
+                "https://6c6f-lovecookbook-7gjn846l3db07924-1253175673.tcb.qcloud.la");
+            print("image upload success = " + _images[i].url);
+          }
+        }
+      } catch (e) {
+        Fluttertoast.showToast(msg: "图片上传失败");
+        return;
+      }
+
+      // 图片设置到bean上
+      _todo.images.clear();
+      for (int i = 0; i < _images.length; i++) {
+        _todo.images.add(_images[i].url);
+      }
+
+      // 新增or更新
       if (_isUpdate) {
         DataHelper.updateData(_todo)
             .then((value) => requestSuccess("修改"))

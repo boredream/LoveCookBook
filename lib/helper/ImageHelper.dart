@@ -24,7 +24,7 @@ class ImageHelper {
   }
 
 
-  static Future<dynamic> uploadFile(String filePath, String cloudPath, void onProcess(int count, int total)) async {
+  static Future<dynamic> uploadFile(String filePath, String cloudPath, {void onProcess(int count, int total)}) async {
     return CloudBaseHelper.getStorage().uploadFile(
         cloudPath: cloudPath,
         filePath: filePath,
