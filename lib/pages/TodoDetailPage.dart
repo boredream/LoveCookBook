@@ -257,13 +257,11 @@ class _PageState extends State<TodoDetailPage> {
               child: Text("删除"),
               onPressed: () {
                 //关闭对话框并返回true
+                Navigator.pop(context, true);
                 _helper
                     .delete(_todo)
-                    .then(updateSuccess("删除"))
-                    .catchError((error) => updateError(error));
-
-                Navigator.pop(context, true);
-                Navigator.pop(context, true);
+                    .then((value) => requestSuccess("删除"))
+                    .catchError((error) => requestError(error));
               },
             ),
           ],
@@ -279,18 +277,18 @@ class _PageState extends State<TodoDetailPage> {
 
       _helper
           .saveData(_todo)
-          .then((value) => updateSuccess(_isUpdate ? "修改" : "新增"))
-          .catchError((error) => updateError(error));
+          .then((value) => requestSuccess(_isUpdate ? "修改" : "新增"))
+          .catchError((error) => requestError(error));
     }
   }
 
-  updateSuccess(String operation) {
+  requestSuccess(String operation) {
     var msg = operation + "成功";
     Fluttertoast.showToast(msg: msg);
     Navigator.pop(context, true);
   }
 
-  updateError(error) {
+  requestError(error) {
     var msg = "操作失败 " + error.toString();
     Fluttertoast.showToast(msg: msg);
     print(msg);

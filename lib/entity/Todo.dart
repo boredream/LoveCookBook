@@ -11,14 +11,18 @@ class Todo {
   static const TYPE_OTHER = "other";
 
   Todo({this.done = false});
+  String _id;
   bool done;
   String type;
   String name;
   String desc;
   List<String> images = [];
-  String createDate;
   String todoDate;
   String doneDate;
+
+  String getId() {
+    return _id;
+  }
 
   factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
   Map<String, dynamic> toJson() => _$TodoToJson(this);
@@ -27,7 +31,7 @@ class Todo {
   bool operator ==(Object other) {
     if(other is Todo) {
       Todo o = other;
-      return createDate == o.createDate;
+      return _id == o._id;
     }
     return super == other;
   }

@@ -63,15 +63,15 @@ class _PageState extends State<MainPage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            title: Text('List'),
+            label: 'List',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            title: Text('纪念日'),
+            label: '纪念日',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.flag),
-            title: Text('里程碑'),
+            label: '里程碑',
           ),
         ],
         currentIndex: _selectedIndex,
