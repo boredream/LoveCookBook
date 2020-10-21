@@ -210,6 +210,9 @@ class _PageState extends State<TodoDetailPage> {
 
   Future selectImage() async {
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+    _helper.uploadFile(pickedFile.path, (count, total) {
+        print("$count / $total");
+    });
     setState(() {
       if (pickedFile != null) {
         _todo.images.add(pickedFile.path);
@@ -277,12 +280,10 @@ class _PageState extends State<TodoDetailPage> {
 
       if (_isUpdate) {
         _helper.updateData(_todo).then((value) {
-          print(value);
           requestSuccess("修改");
         }).catchError((error) => requestError(error));
       } else {
         _helper.saveData(_todo).then((value) {
-          print(value);
           requestSuccess("新增");
         }).catchError((error) => requestError(error));
       }
@@ -298,6 +299,5 @@ class _PageState extends State<TodoDetailPage> {
   requestError(error) {
     var msg = "操作失败 " + error.toString();
     Fluttertoast.showToast(msg: msg);
-    print(msg);
   }
 }

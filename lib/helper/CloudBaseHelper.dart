@@ -3,11 +3,13 @@
 import 'package:cloudbase_auth/cloudbase_auth.dart';
 import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:cloudbase_database/cloudbase_database.dart';
+import 'package:cloudbase_storage/cloudbase_storage.dart';
 
 class CloudBaseHelper {
 
   static CloudBaseCore core;
   static CloudBaseDatabase db;
+  static CloudBaseStorage storage;
 
   static CloudBaseCore init() {
     if(core == null) {
@@ -34,6 +36,14 @@ class CloudBaseHelper {
       db = CloudBaseDatabase(core);
     }
     return db;
+  }
+
+  static CloudBaseStorage getStorage() {
+    CloudBaseCore core = init();
+    if(storage == null) {
+      storage = CloudBaseStorage(core);
+    }
+    return storage;
   }
 
   static Future<CloudBaseAuthState> login() async {
