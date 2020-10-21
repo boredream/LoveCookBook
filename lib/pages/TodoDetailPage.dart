@@ -7,7 +7,7 @@ import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:progress_dialog/progress_dialog.dart';
 
 class TodoDetailPage extends StatefulWidget {
   @override
@@ -20,11 +20,12 @@ class _PageState extends State<TodoDetailPage> {
 
   Todo _todo;
   bool _isUpdate = false;
-  int _imageSize;
+  var _images = [];
   ImagePicker _picker = ImagePicker();
   TextEditingController _titleController;
   TextEditingController _descController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  ProgressDialog _dialog;
 
   @override
   void initState() {
@@ -35,6 +36,10 @@ class _PageState extends State<TodoDetailPage> {
 
     _titleController = TextEditingController();
     _descController = TextEditingController();
+    _dialog = ProgressDialog(context);
+    _dialog.style(
+      message: "请等待..."
+    );
   }
 
   @override
@@ -48,6 +53,7 @@ class _PageState extends State<TodoDetailPage> {
       } else {
         // 修改
         _isUpdate = true;
+        _images.addAll(_todo.images);
       }
       _titleController.text = _todo.name;
       _descController.text = _todo.desc;
@@ -64,113 +70,121 @@ class _PageState extends State<TodoDetailPage> {
   }
 
   getBody() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: Form(
-        key: _formKey,
-        autovalidate: true,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      children: [
+        Expanded(
+            child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          padding: EdgeInsets.all(16),
+          child: getForm(),
+        )),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            TextFormField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: "标题",
-              ),
-              validator: (value) {
-                return value.trim().length > 0 ? null : "标题不能为空";
-              },
-              onSaved: (newValue) {
-                _todo.name = newValue;
-              },
+            FlatButton(
+              child: Text("删除"),
+              onPressed: () => deleteTodo(),
             ),
-            TextFormField(
-              controller: _descController,
-              keyboardType: TextInputType.multiline,
-              textAlignVertical: TextAlignVertical.top,
-              minLines: 1,
-              maxLines: 10,
-              decoration: InputDecoration(
-                labelText: "描述",
-              ),
-              onSaved: (newValue) {
-                _todo.desc = newValue;
-              },
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            GestureDetector(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "预计完成日期：",
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  Text(
-                    _todo.todoDate ?? "未填写",
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                ],
-              ),
-              onTap: () {
-                selectData(DATE_TYPE_TODO);
-              },
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            GestureDetector(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "实际完成日期：",
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  Text(
-                    _todo.doneDate ?? "未填写",
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                ],
-              ),
-              onTap: () {
-                selectData(DATE_TYPE_DONE);
-              },
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Expanded(
-              child: getGridImage(),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FlatButton(
-                  child: Text("删除"),
-                  onPressed: () => deleteTodo(),
-                ),
-                FlatButton(
-                  child: Text(_isUpdate ? "修改" : "新增"),
-                  onPressed: () => updateTodo(),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 16,
+            FlatButton(
+              child: Text(_isUpdate ? "修改" : "新增"),
+              onPressed: () => updateTodo(),
             ),
           ],
         ),
+        SizedBox(
+          height: 16,
+        ),
+      ],
+    );
+  }
+
+  getForm() {
+    return Form(
+      key: _formKey,
+      autovalidate: true,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFormField(
+            controller: _titleController,
+            decoration: InputDecoration(
+              labelText: "标题",
+            ),
+            validator: (value) {
+              return value.trim().length > 0 ? null : "标题不能为空";
+            },
+            onSaved: (newValue) {
+              _todo.name = newValue;
+            },
+          ),
+          TextFormField(
+            controller: _descController,
+            keyboardType: TextInputType.multiline,
+            textAlignVertical: TextAlignVertical.top,
+            minLines: 1,
+            maxLines: 10,
+            decoration: InputDecoration(
+              labelText: "描述",
+            ),
+            onSaved: (newValue) {
+              _todo.desc = newValue;
+            },
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          GestureDetector(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "预计完成日期：",
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+                Text(
+                  _todo.todoDate ?? "未填写",
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ],
+            ),
+            onTap: () {
+              selectData(DATE_TYPE_TODO);
+            },
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          GestureDetector(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "实际完成日期：",
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+                Text(
+                  _todo.doneDate ?? "未填写",
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ],
+            ),
+            onTap: () {
+              selectData(DATE_TYPE_DONE);
+            },
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          getGridImage(),
+        ],
       ),
     );
   }
 
-  Widget getGridImage() {
-    getImageSize();
+  GridView getGridImage() {
     return GridView.builder(
+        shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
@@ -178,9 +192,9 @@ class _PageState extends State<TodoDetailPage> {
           crossAxisSpacing: 8,
           childAspectRatio: 1,
         ),
-        itemCount: _imageSize,
+        itemCount: getImageSize(),
         itemBuilder: (context, index) {
-          if (index == _todo.images.length) {
+          if (index == _images.length) {
             return GestureDetector(
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -205,44 +219,57 @@ class _PageState extends State<TodoDetailPage> {
   getRow(int index) {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(16)),
-      child: Image.file(File(_todo.images[index]), fit: BoxFit.cover),
+      child: Image.file(File(_images[index]), fit: BoxFit.cover),
     );
   }
 
-  Future selectImage() async {
+  selectImage() async {
     // 选择图片
-    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await _picker.getImage(
+      source: ImageSource.gallery,
+      imageQuality: 10,
+    );
+    if (pickedFile == null) return;
+
     String sourcePath = pickedFile.path;
-
     setState(() {
-      if (pickedFile != null) {
-        _todo.images.add(sourcePath);
-        _imageSize = _todo.images.length + 1;
-      }
+      // 添加本地路径
+      _images.add(sourcePath);
     });
 
-    // 创建临时文件
-    String filename = sourcePath.substring(sourcePath.lastIndexOf("/") + 1);
-    final dir = await path_provider.getTemporaryDirectory();
-    String targetPath = dir.path + "/" + filename;
+//    // 创建临时文件
+//    String filename = sourcePath.substring(sourcePath.lastIndexOf("/") + 1);
+//    final dir = await path_provider.getTemporaryDirectory();
+//    String targetPath = dir.path + "/" + filename;
+//
+//    // 压缩图片到临时文件
+//    File file = await ImageHelper.compressAndGetFile(sourcePath, targetPath);
+//
+//    // 上传压缩后的图片文件
+//    ImageHelper.uploadFile(file, (count, total) {
+//      print("$count / $total");
+//    }).then((value) {
+//      print("upload = " + value.runtimeType.toString());
+//      print("upload = " + value.data.fileId);
+//    });
 
-    // 压缩图片到临时文件
-    File file = await ImageHelper.compressAndGetFile(sourcePath, targetPath);
-
-    // 上传压缩后的临时图片文件
-    ImageHelper.uploadFile(file.path, (count, total) {
-      print("$count / $total");
-    }).then((value) {
-      print("upload = " + value.runtimeType.toString());
-      print("upload = " + value.data.fileId);
-    });
+//    // 上传图片文件
+//    String filename = sourcePath.substring(sourcePath.lastIndexOf("/") + 1);
+//    String cloudPath = 'flutter/' + filename;
+//    ImageHelper.uploadFile(sourcePath, cloudPath, (count, total) {
+//      print("$count / $total");
+//    }).then((value) {
+//      print("upload = " + value.runtimeType.toString());
+//      print("upload = " + value.data.fileId);
+//    });
   }
 
-  void getImageSize() {
-    _imageSize = _todo.images.length + 1;
-    if (_imageSize > 9) {
-      _imageSize = 9;
+  int getImageSize() {
+    int size = _images.length + 1;
+    if (size > 9) {
+      size = 9;
     }
+    return size;
   }
 
   selectData(int dateType) async {
@@ -289,19 +316,22 @@ class _PageState extends State<TodoDetailPage> {
     );
   }
 
-  updateTodo() {
+  updateTodo() async {
     if (_formKey.currentState.validate()) {
       // 验证通过提交数据
       _formKey.currentState.save();
 
+      _dialog.show();
       if (_isUpdate) {
-        DataHelper.updateData(_todo).then((value) {
-          requestSuccess("修改");
-        }).catchError((error) => requestError(error));
+        DataHelper.updateData(_todo)
+            .then((value) => requestSuccess("修改"))
+            .catchError((error) => requestError(error))
+            .whenComplete(() => _dialog.hide());
       } else {
-        DataHelper.saveData(_todo).then((value) {
-          requestSuccess("新增");
-        }).catchError((error) => requestError(error));
+        DataHelper.saveData(_todo)
+            .then((value) => requestSuccess("新增"))
+            .catchError((error) => requestError(error))
+            .whenComplete(() => _dialog.hide());
       }
     }
   }

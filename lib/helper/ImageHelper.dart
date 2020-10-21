@@ -24,10 +24,9 @@ class ImageHelper {
   }
 
 
-  static Future<dynamic> uploadFile(String filePath, void onProcess(int count, int total)) async {
-    String filename = filePath.substring(filePath.lastIndexOf("/") + 1);
+  static Future<dynamic> uploadFile(String filePath, String cloudPath, void onProcess(int count, int total)) async {
     return CloudBaseHelper.getStorage().uploadFile(
-        cloudPath: 'flutter/' + filename,
+        cloudPath: cloudPath,
         filePath: filePath,
         onProcess: onProcess);
   }
