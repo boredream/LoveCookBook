@@ -12,28 +12,44 @@ class DataHelper {
 //        .putFile(file);
 //  }
 
-  Future saveData(Todo data) {
-    Collection collection = CloudBaseHelper.getDb().collection("list");
-    if(data.getId() == null) {
-      return collection.add(data.toJson());
-    } else {
-      print(data.toJson());
-      return collection.doc(data.getId()).update(data.toJson());
+  Future<DbCreateResponse> saveData(Todo data) async {
+    DbCreateResponse response = await CloudBaseHelper.getDb()
+        .collection("list").add(data.toJson());
+    if (response.code != null) {
+      throw Exception(response.message);
     }
+    return response;
   }
 
-  Future<DbQueryResponse> loadData(String type) {
-    // TODO 分页
-    return CloudBaseHelper.getDb()
-        .collection("list")
-        // .where({"type": type})
-        .get();
+  Future<DbUpdateResponse> updateData(Todo data) async {
+    String id = data.getId();
+    Map<String, dynamic> newData = data.toJson();
+    // 更新的时候不能带 _id
+    newData.remove("_id");
+
+    DbUpdateResponse response = await CloudBaseHelper.getDb()
+        .collection("list").doc(id).set(newData);
+    if (response.code != null) {
+      throw Exception(response.message);
+    }
+    return response;
+  }
+
+  Future<DbQueryResponse> loadData(String type) async {
+    DbQueryResponse response = await CloudBaseHelper.getDb()
+        .collection("list").get();
+    if (response.code != null) {
+      throw Exception(response.message);
+    }
+    return response;
   }
 
   Future<DbRemoveResponse> delete(Todo data) async {
-    return CloudBaseHelper.getDb()
-        .collection("list")
-        .doc(data.getId())
-        .remove();
+    DbRemoveResponse response = await CloudBaseHelper.getDb()
+        .collection("list").doc(data.getId()).remove();
+    if (response.code != null) {
+      throw Exception(response.message);
+    }
+    return response;
   }
 }

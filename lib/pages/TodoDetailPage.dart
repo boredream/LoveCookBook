@@ -275,10 +275,17 @@ class _PageState extends State<TodoDetailPage> {
       // 验证通过提交数据
       _formKey.currentState.save();
 
-      _helper
-          .saveData(_todo)
-          .then((value) => requestSuccess(_isUpdate ? "修改" : "新增"))
-          .catchError((error) => requestError(error));
+      if (_isUpdate) {
+        _helper.updateData(_todo).then((value) {
+          print(value);
+          requestSuccess("修改");
+        }).catchError((error) => requestError(error));
+      } else {
+        _helper.saveData(_todo).then((value) {
+          print(value);
+          requestSuccess("新增");
+        }).catchError((error) => requestError(error));
+      }
     }
   }
 

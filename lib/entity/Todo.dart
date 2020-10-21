@@ -24,6 +24,10 @@ class Todo {
     return _id;
   }
 
+  setId(String id) {
+    _id = id;
+  }
+
   factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
   Map<String, dynamic> toJson() => _$TodoToJson(this);
 
