@@ -55,7 +55,6 @@ class _TodoListState extends State<TodoList> {
   final type;
   bool _hasLoadData = false;
   List<Todo> _todoList = [];
-  DataHelper _helper = DataHelper();
 
   @override
   void initState() {
@@ -64,7 +63,7 @@ class _TodoListState extends State<TodoList> {
   }
 
   void loadData() {
-    _helper.loadData(type).then((value) {
+    DataHelper.loadData(type).then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
         loadDataError(value.message);

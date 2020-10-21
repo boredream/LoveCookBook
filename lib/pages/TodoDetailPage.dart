@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 class TodoDetailPage extends StatefulWidget {
   @override
@@ -20,7 +22,6 @@ class _PageState extends State<TodoDetailPage> {
   bool _isUpdate = false;
   int _imageSize;
   ImagePicker _picker = ImagePicker();
-  DataHelper _helper = DataHelper();
   TextEditingController _titleController;
   TextEditingController _descController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
@@ -209,15 +210,31 @@ class _PageState extends State<TodoDetailPage> {
   }
 
   Future selectImage() async {
+    // 选择图片
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
-    _helper.uploadFile(pickedFile.path, (count, total) {
-        print("$count / $total");
-    });
+    String sourcePath = pickedFile.path;
+
     setState(() {
       if (pickedFile != null) {
-        _todo.images.add(pickedFile.path);
+        _todo.images.add(sourcePath);
         _imageSize = _todo.images.length + 1;
       }
+    });
+
+    // 创建临时文件
+    String filename = sourcePath.substring(sourcePath.lastIndexOf("/") + 1);
+    final dir = await path_provider.getTemporaryDirectory();
+    String targetPath = dir.path + "/" + filename;
+
+    // 压缩图片到临时文件
+    File file = await ImageHelper.compressAndGetFile(sourcePath, targetPath);
+
+    // 上传压缩后的临时图片文件
+    ImageHelper.uploadFile(file.path, (count, total) {
+      print("$count / $total");
+    }).then((value) {
+      print("upload = " + value.runtimeType.toString());
+      print("upload = " + value.data.fileId);
     });
   }
 
@@ -261,8 +278,7 @@ class _PageState extends State<TodoDetailPage> {
               onPressed: () {
                 //关闭对话框并返回true
                 Navigator.pop(context, true);
-                _helper
-                    .delete(_todo)
+                DataHelper.delete(_todo)
                     .then((value) => requestSuccess("删除"))
                     .catchError((error) => requestError(error));
               },
@@ -279,11 +295,11 @@ class _PageState extends State<TodoDetailPage> {
       _formKey.currentState.save();
 
       if (_isUpdate) {
-        _helper.updateData(_todo).then((value) {
+        DataHelper.updateData(_todo).then((value) {
           requestSuccess("修改");
         }).catchError((error) => requestError(error));
       } else {
-        _helper.saveData(_todo).then((value) {
+        DataHelper.saveData(_todo).then((value) {
           requestSuccess("新增");
         }).catchError((error) => requestError(error));
       }
