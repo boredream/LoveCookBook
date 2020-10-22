@@ -8,21 +8,16 @@ import 'CloudBaseHelper.dart';
 
 class ImageHelper {
 
-  static compressAndUploadFile(String filePath, void onProcess(int count, int total)) {
-
-  }
-
-  static Future<File> compressAndGetFile(String sourcePath, String targetPath) async {
-    final result = await FlutterImageCompress.compressAndGetFile(
-      sourcePath,
-      targetPath,
-      quality: 80,
-      minWidth: 1024,
-      minHeight: 1024,
-    );
-    return result;
-  }
-
+//  static Future<File> compressAndGetFile(String sourcePath, String targetPath) async {
+//    final result = await FlutterImageCompress.compressAndGetFile(
+//      sourcePath,
+//      targetPath,
+//      quality: 80,
+//      minWidth: 1024,
+//      minHeight: 1024,
+//    );
+//    return result;
+//  }
 
   static Future<dynamic> uploadFile(String filePath, String cloudPath, {void onProcess(int count, int total)}) async {
     return CloudBaseHelper.getStorage().uploadFile(

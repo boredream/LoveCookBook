@@ -29,9 +29,26 @@ class DataHelper {
     return response;
   }
 
+  static Future<DbUpdateResponse> doneData(Todo data) async {
+    String id = data.getId();
+    Map<String, dynamic> newData = {
+      "done": data.done
+    };
+
+    DbUpdateResponse response =
+        await CloudBaseHelper.getDb().collection("list").doc(id).update(newData);
+    if (response.code != null) {
+      throw Exception(response.message);
+    }
+    return response;
+  }
+
   static Future<DbQueryResponse> loadData(String type) async {
     DbQueryResponse response =
-        await CloudBaseHelper.getDb().collection("list").get();
+        await CloudBaseHelper.getDb()
+            .collection("list")
+            .where({"type": type})
+            .get();
     if (response.code != null) {
       throw Exception(response.message);
     }

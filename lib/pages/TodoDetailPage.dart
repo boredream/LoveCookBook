@@ -309,6 +309,7 @@ class _PageState extends State<TodoDetailPage> {
               onPressed: () {
                 //关闭对话框并返回true
                 Navigator.pop(context, true);
+                _dialog.show();
                 DataHelper.delete(_todo)
                     .then((value) => requestSuccess("删除"))
                     .catchError((error) => requestError(error));
@@ -363,24 +364,26 @@ class _PageState extends State<TodoDetailPage> {
       if (_isUpdate) {
         DataHelper.updateData(_todo)
             .then((value) => requestSuccess("修改"))
-            .catchError((error) => requestError(error))
-            .whenComplete(() => _dialog.hide());
+            .catchError((error) => requestError(error));
       } else {
+        _todo.createDate = DateFormat("yyyy-MM-dd HH:mm:ss")
+            .format(DateTime.now());
         DataHelper.saveData(_todo)
             .then((value) => requestSuccess("新增"))
-            .catchError((error) => requestError(error))
-            .whenComplete(() => _dialog.hide());
+            .catchError((error) => requestError(error));
       }
     }
   }
 
   requestSuccess(String operation) {
+    _dialog.hide();
     var msg = operation + "成功";
     Fluttertoast.showToast(msg: msg);
     Navigator.pop(context, true);
   }
 
   requestError(error) {
+    _dialog.hide();
     var msg = "操作失败 " + error.toString();
     Fluttertoast.showToast(msg: msg);
   }

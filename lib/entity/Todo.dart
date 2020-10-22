@@ -17,6 +17,7 @@ class Todo {
   String name;
   String desc;
   List<String> images = [];
+  String createDate;
   String todoDate;
   String doneDate;
 

@@ -122,13 +122,12 @@ class _TodoListState extends State<TodoList> {
             setState(() {
               todo.done = !todo.done;
             });
-            // fixme
-            // _helper.saveDataList(type, _todoList);
+             DataHelper.doneData(todo);
           },
         ),
         Expanded(
           child: GestureDetector(
-            child: Text(todo.name),
+            child: Text("[" + (todo.todoDate ?? "未设置时间") + "] " + todo.name),
             onTap: () {
               // FIXME 使用通知一类的方案刷新
               Navigator.pushNamed(context, "todoDetail",
