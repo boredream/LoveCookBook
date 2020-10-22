@@ -13,11 +13,14 @@ class TabTodoListPage extends StatefulWidget {
 
 class _PageState extends State<TabTodoListPage> with AutomaticKeepAliveClientMixin {
 
+  // FIXME bottomNavigation 页面切换不保留状态？
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -98,6 +101,7 @@ class _TodoListState extends State<TodoList> with AutomaticKeepAliveClientMixin 
     return Scaffold(
       body: getBody(),
       floatingActionButton: FloatingActionButton(
+        heroTag: type,
         child: Icon(Icons.add),
         onPressed: () {
           Navigator.pushNamed(context, "todoDetail", arguments: {"type": type})

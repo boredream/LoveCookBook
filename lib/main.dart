@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'pages/DishPage.dart';
-import 'pages/HttpLoad.dart';
 import 'pages/MainPage.dart';
+import 'pages/MenuPage.dart';
 import 'pages/TodoDetailPage.dart';
 
 void main() {
@@ -23,7 +23,7 @@ class App extends StatelessWidget {
         "/": (context) => MainPage(),
         "dish": (context) => DishPage(),
         "todoDetail": (context) => TodoDetailPage(),
-        "http": (context) => SampleAppPage(),
+        "menu": (context) => MenuPage(),
       },
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(builder: (context) {

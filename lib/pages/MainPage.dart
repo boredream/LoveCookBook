@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 
 import 'EatPage.dart';
+import 'LifePage.dart';
 import 'TodoListPage.dart';
 
 class MainPage extends StatefulWidget {
@@ -15,7 +16,7 @@ class _PageState extends State<MainPage> {
 
   List<Widget> _widgetOptions = <Widget>[
     TabTodoListPage(),
-    EatPage(),
+    LifePage(),
     Text(
       'Index 2: School',
     ),
@@ -66,8 +67,8 @@ class _PageState extends State<MainPage> {
             label: 'List',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: '纪念日',
+            icon: Icon(Icons.wb_sunny),
+            label: '日常',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.flag),
