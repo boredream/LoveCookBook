@@ -11,7 +11,11 @@ class TabTodoListPage extends StatefulWidget {
   _PageState createState() => _PageState();
 }
 
-class _PageState extends State<TabTodoListPage> {
+class _PageState extends State<TabTodoListPage> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -38,6 +42,7 @@ class _PageState extends State<TabTodoListPage> {
       ),
     );
   }
+
 }
 
 class TodoList extends StatefulWidget {
@@ -49,7 +54,11 @@ class TodoList extends StatefulWidget {
   _TodoListState createState() => _TodoListState(type);
 }
 
-class _TodoListState extends State<TodoList> {
+class _TodoListState extends State<TodoList> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   _TodoListState(this.type);
 
   final type;
@@ -85,6 +94,7 @@ class _TodoListState extends State<TodoList> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: getBody(),
       floatingActionButton: FloatingActionButton(
