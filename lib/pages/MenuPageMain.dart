@@ -34,7 +34,7 @@ class _PageState extends State<MenuPageMain> {
         actions: [
           Center(
               child: FlatButton(
-            child: Text("全部菜单", style: TextStyle(color: Colors.white)),
+            child: Text("全部菜品", style: TextStyle(color: Colors.white)),
             onPressed: () => Navigator.pushNamed(context, "menuAll"),
           )),
         ],
@@ -74,21 +74,6 @@ class _PageState extends State<MenuPageMain> {
             ],
           ),
           SizedBox(height: 64),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              OutlineButton(
-                onPressed: () {},
-                child: Text(GlobalConstants.EAT_TYPE_HOME),
-                textColor: Theme.of(context).primaryColor,
-              ),
-              OutlineButton(
-                onPressed: () {},
-                child: Text(GlobalConstants.EAT_TYPE_OUTSIDE),
-                textColor: Theme.of(context).primaryColor,
-              ),
-            ],
-          ),
         ],
       );
     } else {

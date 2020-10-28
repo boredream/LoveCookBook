@@ -7,19 +7,27 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a4b37cb6-a4ea-4920-a7aa-235f634dcfdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/helper/GlobalConstants.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pages/MenuDetailPage.dart" afterDir="false" />
+    <list default="true" id="a4b37cb6-a4ea-4920-a7aa-235f634dcfdc" name="Default Changelist" comment="全部菜单UI">
+      <change afterPath="$PROJECT_DIR$/lib/entity/Menu.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/entity/Menu.g.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/views/AddGridImageList.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Flutter/.last_build_id" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/.last_build_id" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Flutter/App.framework/App" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/App.framework/App" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Flutter/App.framework/flutter_assets/NOTICES" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/App.framework/flutter_assets/NOTICES" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Flutter/App.framework/flutter_assets/kernel_blob.bin" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/App.framework/flutter_assets/kernel_blob.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Flutter/Generated.xcconfig" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/Generated.xcconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Flutter/flutter_export_environment.sh" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/flutter_export_environment.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/entity/Dish.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/entity/Todo.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/entity/Todo.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/entity/Todo.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/entity/Todo.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/helper/DataHelper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/helper/DataHelper.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/helper/GlobalConstants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/helper/GlobalConstants.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/DishPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/MenuPageAll.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/LifePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/LifePage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/MenuPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/MenuPageMain.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/MenuDetailPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/MenuDetailPage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/MenuPageAll.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/MenuAllPage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/MenuPageMain.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/MenuPageMain.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/TodoDetailPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/TodoDetailPage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/TodoListPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/TodoListPage.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +37,7 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[4ca15478]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -39,56 +47,6 @@
   </component>
   <component name="FindBugs-IDEA-Workspace">
     <toolWindowEditorPreview>false</toolWindowEditorPreview>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>_images.ad</find>
-      <find>link</find>
-      <find>&quot;url&quot;</find>
-      <find>ImageInfo</find>
-      <find>_images[i]</find>
-      <find>getRow</find>
-      <find>_images.add</find>
-      <find>_images</find>
-      <find>_images[index]</find>
-      <find>now(</find>
-      <find>DateFormat</find>
-      <find>checkbox</find>
-      <find>Check</find>
-      <find>FloatingActionButton</find>
-      <find>纪念日</find>
-      <find>LifePage</find>
-      <find>alignment:</find>
-      <find>style</find>
-      <find>进行中</find>
-      <find>FmFra</find>
-      <find>createDate</find>
-      <find>预计</find>
-      <find>吃点</find>
-      <find>style:</find>
-      <find>TodoList</find>
-      <find>Tab(</find>
-      <find>_controller</find>
-      <find>TabBar(</find>
-      <find>FloatingActionButton(</find>
-      <find>TodoDetailPage</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>_isUpdate</replace>
-      <replace>CommonConstants.db</replace>
-      <replace>CloudBaseDatabase(CommonConstants.core)</replace>
-      <replace>label</replace>
-      <replace>_id</replace>
-      <replace>DataHelper</replace>
-      <replace>sourcePath</replace>
-      <replace>_images</replace>
-      <replace>_ImageBean</replace>
-      <replace>ImageBean</replace>
-      <replace>image</replace>
-      <replace>MenuPage</replace>
-      <replace>MenuPageList</replace>
-      <replace>MenuDetailPage</replace>
-    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -125,17 +83,17 @@
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/pages" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/entity" />
     <property name="settings.editor.selected.configurable" value="experimental" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/entity" />
       <recent name="$PROJECT_DIR$/lib/pages" />
       <recent name="$PROJECT_DIR$/lib/helper" />
       <recent name="$PROJECT_DIR$/ios/Runner" />
       <recent name="$PROJECT_DIR$/android/app" />
-      <recent name="$PROJECT_DIR$/lib/entity" />
     </key>
   </component>
   <component name="RunManager" selected="Flutter.main.dart">
@@ -357,17 +315,15 @@
       <option name="project" value="LOCAL" />
       <updated>1603852398390</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="全部菜单UI">
+      <created>1603866503076</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1603866503076</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -420,42 +376,74 @@
     <MESSAGE value="menu page + rg" />
     <MESSAGE value="menu page" />
     <MESSAGE value="国际化，日期中文" />
-    <option name="LAST_COMMIT_MESSAGE" value="国际化，日期中文" />
+    <MESSAGE value="全部菜单UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="全部菜单UI" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="73" y="88" key="#Plugins" timestamp="1603865606664">
+    <state x="73" y="88" key="#Plugins" timestamp="1603868574783">
       <screen x="0" y="23" width="1440" height="811" />
     </state>
-    <state x="73" y="88" key="#Plugins/0.23.1440.811@0.23.1440.811" timestamp="1603865606664" />
+    <state x="73" y="88" key="#Plugins/0.23.1440.811@0.23.1440.811" timestamp="1603868574783" />
+    <state x="73" y="88" key="#Plugins/0.23.1440.812@0.23.1440.812" timestamp="1603868153427" />
     <state x="281" y="93" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603865567372">
       <screen x="0" y="23" width="1440" height="811" />
     </state>
     <state x="281" y="93" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.811@0.23.1440.811" timestamp="1603865567372" />
-    <state width="875" height="193" key="GridCell.Tab.0.bottom" timestamp="1603866233316">
-      <screen x="0" y="23" width="1440" height="812" />
-    </state>
-    <state width="875" height="193" key="GridCell.Tab.0.bottom/0.23.1440.812@0.23.1440.812" timestamp="1603866233316" />
-    <state width="875" height="193" key="GridCell.Tab.0.center" timestamp="1603866233315">
-      <screen x="0" y="23" width="1440" height="812" />
-    </state>
-    <state width="875" height="193" key="GridCell.Tab.0.center/0.23.1440.812@0.23.1440.812" timestamp="1603866233315" />
-    <state width="875" height="193" key="GridCell.Tab.0.left" timestamp="1603866233315">
-      <screen x="0" y="23" width="1440" height="812" />
-    </state>
-    <state width="875" height="193" key="GridCell.Tab.0.left/0.23.1440.812@0.23.1440.812" timestamp="1603866233315" />
-    <state width="875" height="193" key="GridCell.Tab.0.right" timestamp="1603866233316">
-      <screen x="0" y="23" width="1440" height="812" />
-    </state>
-    <state width="875" height="193" key="GridCell.Tab.0.right/0.23.1440.812@0.23.1440.812" timestamp="1603866233316" />
-    <state width="464" height="188" key="javadoc.popup.new" timestamp="1603866449994">
-      <screen x="0" y="23" width="1440" height="812" />
-    </state>
-    <state width="464" height="187" key="javadoc.popup.new/0.23.1440.811@0.23.1440.811" timestamp="1603865989560" />
-    <state width="464" height="188" key="javadoc.popup.new/0.23.1440.812@0.23.1440.812" timestamp="1603866449994" />
-    <state x="482" y="158" width="670" height="676" key="search.everywhere.popup" timestamp="1603865579511">
+    <state x="792" y="151" key="#com.intellij.ide.util.MemberChooser" timestamp="1603869526333">
       <screen x="0" y="23" width="1440" height="811" />
     </state>
-    <state x="482" y="158" width="670" height="676" key="search.everywhere.popup/0.23.1440.811@0.23.1440.811" timestamp="1603865579511" />
+    <state x="792" y="151" key="#com.intellij.ide.util.MemberChooser/0.23.1440.811@0.23.1440.811" timestamp="1603869526333" />
+    <state x="537" y="23" key="CommitChangelistDialog2" timestamp="1603870890827">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state x="537" y="23" key="CommitChangelistDialog2/0.23.1440.811@0.23.1440.811" timestamp="1603870890827" />
+    <state x="537" y="23" key="CommitChangelistDialog2/0.23.1440.812@0.23.1440.812" timestamp="1603866499562" />
+    <state x="288" y="93" key="DiffContextDialog" timestamp="1603870890628">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state x="288" y="93" key="DiffContextDialog/0.23.1440.811@0.23.1440.811" timestamp="1603870890628" />
+    <state width="875" height="222" key="GridCell.Tab.0.bottom" timestamp="1603877549641">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state width="875" height="222" key="GridCell.Tab.0.bottom/0.23.1440.811@0.23.1440.811" timestamp="1603877549641" />
+    <state width="875" height="179" key="GridCell.Tab.0.bottom/0.23.1440.812@0.23.1440.812" timestamp="1603867160588" />
+    <state width="875" height="222" key="GridCell.Tab.0.center" timestamp="1603877549640">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state width="875" height="222" key="GridCell.Tab.0.center/0.23.1440.811@0.23.1440.811" timestamp="1603877549640" />
+    <state width="875" height="179" key="GridCell.Tab.0.center/0.23.1440.812@0.23.1440.812" timestamp="1603867160588" />
+    <state width="875" height="222" key="GridCell.Tab.0.left" timestamp="1603877549640">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state width="875" height="222" key="GridCell.Tab.0.left/0.23.1440.811@0.23.1440.811" timestamp="1603877549640" />
+    <state width="875" height="179" key="GridCell.Tab.0.left/0.23.1440.812@0.23.1440.812" timestamp="1603867160587" />
+    <state width="875" height="222" key="GridCell.Tab.0.right" timestamp="1603877549641">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state width="875" height="222" key="GridCell.Tab.0.right/0.23.1440.811@0.23.1440.811" timestamp="1603877549641" />
+    <state width="875" height="179" key="GridCell.Tab.0.right/0.23.1440.812@0.23.1440.812" timestamp="1603867160588" />
+    <state x="744" y="138" key="RollbackChangesDialog" timestamp="1603869491295">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state x="744" y="138" key="RollbackChangesDialog/0.23.1440.811@0.23.1440.811" timestamp="1603869491295" />
+    <state x="579" y="168" key="Vcs.Push.Dialog.v2" timestamp="1603875827124">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state x="579" y="168" key="Vcs.Push.Dialog.v2/0.23.1440.811@0.23.1440.811" timestamp="1603875827124" />
+    <state x="672" y="183" width="615" height="490" key="find.popup" timestamp="1603872990599">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state x="672" y="183" width="615" height="490" key="find.popup/0.23.1440.811@0.23.1440.811" timestamp="1603872990599" />
+    <state width="464" height="187" key="javadoc.popup.new" timestamp="1603877038748">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state width="464" height="187" key="javadoc.popup.new/0.23.1440.811@0.23.1440.811" timestamp="1603877038748" />
+    <state width="464" height="188" key="javadoc.popup.new/0.23.1440.812@0.23.1440.812" timestamp="1603867147213" />
+    <state x="482" y="158" width="670" height="676" key="search.everywhere.popup" timestamp="1603869525772">
+      <screen x="0" y="23" width="1440" height="811" />
+    </state>
+    <state x="482" y="158" width="670" height="676" key="search.everywhere.popup/0.23.1440.811@0.23.1440.811" timestamp="1603869525772" />
+    <state x="482" y="158" width="670" height="677" key="search.everywhere.popup/0.23.1440.812@0.23.1440.812" timestamp="1603868095836" />
   </component>
   <component name="gradleExecuteTaskHistory">
     <option value="" />

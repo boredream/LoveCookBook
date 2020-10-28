@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_todo/pages/MenuPageAll.dart';
+import 'package:flutter_todo/pages/MenuAllPage.dart';
 
 import 'pages/MainPage.dart';
 import 'pages/MenuDetailPage.dart';
@@ -25,7 +25,7 @@ class App extends StatelessWidget {
         "/": (context) => MainPage(),
         "todoDetail": (context) => TodoDetailPage(),
         "menuMain": (context) => MenuPageMain(),
-        "menuAll": (context) => MenuPageAll(),
+        "menuAll": (context) => MenuAllPage(),
         "menuDetail": (context) => MenuDetailPage(),
       },
       onGenerateRoute: (RouteSettings settings) {

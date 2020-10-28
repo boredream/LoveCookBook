@@ -326,7 +326,7 @@ class _PageState extends State<TodoDetailPage> {
                 //关闭对话框并返回true
                 Navigator.pop(context, true);
                 _dialog.show();
-                DataHelper.delete(_todo)
+                DataHelper.deleteData(DataHelper.COLLECTION_LIST, _todo.getId())
                     .then((value) => requestSuccess("删除"))
                     .catchError((error) => requestError(error));
               },
@@ -378,13 +378,13 @@ class _PageState extends State<TodoDetailPage> {
 
       // 新增or更新
       if (_isUpdate) {
-        DataHelper.updateData(_todo)
+        DataHelper.setData(DataHelper.COLLECTION_LIST, _todo.getId(), _todo)
             .then((value) => requestSuccess("修改"))
             .catchError((error) => requestError(error));
       } else {
         _todo.createDate = DateFormat("yyyy-MM-dd HH:mm:ss")
             .format(DateTime.now());
-        DataHelper.saveData(_todo)
+        DataHelper.saveData(DataHelper.COLLECTION_LIST, _todo)
             .then((value) => requestSuccess("新增"))
             .catchError((error) => requestError(error));
       }

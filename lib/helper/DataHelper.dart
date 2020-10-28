@@ -2,67 +2,66 @@ import 'package:cloudbase_database/cloudbase_database.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 
-const KEY_TODO_LIST = "todo_list";
-
 class DataHelper {
-
-  static Future<DbCreateResponse> saveData(Todo data) async {
+  
+  static const COLLECTION_LIST = "list";
+  static const COLLECTION_MENU = "menu";
+  
+  static Future<DbCreateResponse> saveData(
+      String collection, dynamic data) async {
     DbCreateResponse response =
-        await CloudBaseHelper.getDb().collection("list").add(data.toJson());
+        await CloudBaseHelper.getDb().collection(collection).add(data.toJson());
     if (response.code != null) {
       throw Exception(response.message);
     }
     return response;
   }
 
-  static Future<DbUpdateResponse> updateData(Todo data) async {
-    String id = data.getId();
+  static Future<DbUpdateResponse> setData(
+      String collection, String id, dynamic data) async {
     Map<String, dynamic> newData = data.toJson();
     // 更新的时候不能带 _id
     newData.remove("_id");
 
-    DbUpdateResponse response =
-        await CloudBaseHelper.getDb().collection("list").doc(id).set(newData);
+    DbUpdateResponse response = await CloudBaseHelper.getDb()
+        .collection(collection)
+        .doc(id)
+        .set(newData);
     if (response.code != null) {
       throw Exception(response.message);
     }
     return response;
   }
 
-  static Future<DbUpdateResponse> doneData(Todo data) async {
-    String id = data.getId();
-    Map<String, dynamic> newData = {
-      "done": data.done
-    };
-
-    DbUpdateResponse response =
-        await CloudBaseHelper.getDb().collection("list").doc(id).update(newData);
+  static Future<DbUpdateResponse> updateData(
+      String collection, String id, Map<String, dynamic> update) async {
+    DbUpdateResponse response = await CloudBaseHelper.getDb()
+        .collection(collection)
+        .doc(id)
+        .update(update);
     if (response.code != null) {
       throw Exception(response.message);
     }
     return response;
   }
 
-  static Future<DbQueryResponse> loadData(String type) async {
+  static Future<DbRemoveResponse> deleteData(String collection, String id) async {
+    DbRemoveResponse response =
+        await CloudBaseHelper.getDb().collection(collection).doc(id).remove();
+    if (response.code != null) {
+      throw Exception(response.message);
+    }
+    return response;
+  }
+
+  static Future<DbQueryResponse> loadData(
+      String collection, dynamic where) async {
     DbQueryResponse response =
-        await CloudBaseHelper.getDb()
-            .collection("list")
-            .where({"type": type})
-            .get();
+        await CloudBaseHelper.getDb().collection(collection).where(where).get();
     if (response.code != null) {
       throw Exception(response.message);
     }
     return response;
   }
-
-  static Future<DbRemoveResponse> delete(Todo data) async {
-    DbRemoveResponse response = await CloudBaseHelper.getDb()
-        .collection("list")
-        .doc(data.getId())
-        .remove();
-    if (response.code != null) {
-      throw Exception(response.message);
-    }
-    return response;
-  }
+  
 }

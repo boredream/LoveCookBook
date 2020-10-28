@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:flutter_todo/helper/GlobalConstants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class TabTodoListPage extends StatefulWidget {
@@ -11,8 +11,8 @@ class TabTodoListPage extends StatefulWidget {
   _PageState createState() => _PageState();
 }
 
-class _PageState extends State<TabTodoListPage> with AutomaticKeepAliveClientMixin {
-
+class _PageState extends State<TabTodoListPage>
+    with AutomaticKeepAliveClientMixin {
   // FIXME bottomNavigation 页面切换不保留状态？
 
   @override
@@ -36,16 +36,15 @@ class _PageState extends State<TabTodoListPage> with AutomaticKeepAliveClientMix
         ),
         body: TabBarView(
           children: [
-            TodoList(Todo.TYPE_EAT),
-            TodoList(Todo.TYPE_VIDEO),
-            TodoList(Todo.TYPE_TRAVEL),
-            TodoList(Todo.TYPE_OTHER),
+            TodoList(GlobalConstants.TODO_TYPE_EAT),
+            TodoList(GlobalConstants.TODO_TYPE_VIDEO),
+            TodoList(GlobalConstants.TODO_TYPE_TRAVEL),
+            TodoList(GlobalConstants.TODO_TYPE_OTHER),
           ],
         ),
       ),
     );
   }
-
 }
 
 class TodoList extends StatefulWidget {
@@ -57,8 +56,8 @@ class TodoList extends StatefulWidget {
   _TodoListState createState() => _TodoListState(type);
 }
 
-class _TodoListState extends State<TodoList> with AutomaticKeepAliveClientMixin {
-
+class _TodoListState extends State<TodoList>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -75,7 +74,8 @@ class _TodoListState extends State<TodoList> with AutomaticKeepAliveClientMixin 
   }
 
   void loadData() {
-    DataHelper.loadData(type).then((value) {
+    var where = {"type": type};
+    DataHelper.loadData(DataHelper.COLLECTION_LIST, where).then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
         loadDataError(value.message);
@@ -136,7 +136,8 @@ class _TodoListState extends State<TodoList> with AutomaticKeepAliveClientMixin 
             setState(() {
               todo.done = !todo.done;
             });
-             DataHelper.doneData(todo);
+            DataHelper.updateData(DataHelper.COLLECTION_LIST,
+                todo.getId(), {"done": todo.done});
           },
         ),
         Expanded(

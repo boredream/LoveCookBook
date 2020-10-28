@@ -5,11 +5,6 @@ part 'Todo.g.dart';
 @JsonSerializable()
 class Todo {
 
-  static const TYPE_EAT = "eat";
-  static const TYPE_VIDEO = "video";
-  static const TYPE_TRAVEL = "travel";
-  static const TYPE_OTHER = "other";
-
   Todo({this.done = false});
   String _id;
   bool done;
