@@ -18,8 +18,8 @@ class _PageState extends State<LifePage> {
             childAspectRatio: 1.0 //宽高比为1时，子widget
             ),
         children: <Widget>[
-          getRow(Icons.cake, "菜单", "menu"),
-          getRow(Icons.sports_esports, "游戏", "menu"),
+          getRow(Icons.cake, "菜单", "menuMain"),
+          getRow(Icons.sports_esports, "游戏", ""),
         ]);
   }
 

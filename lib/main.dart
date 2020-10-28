@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_todo/pages/MenuPageAll.dart';
 
-import 'pages/DishPage.dart';
 import 'pages/MainPage.dart';
-import 'pages/MenuPage.dart';
+import 'pages/MenuDetailPage.dart';
+import 'pages/MenuPageMain.dart';
 import 'pages/TodoDetailPage.dart';
 
 void main() {
@@ -22,9 +23,10 @@ class App extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => MainPage(),
-        "dish": (context) => DishPage(),
         "todoDetail": (context) => TodoDetailPage(),
-        "menu": (context) => MenuPage(),
+        "menuMain": (context) => MenuPageMain(),
+        "menuAll": (context) => MenuPageAll(),
+        "menuDetail": (context) => MenuDetailPage(),
       },
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(builder: (context) {
