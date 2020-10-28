@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>flutter_todo.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>937CED1BE7554952C7F140963A8926CE2BE11F8C</string>
+				<key>dateExpires</key>
+				<string>2023/2/8</string>
+				<key>type</key>
+				<string>iOS Distribution</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>937CED1BE7554952C7F140963A8926CE2BE11F8C</string>
+						<key>dateExpires</key>
+						<string>2023/2/8</string>
+						<key>type</key>
+						<string>iOS Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>App.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>8NC375D4T6</string>
+						<key>name</key>
+						<string>Yantai Shinho Enterprise Food Co., Ltd.</string>
+					</dict>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>937CED1BE7554952C7F140963A8926CE2BE11F8C</string>
+						<key>dateExpires</key>
+						<string>2023/2/8</string>
+						<key>type</key>
+						<string>iOS Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>Flutter.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>8NC375D4T6</string>
+						<key>name</key>
+						<string>Yantai Shinho Enterprise Food Co., Ltd.</string>
+					</dict>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>8NC375D4T6.com.boredream.lovecookbook</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>8NC375D4T6</string>
+				<key>get-task-allow</key>
+				<false/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>8NC375D4T6.com.boredream.lovecookbook</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>Runner.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>247ab6f3-0021-49dd-b2a3-898827b0e6aa</string>
+				<key>name</key>
+				<string>UniversalDistributionProfile</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>8NC375D4T6</string>
+				<key>name</key>
+				<string>Yantai Shinho Enterprise Food Co., Ltd.</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
