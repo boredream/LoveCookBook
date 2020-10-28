@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'pages/DishPage.dart';
 import 'pages/MainPage.dart';
@@ -32,6 +33,14 @@ class App extends StatelessWidget {
           return MainPage();
         });
       },
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale("zh", "CH"),
+      ],
+      locale: Locale("zh"),
     );
   }
 }

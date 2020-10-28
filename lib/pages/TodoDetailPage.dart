@@ -136,6 +136,22 @@ class _PageState extends State<TodoDetailPage> {
           SizedBox(
             height: 16,
           ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "创建日期：",
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              Text(
+                _todo.createDate ?? "",
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 8,
+          ),
           GestureDetector(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

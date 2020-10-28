@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4b37cb6-a4ea-4920-a7aa-235f634dcfdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/pages/LifePage.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pages/MenuPage.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Flutter/App.framework/flutter_assets/kernel_blob.bin" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/App.framework/flutter_assets/kernel_blob.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/HttpLoad.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/MainPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/MainPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/TodoListPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/TodoListPage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/TodoDetailPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/TodoDetailPage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -26,26 +23,47 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="4ca15478" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_API_25" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/pages/MenuPage.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="15" column="22" lean-forward="true" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+            <state relative-caret-position="214">
+              <caret line="69" column="61" selection-start-line="69" selection-start-column="61" selection-end-line="69" selection-end-column="61" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="122">
+              <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/main.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="262">
+              <caret line="42" column="27" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
               <folding>
-                <element signature="e#1#40#0" expanded="true" />
+                <element signature="e#0#39#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Documents/code/flutter/packages/flutter/lib/src/material/app_bar.dart">
+        <entry file="file://$PROJECT_DIR$/lib/pages/TodoDetailPage.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="204" column="25" lean-forward="true" selection-start-line="204" selection-start-column="25" selection-end-line="204" selection-end-column="25" />
+            <state relative-caret-position="-953">
+              <caret line="148" column="16" selection-start-line="148" selection-start-column="16" selection-end-line="148" selection-end-column="16" />
+              <folding>
+                <element signature="e#0#17#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -61,10 +79,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>_picker</find>
-      <find>70</find>
-      <find>selectImage</find>
-      <find>pickedFile.path</find>
       <find>images</find>
       <find>getImageSize</find>
       <find>_todo.images</find>
@@ -91,6 +105,10 @@
       <find>alignment:</find>
       <find>TodoList</find>
       <find>style</find>
+      <find>进行中</find>
+      <find>FmFra</find>
+      <find>createDate</find>
+      <find>预计</find>
     </findStrings>
     <replaceStrings>
       <replace>_isUpdate</replace>
@@ -152,18 +170,18 @@
         <option value="$PROJECT_DIR$/lib/helper/SpDataHelper.dart" />
         <option value="$USER_HOME$/Documents/code/flutter/.pub-cache/hosted/pub.dartlang.org/cloudbase_database-0.0.12/lib/src/collection.dart" />
         <option value="$PROJECT_DIR$/lib/helper/CloudBaseHelper.dart" />
-        <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/lib/entity/ImageInfo.dart" />
         <option value="$PROJECT_DIR$/lib/entity/ImageBean.dart" />
         <option value="$PROJECT_DIR$/lib/helper/ImageHelper.dart" />
         <option value="$PROJECT_DIR$/lib/entity/Todo.dart" />
         <option value="$PROJECT_DIR$/lib/entity/Todo.g.dart" />
         <option value="$PROJECT_DIR$/lib/helper/DataHelper.dart" />
-        <option value="$PROJECT_DIR$/lib/pages/TodoDetailPage.dart" />
         <option value="$PROJECT_DIR$/lib/pages/TodoListPage.dart" />
         <option value="$PROJECT_DIR$/lib/pages/MainPage.dart" />
         <option value="$PROJECT_DIR$/lib/pages/LifePage.dart" />
         <option value="$PROJECT_DIR$/lib/pages/MenuPage.dart" />
+        <option value="$PROJECT_DIR$/lib/pages/TodoDetailPage.dart" />
+        <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/lib/main.dart" />
       </list>
     </option>
@@ -182,6 +200,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -221,9 +242,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -462,7 +480,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603336193227</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="menu page">
+      <created>1603353712362</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1603353712362</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TodoView">
@@ -490,13 +515,13 @@
       <window_info anchor="bottom" id="Find" order="0" weight="0.25" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="1" weight="0.3275862" />
       <window_info anchor="bottom" id="Dart Analysis" order="2" weight="0.2974138" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.49902913" visible="true" weight="0.31547618" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.49902913" weight="0.29761904" />
       <window_info anchor="bottom" id="Event Log" order="4" sideWeight="0.5009709" side_tool="true" weight="0.42898133" />
       <window_info anchor="bottom" id="TODO" order="5" weight="0.32738096" />
       <window_info anchor="bottom" id="Version Control" order="6" weight="0.29166666" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.36011904" />
       <window_info anchor="bottom" id="Debug" order="8" />
-      <window_info anchor="bottom" id="Messages" order="9" weight="0.45684522" />
+      <window_info anchor="bottom" id="Messages" order="9" visible="true" weight="0.37202382" />
       <window_info anchor="bottom" id="Android Profiler" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Logcat" order="11" weight="0.36160713" />
       <window_info anchor="right" id="Palette&#9;" order="0" />
@@ -570,7 +595,10 @@
     <MESSAGE value="opt" />
     <MESSAGE value="完成产品经理的需求！" />
     <MESSAGE value="tabbar 保留状态" />
-    <option name="LAST_COMMIT_MESSAGE" value="tabbar 保留状态" />
+    <MESSAGE value="menu rg" />
+    <MESSAGE value="menu page + rg" />
+    <MESSAGE value="menu page" />
+    <option name="LAST_COMMIT_MESSAGE" value="menu page" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/Documents/code/flutter/.pub-cache/hosted/pub.dartlang.org/cloudbase_auth-0.0.13/lib/src/index.dart">
@@ -772,13 +800,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="21" column="25" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Documents/code/flutter/packages/flutter/lib/src/material/icons.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="174">
@@ -855,16 +876,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/pages/TodoDetailPage.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="141" column="25" selection-start-line="141" selection-start-column="25" selection-end-line="141" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Documents/code/flutter/packages/flutter/lib/src/rendering/flex.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-563">
@@ -898,29 +909,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/pages/HttpLoad.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-780">
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/pages/HttpLoad.dart" />
     <entry file="file://$PROJECT_DIR$/lib/pages/EatPage.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-11">
           <caret line="6" column="13" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/main.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="15" column="12" lean-forward="true" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -941,12 +934,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lib/pages/TodoDetailPage.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-953">
+          <caret line="148" column="16" selection-start-line="148" selection-start-column="16" selection-end-line="148" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/lib/pages/MenuPage.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="15" column="22" lean-forward="true" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+        <state relative-caret-position="214">
+          <caret line="69" column="61" selection-start-line="69" selection-start-column="61" selection-end-line="69" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/main.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="42" column="27" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
           <folding>
-            <element signature="e#1#40#0" expanded="true" />
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
