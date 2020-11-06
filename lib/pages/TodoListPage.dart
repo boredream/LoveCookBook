@@ -22,28 +22,34 @@ class _PageState extends State<TabTodoListPage>
   Widget build(BuildContext context) {
     super.build(context);
     return DefaultTabController(
-      length: 4,
+      length: GlobalConstants.todoTypes.length,
       child: Scaffold(
         appBar: AppBar(
           title: TabBar(
-            tabs: [
-              Tab(text: "吃吃吃"),
-              Tab(text: "看剧"),
-              Tab(text: "出游"),
-              Tab(text: "其他"),
-            ],
+            tabs: getTabs(),
           ),
         ),
         body: TabBarView(
-          children: [
-            TodoList(GlobalConstants.TODO_TYPE_EAT),
-            TodoList(GlobalConstants.TODO_TYPE_VIDEO),
-            TodoList(GlobalConstants.TODO_TYPE_TRAVEL),
-            TodoList(GlobalConstants.TODO_TYPE_OTHER),
-          ],
+          children: getTabViews(),
         ),
       ),
     );
+  }
+
+  List<Widget> getTabs() {
+    List<Widget> tabs = [];
+    for (String type in GlobalConstants.todoTypes) {
+      tabs.add( Tab(text: type));
+    }
+    return tabs;
+  }
+
+  List<Widget> getTabViews() {
+    List<Widget> tabs = [];
+    for (String type in GlobalConstants.todoTypes) {
+      tabs.add( TodoList(type));
+    }
+    return tabs;
   }
 }
 
@@ -137,7 +143,7 @@ class _TodoListState extends State<TodoList>
               todo.done = !todo.done;
             });
             DataHelper.updateData(DataHelper.COLLECTION_LIST,
-                todo.getId(), {"done": todo.done});
+                todo.id, {"done": todo.done});
           },
         ),
         Expanded(

@@ -1,12 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'BaseCloudBean.dart';
+
 part 'Todo.g.dart';
 
 @JsonSerializable()
-class Todo {
+class Todo extends BaseCloudBean {
 
   Todo({this.done = false});
-  String _id;
   bool done;
   String type;
   String name;
@@ -16,23 +17,7 @@ class Todo {
   String todoDate;
   String doneDate;
 
-  String getId() {
-    return _id;
-  }
-
-  setId(String id) {
-    _id = id;
-  }
-
   factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
   Map<String, dynamic> toJson() => _$TodoToJson(this);
 
-  @override
-  bool operator ==(Object other) {
-    if(other is Todo) {
-      Todo o = other;
-      return _id == o._id;
-    }
-    return super == other;
-  }
 }

@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Menu.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/GlobalConstants.dart';
+import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class MenuAllPage extends StatefulWidget {
@@ -157,16 +159,14 @@ class _ListPageState extends State<MenuPageList> {
 
   Widget getRow(int index) {
     var menu = _menuList[index];
+    var url = menu.images.length > 0 ? menu.images[0] : "";
     return GestureDetector(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AspectRatio(
             aspectRatio: 1,
-            child: Image.network(
-              menu.images[0],
-              fit: BoxFit.cover,
-            ),
+            child: ImageHelper.getImageByUrl(url),
           ),
           Text(menu.name),
         ],

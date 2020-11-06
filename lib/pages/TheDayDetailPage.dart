@@ -1,10 +1,6 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloudbase_storage/cloudbase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/ImageBean.dart';
-import 'package:flutter_todo/entity/Todo.dart';
+import 'package:flutter_todo/entity/TheDay.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
@@ -14,16 +10,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-class TodoDetailPage extends StatefulWidget {
+class TheDayDetailPage extends StatefulWidget {
   @override
   _PageState createState() => _PageState();
 }
 
-class _PageState extends State<TodoDetailPage> {
-  static const DATE_TYPE_TODO = 1;
-  static const DATE_TYPE_DONE = 2;
-
-  Todo _todo;
+class _PageState extends State<TheDayDetailPage> {
+  TheDay _theDay;
   bool _isUpdate = false;
   List<ImageBean> _images = [];
   ImagePicker _picker = ImagePicker();
@@ -31,6 +24,8 @@ class _PageState extends State<TodoDetailPage> {
   TextEditingController _descController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ProgressDialog _dialog;
+
+  List<String> _remindPeriods = ["从不", "仅一次", "每年"];
 
   @override
   void initState() {
@@ -43,28 +38,32 @@ class _PageState extends State<TodoDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_todo == null) {
+    if (_theDay == null) {
       Map args = ModalRoute.of(context).settings.arguments as Map;
-      _todo = args["todo"];
-      if (_todo == null) {
+      _theDay = args["theDay"];
+      if (_theDay == null) {
         // 新增
-        _todo = Todo();
+        _theDay = TheDay();
       } else {
         // 修改
         _isUpdate = true;
-        for (String url in _todo.images) {
+        for (String url in _theDay.images) {
           _images.add(ImageBean(url: url));
         }
       }
-      _titleController.text = _todo.name;
-      _descController.text = _todo.desc;
+      if (_theDay.remindPeriod == null) {
+        _theDay.remindPeriod = _remindPeriods[0];
+      }
+      print(_theDay.remindPeriod);
+      _theDay.theDayDate = DateFormat("yyyy-MM-dd").format(args["date"]);
 
-      _todo.type = args["type"];
+      _titleController.text = _theDay.name;
+      _descController.text = _theDay.desc;
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("list 详情"),
+        title: Text("纪念日"),
       ),
       body: getBody(),
     );
@@ -84,11 +83,11 @@ class _PageState extends State<TodoDetailPage> {
           children: [
             FlatButton(
               child: Text("删除"),
-              onPressed: () => deleteTodo(),
+              onPressed: () => deleteTheDay(),
             ),
             FlatButton(
               child: Text(_isUpdate ? "修改" : "新增"),
-              onPressed: () => updateTodo(),
+              onPressed: () => updateTheDay(),
             ),
           ],
         ),
@@ -102,7 +101,7 @@ class _PageState extends State<TodoDetailPage> {
   getForm() {
     return Form(
       key: _formKey,
-      autovalidate: true,
+      autovalidateMode: AutovalidateMode.always,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +115,7 @@ class _PageState extends State<TodoDetailPage> {
               return value.trim().length > 0 ? null : "标题不能为空";
             },
             onSaved: (newValue) {
-              _todo.name = newValue;
+              _theDay.name = newValue;
             },
           ),
           TextFormField(
@@ -129,7 +128,7 @@ class _PageState extends State<TodoDetailPage> {
               labelText: "描述",
             ),
             onSaved: (newValue) {
-              _todo.desc = newValue;
+              _theDay.desc = newValue;
             },
           ),
           SizedBox(
@@ -143,7 +142,7 @@ class _PageState extends State<TodoDetailPage> {
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               Text(
-                _todo.createDate ?? "",
+                _theDay.createDate ?? "",
                 style: Theme.of(context).textTheme.subtitle1,
               ),
             ],
@@ -156,40 +155,23 @@ class _PageState extends State<TodoDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "预计完成日期：",
+                  "纪念日期：",
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 Text(
-                  _todo.todoDate ?? "未填写",
+                  _theDay.theDayDate ?? "未填写",
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
               ],
             ),
             onTap: () {
-              selectData(DATE_TYPE_TODO);
+              selectData();
             },
           ),
           SizedBox(
             height: 8,
           ),
-          GestureDetector(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "实际完成日期：",
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                Text(
-                  _todo.doneDate ?? "未填写",
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-              ],
-            ),
-            onTap: () {
-              selectData(DATE_TYPE_DONE);
-            },
-          ),
+          getRemindPeriods(),
           SizedBox(
             height: 16,
           ),
@@ -218,33 +200,57 @@ class _PageState extends State<TodoDetailPage> {
     });
   }
 
-  selectData(int dateType) async {
+  selectData() async {
     var date = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2000),
         lastDate: DateTime(2100));
-    if(date == null) return;
-    var format = DateFormat("yyyy-MM-dd").format(date);
+    if (date == null) return;
     setState(() {
-      if (dateType == DATE_TYPE_TODO) {
-        _todo.todoDate = format;
-      } else if (dateType == DATE_TYPE_DONE) {
-        _todo.doneDate = format;
-      }
+      _theDay.theDayDate = DateFormat("yyyy-MM-dd").format(date);
     });
   }
 
-  deleteTodo() {
+  deleteTheDay() {
     DialogUtils.showDeleteConfirmDialog(context, () {
       _dialog.show();
-      DataHelper.deleteData(DataHelper.COLLECTION_LIST, _todo.id)
+      DataHelper.deleteData(DataHelper.COLLECTION_THE_DAY, _theDay.id)
           .then((value) => requestSuccess("删除"))
           .catchError((error) => requestError(error));
     });
   }
 
-  updateTodo() async {
+  getRemindPeriods() {
+    List<Widget> list = List<Widget>();
+    list.add(Text("提醒："));
+    for (String type in _remindPeriods) {
+      // FIXME 横向radio？
+      list.add(GestureDetector(
+          onTap: () {
+            setState(() {
+              _theDay.remindPeriod = type;
+            });
+          },
+          child: Row(
+            children: [
+              Radio(
+                value: type,
+                groupValue: _theDay.remindPeriod,
+                onChanged: (value) {
+                  setState(() {
+                    _theDay.remindPeriod = type;
+                  });
+                },
+              ),
+              Text(type),
+            ],
+          )));
+    }
+    return Row(children: list);
+  }
+
+  updateTheDay() async {
     if (_formKey.currentState.validate()) {
       // 验证通过提交数据
       _formKey.currentState.save();
@@ -266,20 +272,21 @@ class _PageState extends State<TodoDetailPage> {
       }
 
       // 图片设置到bean上
-      _todo.images.clear();
+      _theDay.images.clear();
       for (int i = 0; i < _images.length; i++) {
-        _todo.images.add(_images[i].url);
+        _theDay.images.add(_images[i].url);
       }
 
       // 新增or更新
       if (_isUpdate) {
-        DataHelper.setData(DataHelper.COLLECTION_LIST, _todo.id, _todo)
+        print(_theDay.id);
+        DataHelper.setData(DataHelper.COLLECTION_THE_DAY, _theDay.id, _theDay)
             .then((value) => requestSuccess("修改"))
             .catchError((error) => requestError(error));
       } else {
-        _todo.createDate = DateFormat("yyyy-MM-dd HH:mm:ss")
-            .format(DateTime.now());
-        DataHelper.saveData(DataHelper.COLLECTION_LIST, _todo)
+        _theDay.createDate =
+            DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+        DataHelper.saveData(DataHelper.COLLECTION_THE_DAY, _theDay)
             .then((value) => requestSuccess("新增"))
             .catchError((error) => requestError(error));
       }

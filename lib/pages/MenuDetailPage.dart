@@ -4,6 +4,7 @@ import 'package:flutter_todo/entity/ImageBean.dart';
 import 'package:flutter_todo/entity/Menu.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
+import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/views/AddGridImageList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -133,7 +134,11 @@ class _PageState extends State<MenuDetailPage> {
           SizedBox(
             height: 8,
           ),
-          AddGridImageList(_images, selectImage),
+          AddGridImageList(_images, selectImage, (image) {
+            setState(() {
+              _images.remove(image);
+            });
+          }),
         ],
       ),
     );
@@ -161,6 +166,7 @@ class _PageState extends State<MenuDetailPage> {
         initialDate: DateTime.now(),
         firstDate: DateTime(2000),
         lastDate: DateTime(2100));
+    if(date == null) return;
     var format = DateFormat("yyyy-MM-dd").format(date);
     setState(() {
       _menu.createDate = format;
@@ -168,32 +174,12 @@ class _PageState extends State<MenuDetailPage> {
   }
 
   deleteTodo() {
-    showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("提示"),
-          content: Text("您确定要删除吗?"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("取消"),
-              onPressed: () => Navigator.pop(context), // 关闭对话框
-            ),
-            FlatButton(
-              child: Text("删除"),
-              onPressed: () {
-                //关闭对话框并返回true
-                Navigator.pop(context, true);
-                _dialog.show();
-                DataHelper.deleteData(DataHelper.COLLECTION_MENU, _menu.getId())
-                    .then((value) => requestSuccess("删除"))
-                    .catchError((error) => requestError(error));
-              },
-            ),
-          ],
-        );
-      },
-    );
+    DialogUtils.showDeleteConfirmDialog(context, () {
+      _dialog.show();
+      DataHelper.deleteData(DataHelper.COLLECTION_MENU, _menu.id)
+          .then((value) => requestSuccess("删除"))
+          .catchError((error) => requestError(error));
+    });
   }
 
   updateTodo() async {
@@ -208,19 +194,7 @@ class _PageState extends State<MenuDetailPage> {
         for (int i = 0; i < _images.length; i++) {
           if (_images[i].url == null) {
             // 本地图片，上传之
-            String sourcePath = _images[i].path;
-            String filename =
-                sourcePath.substring(sourcePath.lastIndexOf("/") + 1);
-            String cloudPath = 'flutter/' + filename;
-
-            CloudBaseStorageRes<UploadRes> res =
-                await ImageHelper.uploadFile(sourcePath, cloudPath);
-            // 上传成功，替换地址
-            // field : cloud://lovecookbook-7gjn846l3db07924.6c6f-lovecookbook-7gjn846l3db07924-1253175673/flutter/image_picker_297004EB-44C4-4355-82AD-FFDA4553F8F4-28546-00000F1C08B97C8F.jpg
-            // url: https://6c6f-lovecookbook-7gjn846l3db07924-1253175673.tcb.qcloud.la/flutter/image_picker_297004EB-44C4-4355-82AD-FFDA4553F8F4-28546-00000F1C08B97C8F.jpg
-            _images[i].url = res.data.fileId.replaceFirst(
-                "cloud://lovecookbook-7gjn846l3db07924.6c6f-lovecookbook-7gjn846l3db07924-1253175673",
-                "https://6c6f-lovecookbook-7gjn846l3db07924-1253175673.tcb.qcloud.la");
+            _images[i].url = await ImageHelper.uploadImage(_images[i].path);
             print("image upload success = " + _images[i].url);
           }
         }
@@ -237,7 +211,7 @@ class _PageState extends State<MenuDetailPage> {
 
       // 新增or更新
       if (_isUpdate) {
-        DataHelper.setData(DataHelper.COLLECTION_MENU, _menu.getId(), _menu)
+        DataHelper.setData(DataHelper.COLLECTION_MENU, _menu.id, _menu)
             .then((value) => requestSuccess("修改"))
             .catchError((error) => requestError(error));
       } else {

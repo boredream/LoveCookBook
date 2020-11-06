@@ -3,6 +3,7 @@ import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 
 import 'EatPage.dart';
 import 'LifePage.dart';
+import 'TheDayPage.dart';
 import 'TodoListPage.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,9 +18,7 @@ class _PageState extends State<MainPage> {
   List<Widget> _widgetOptions = <Widget>[
     TabTodoListPage(),
     LifePage(),
-    Text(
-      'Index 2: School',
-    ),
+    TheDayPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -71,12 +70,12 @@ class _PageState extends State<MainPage> {
             label: '日常',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.flag),
-            label: '里程碑',
+            icon: Icon(Icons.calendar_today),
+            label: '纪念日',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Theme.of(context).primaryColor,
         onTap: _onItemTapped,
       ),
     );

@@ -1,23 +1,27 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/ImageBean.dart';
+import 'package:flutter_todo/helper/ImageHelper.dart';
+import 'package:flutter_todo/utils/DialogUtils.dart';
 
 class AddGridImageList extends StatefulWidget {
-
   final List<ImageBean> _images;
   final Function() _onAddImage;
-  AddGridImageList(this._images, this._onAddImage, {Key key}) : super(key: key);
+  final Function(ImageBean) _onRemoveImage;
+
+  AddGridImageList(this._images, this._onAddImage, this._onRemoveImage,
+      {Key key})
+      : super(key: key);
 
   @override
-  _State createState() => _State(_images, _onAddImage);
+  _State createState() => _State(_images, _onAddImage, _onRemoveImage);
 }
 
 class _State extends State<AddGridImageList> {
-
   final List<ImageBean> _images;
   final Function() _onAddImage;
-  _State(this._images, this._onAddImage);
+  final Function(ImageBean) _onRemoveImage;
+
+  _State(this._images, this._onAddImage, this._onRemoveImage);
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +57,46 @@ class _State extends State<AddGridImageList> {
   }
 
   getRow(int index) {
-    return ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-        child: _images[index].path != null
-            ? Image.file(File(_images[index].path), fit: BoxFit.cover)
-            : Image.network(_images[index].url, fit: BoxFit.cover)
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        GestureDetector(
+          child: Hero(
+            tag: _images[index],
+            child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                child: ImageHelper.getImage(_images[index])),
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, "imageBrowser",
+                arguments: {"index": index, "images": _images});
+          },
+        ),
+        Positioned(
+          right: 0,
+          top: 0,
+          child: GestureDetector(
+            child: Container(
+              width: 24,
+              height: 24,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.red,
+              ),
+              child: Icon(Icons.close, size: 16, color: Colors.white),
+            ),
+            onTap: () => showConfirmDeleteDialog(_images[index]),
+          ),
+        ),
+      ],
     );
+  }
+
+  void showConfirmDeleteDialog(ImageBean image) {
+    DialogUtils.showDeleteConfirmDialog(context, () {
+      _onRemoveImage(image);
+    });
   }
 
   int getImageSize() {
