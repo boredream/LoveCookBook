@@ -32,6 +32,7 @@ class _PageState extends State<TheDayPage>
 
     _calendarController = CalendarController();
     _animationController = AnimationController(
+      vsync: this,
       duration: const Duration(milliseconds: 400),
     );
     _animationController.forward();

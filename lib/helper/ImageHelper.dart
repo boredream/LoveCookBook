@@ -8,7 +8,6 @@ import 'package:flutter_todo/entity/ImageBean.dart';
 import 'CloudBaseHelper.dart';
 
 class ImageHelper {
-
   static getImageByUrl(String url) {
     return getImage(ImageBean(url: url));
   }
@@ -19,7 +18,8 @@ class ImageHelper {
         : CachedNetworkImage(
             imageUrl: image.url,
             fit: BoxFit.cover,
-            placeholder: (context, url) => new CircularProgressIndicator(),
+            placeholder: (context, url) =>
+                new Center(child: CircularProgressIndicator()),
             errorWidget: (context, url, error) => new Icon(Icons.error),
           );
   }
@@ -46,11 +46,9 @@ class ImageHelper {
     return url;
   }
 
-  static Future<dynamic> uploadFile(String filePath, String cloudPath, {void onProcess(int count, int total)}) async {
+  static Future<dynamic> uploadFile(String filePath, String cloudPath,
+      {void onProcess(int count, int total)}) async {
     return CloudBaseHelper.getStorage().uploadFile(
-        cloudPath: cloudPath,
-        filePath: filePath,
-        onProcess: onProcess);
+        cloudPath: cloudPath, filePath: filePath, onProcess: onProcess);
   }
-
 }

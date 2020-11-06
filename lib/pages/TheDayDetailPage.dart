@@ -47,6 +47,9 @@ class _PageState extends State<TheDayDetailPage> {
       } else {
         // 修改
         _isUpdate = true;
+        if(_theDay.images == null) {
+          _theDay.images = [];
+        }
         for (String url in _theDay.images) {
           _images.add(ImageBean(url: url));
         }
@@ -54,7 +57,6 @@ class _PageState extends State<TheDayDetailPage> {
       if (_theDay.remindPeriod == null) {
         _theDay.remindPeriod = _remindPeriods[0];
       }
-      print(_theDay.remindPeriod);
       _theDay.theDayDate = DateFormat("yyyy-MM-dd").format(args["date"]);
 
       _titleController.text = _theDay.name;
