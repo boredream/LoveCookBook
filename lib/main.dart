@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_todo/pages/MenuAllPage.dart';
 import 'package:flutter_todo/pages/TheDayDetailPage.dart';
 
+import 'helper/ChineseCupertinoLocalizations.dart';
 import 'pages/ImageBrowerPage.dart';
 import 'pages/MainPage.dart';
 import 'pages/MenuDetailPage.dart';
@@ -40,11 +42,16 @@ class App extends StatelessWidget {
         });
       },
       localizationsDelegates: [
+        ChineseCupertinoLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: [
+        const Locale('en', 'US'),
         const Locale("zh", "CH"),
+        const Locale('zh', 'Hans'),
+        const Locale('zh', ''),
       ],
       locale: Locale("zh"),
     );

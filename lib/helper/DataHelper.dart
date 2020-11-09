@@ -1,5 +1,4 @@
 import 'package:cloudbase_database/cloudbase_database.dart';
-import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 
 class DataHelper {
@@ -57,8 +56,11 @@ class DataHelper {
 
   static Future<DbQueryResponse> loadData(
       String collection, dynamic where) async {
-    DbQueryResponse response =
-        await CloudBaseHelper.getDb().collection(collection).where(where).get();
+    DbQueryResponse response = await CloudBaseHelper.getDb()
+        .collection(collection)
+        .where(where)
+        .limit(100)
+        .get();
     if (response.code != null) {
       throw Exception(response.message);
     }
