@@ -54,13 +54,21 @@ class DataHelper {
     return response;
   }
 
-  static Future<DbQueryResponse> loadData(
-      String collection, dynamic where) async {
-    DbQueryResponse response = await CloudBaseHelper.getDb()
-        .collection(collection)
-        .where(where)
-        .limit(100)
-        .get();
+  static Future<DbQueryResponse> loadData(String collection,
+      {dynamic where, String fieldPath, String directionStr, int limit}) async {
+    dynamic col = CloudBaseHelper.getDb().collection(collection);
+    if (where != null) {
+      col = col.where(where);
+    }
+    if (fieldPath != null && directionStr != null) {
+      col = col.orderBy(fieldPath, directionStr);
+    }
+    if(limit == null) {
+      // 默认拉取数量
+      limit = 100;
+    }
+
+    DbQueryResponse response = await col.limit(limit).get();
     if (response.code != null) {
       throw Exception(response.message);
     }

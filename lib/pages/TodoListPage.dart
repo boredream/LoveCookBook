@@ -81,7 +81,7 @@ class _TodoListState extends State<TodoList>
 
   void loadData() {
     var where = {"type": type};
-    DataHelper.loadData(DataHelper.COLLECTION_LIST, where).then((value) {
+    DataHelper.loadData(DataHelper.COLLECTION_LIST, where: where).then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
         loadDataError(value.message);

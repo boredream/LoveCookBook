@@ -12,6 +12,8 @@ class TheDayPage extends StatefulWidget {
   _PageState createState() => _PageState();
 }
 
+const MODE_CALENDAR = "日历";
+const MODE_LIST = "列表";
 class _PageState extends State<TheDayPage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
 
@@ -25,6 +27,7 @@ class _PageState extends State<TheDayPage>
   List<TheDay> _selectedTheDays = [];
   AnimationController _animationController;
   CalendarController _calendarController;
+  String _curMode = MODE_CALENDAR;
 
   @override
   void initState() {
@@ -42,7 +45,7 @@ class _PageState extends State<TheDayPage>
 
   void loadData() {
     // TODO 一年一年拉？
-    DataHelper.loadData(DataHelper.COLLECTION_THE_DAY, null).then((value) {
+    DataHelper.loadData(DataHelper.COLLECTION_THE_DAY).then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
         loadDataError(value.message);
@@ -97,6 +100,20 @@ class _PageState extends State<TheDayPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('纪念日'),
+        actions: [
+          FlatButton(
+            child: Text(_curMode + "模式", style: TextStyle(color: Colors.white)),
+            onPressed: () {
+              setState(() {
+                _curMode = _curMode == MODE_LIST ? MODE_CALENDAR : MODE_LIST;
+              });
+            },
+          ),
+        ],
+      ),
       body: getBody(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -110,12 +127,15 @@ class _PageState extends State<TheDayPage>
 
   getBody() {
     if (_hasLoadData) {
+      List<Widget> children = [];
+      if(_curMode == MODE_CALENDAR) {
+        children.add(_buildTableCalendarWithBuilders());
+      }
+      children.add(Expanded(child: _buildEventList()));
+
       return Column(
         mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          _buildTableCalendarWithBuilders(),
-          Expanded(child: _buildEventList()),
-        ],
+        children: children,
       );
     } else {
       return Center(child: CircularProgressIndicator());
@@ -145,6 +165,13 @@ class _PageState extends State<TheDayPage>
       headerStyle: HeaderStyle(
         centerHeaderTitle: true,
         formatButtonVisible: false,
+        titleTextStyle: TextStyle(
+          fontSize: 16,
+          decoration: TextDecoration.underline,
+        ),
+        titleTextBuilder: (date, locale) {
+          return DateFormat("yyyy-MM-dd").format(date);
+        },
       ),
       builders: CalendarBuilders(
         markersBuilder: (context, date, events, holidays) {
@@ -165,7 +192,23 @@ class _PageState extends State<TheDayPage>
         _onDaySelected(date, events, holidays);
         _animationController.forward(from: 0.0);
       },
+      onHeaderTapped: (date) {
+        _selectDate();
+      },
     );
+  }
+
+  _selectDate() async {
+    var date = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100));
+    if(date == null) return;
+    setState(() {
+      _calendarController.setFocusedDay(date);
+      _calendarController.setSelectedDay(date);
+    });
   }
 
   Widget _buildEventsMarker(DateTime date, List events) {
@@ -191,16 +234,19 @@ class _PageState extends State<TheDayPage>
   }
 
   Widget _buildEventList() {
-    return ListView(
-      children: _selectedTheDays
-          .map((event) => _buildEventRow(event))
-          .toList(),
+    var children = _curMode == MODE_CALENDAR ? _selectedTheDays : _theDayList;
+    return ListView.separated(
+      itemCount: children.length,
+      itemBuilder: (context, index) => _buildEventRow(children[index]),
+      separatorBuilder: (context, _) => Divider(height: 1),
     );
   }
 
   Widget _buildEventRow(TheDay event) {
     return ListTile(
-      title: Text(event.name),
+      title: Text("[" + (event.theDayDate ?? "未设置时间") + "] " + event.name,
+          style: TextStyle(fontSize: 16)),
+      subtitle: Text(event.desc, maxLines: 1, style: TextStyle(fontSize: 14)),
       onTap: () => Navigator.pushNamed(context, "theDayDetail",
           arguments: {"date": _selectedDate, "theDay": event}),
     );

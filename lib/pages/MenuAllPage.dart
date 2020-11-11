@@ -102,7 +102,7 @@ class _ListPageState extends State<MenuPageList> {
 
   void loadData() {
     var where = {"type": type};
-    DataHelper.loadData(DataHelper.COLLECTION_MENU, where).then((value) {
+    DataHelper.loadData(DataHelper.COLLECTION_MENU, where: where).then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
         loadDataError(value.message);

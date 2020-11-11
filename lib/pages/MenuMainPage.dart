@@ -28,8 +28,7 @@ class _PageState extends State<MenuMainPage> {
   }
 
   void loadData() {
-    var where = {};
-    DataHelper.loadData(DataHelper.COLLECTION_MENU, where).then((value) {
+    DataHelper.loadData(DataHelper.COLLECTION_MENU).then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
         loadDataError(value.message);
