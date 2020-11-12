@@ -4,10 +4,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloudbase_storage/cloudbase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/ImageBean.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'CloudBaseHelper.dart';
 
 class ImageHelper {
+
+  static Future<String> selectImage(ImageSource imageSource) async {
+    // 选择图片
+    final pickedFile = await ImagePicker().getImage(
+      source: imageSource,
+      imageQuality: 10,
+    );
+    if (pickedFile == null) return null;
+
+    return pickedFile.path;
+  }
+
   static getImageByUrl(String url) {
     return getImage(ImageBean(url: url));
   }

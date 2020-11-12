@@ -57,7 +57,10 @@ class _PageState extends State<TheDayDetailPage> {
       if (_theDay.remindPeriod == null) {
         _theDay.remindPeriod = _remindPeriods[0];
       }
-      _theDay.theDayDate = DateFormat("yyyy-MM-dd").format(args["date"]);
+      var date = DateFormat("yyyy-MM-dd").format(args["date"]);
+      if(date == null) {
+        _theDay.theDayDate = date;
+      }
 
       _titleController.text = _theDay.name;
       _descController.text = _theDay.desc;
@@ -187,18 +190,12 @@ class _PageState extends State<TheDayDetailPage> {
     );
   }
 
-  selectImage() async {
-    // 选择图片
-    final pickedFile = await _picker.getImage(
-      source: ImageSource.gallery,
-      imageQuality: 10,
-    );
-    if (pickedFile == null) return;
-
-    String sourcePath = pickedFile.path;
-    setState(() {
-      // 添加本地路径
-      _images.add(ImageBean(path: sourcePath));
+  selectImage() {
+    DialogUtils.showImagePickDialog(context, (path) {
+      setState(() {
+        // 添加本地路径
+        _images.add(ImageBean(path: path));
+      });
     });
   }
 

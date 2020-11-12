@@ -55,13 +55,17 @@ class DataHelper {
   }
 
   static Future<DbQueryResponse> loadData(String collection,
-      {dynamic where, String fieldPath, String directionStr, int limit}) async {
+      {dynamic where, String orderField, bool orderGrow, int limit}) async {
     dynamic col = CloudBaseHelper.getDb().collection(collection);
     if (where != null) {
       col = col.where(where);
     }
-    if (fieldPath != null && directionStr != null) {
-      col = col.orderBy(fieldPath, directionStr);
+    if (orderField != null) {
+      if(orderGrow == null) {
+        // 默认降序
+        orderGrow = false;
+      }
+      col = col.orderBy(orderField, orderGrow ? "asc" : "desc");
     }
     if(limit == null) {
       // 默认拉取数量

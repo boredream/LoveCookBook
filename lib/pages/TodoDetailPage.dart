@@ -203,18 +203,12 @@ class _PageState extends State<TodoDetailPage> {
     );
   }
 
-  selectImage() async {
-    // 选择图片
-    final pickedFile = await _picker.getImage(
-      source: ImageSource.gallery,
-      imageQuality: 10,
-    );
-    if (pickedFile == null) return;
-
-    String sourcePath = pickedFile.path;
-    setState(() {
-      // 添加本地路径
-      _images.add(ImageBean(path: sourcePath));
+  selectImage() {
+    DialogUtils.showImagePickDialog(context, (path) {
+      setState(() {
+        // 添加本地路径
+        _images.add(ImageBean(path: path));
+      });
     });
   }
 

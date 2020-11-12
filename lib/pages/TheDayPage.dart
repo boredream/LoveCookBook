@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/TheDay.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/utils/DateUtils.dart';
+import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -45,7 +46,8 @@ class _PageState extends State<TheDayPage>
 
   void loadData() {
     // TODO 一年一年拉？
-    DataHelper.loadData(DataHelper.COLLECTION_THE_DAY).then((value) {
+    DataHelper.loadData(DataHelper.COLLECTION_THE_DAY, orderField: "theDayDate")
+        .then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
         loadDataError(value.message);
