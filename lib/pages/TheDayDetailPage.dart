@@ -19,7 +19,6 @@ class _PageState extends State<TheDayDetailPage> {
   TheDay _theDay;
   bool _isUpdate = false;
   List<ImageBean> _images = [];
-  ImagePicker _picker = ImagePicker();
   TextEditingController _titleController;
   TextEditingController _descController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
@@ -44,6 +43,7 @@ class _PageState extends State<TheDayDetailPage> {
       if (_theDay == null) {
         // 新增
         _theDay = TheDay();
+        _theDay.theDayDate = DateFormat("yyyy-MM-dd").format(args["date"]);
       } else {
         // 修改
         _isUpdate = true;
@@ -56,10 +56,6 @@ class _PageState extends State<TheDayDetailPage> {
       }
       if (_theDay.remindPeriod == null) {
         _theDay.remindPeriod = _remindPeriods[0];
-      }
-      var date = DateFormat("yyyy-MM-dd").format(args["date"]);
-      if(date == null) {
-        _theDay.theDayDate = date;
       }
 
       _titleController.text = _theDay.name;

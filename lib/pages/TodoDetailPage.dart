@@ -26,7 +26,6 @@ class _PageState extends State<TodoDetailPage> {
   Todo _todo;
   bool _isUpdate = false;
   List<ImageBean> _images = [];
-  ImagePicker _picker = ImagePicker();
   TextEditingController _titleController;
   TextEditingController _descController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();

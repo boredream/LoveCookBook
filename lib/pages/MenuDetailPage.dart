@@ -20,7 +20,6 @@ class _PageState extends State<MenuDetailPage> {
   Menu _menu;
   bool _isUpdate = false;
   List<ImageBean> _images = [];
-  ImagePicker _picker = ImagePicker();
   TextEditingController _titleController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ProgressDialog _dialog;

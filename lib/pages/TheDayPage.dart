@@ -250,7 +250,7 @@ class _PageState extends State<TheDayPage>
           style: TextStyle(fontSize: 16)),
       subtitle: Text(event.desc, maxLines: 1, style: TextStyle(fontSize: 14)),
       onTap: () => Navigator.pushNamed(context, "theDayDetail",
-          arguments: {"date": _selectedDate, "theDay": event}),
+          arguments: {"theDay": event}),
     );
   }
 
