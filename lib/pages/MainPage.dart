@@ -17,8 +17,8 @@ class _PageState extends State<MainPage> {
 
   List<Widget> _widgetOptions = <Widget>[
     TabTodoListPage(),
-    LifePage(),
     TheDayPage(),
+    LifePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -63,12 +63,12 @@ class _PageState extends State<MainPage> {
             label: 'List',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.wb_sunny),
-            label: '日常',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
             label: '纪念日',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.wb_sunny),
+            label: '日常',
           ),
         ],
         currentIndex: _selectedIndex,
