@@ -245,9 +245,12 @@ class _PageState extends State<TheDayPage>
   }
 
   Widget _buildEventRow(TheDay event) {
+    String title = event.name;
+    if(_curMode == MODE_LIST) {
+      title = "[" + (event.theDayDate ?? "未设置时间") + "] " + title;
+    }
     return ListTile(
-      title: Text("[" + (event.theDayDate ?? "未设置时间") + "] " + event.name,
-          style: TextStyle(fontSize: 16)),
+      title: Text(title, style: TextStyle(fontSize: 16)),
       subtitle: Text(event.desc, maxLines: 1, style: TextStyle(fontSize: 14)),
       onTap: () => Navigator.pushNamed(context, "theDayDetail",
           arguments: {"theDay": event}),
