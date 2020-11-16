@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Menu.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
@@ -86,7 +85,11 @@ class MenuPageList extends StatefulWidget {
   _ListPageState createState() => _ListPageState(type);
 }
 
-class _ListPageState extends State<MenuPageList> {
+class _ListPageState extends State<MenuPageList>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   _ListPageState(this.type);
 
   final type;
@@ -124,14 +127,10 @@ class _ListPageState extends State<MenuPageList> {
 
   @override
   Widget build(BuildContext context) {
-    return getBody();
-  }
-
-  getBody() {
+    super.build(context);
     if (_hasLoadData) {
       return Scaffold(
         body: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.all(8),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
@@ -173,7 +172,7 @@ class _ListPageState extends State<MenuPageList> {
       ),
       onTap: () {
         Navigator.pushNamed(context, "menuDetail",
-            arguments: {"type": type, "menu": menu})
+                arguments: {"type": type, "menu": menu})
             .then((value) => loadData());
       },
     );

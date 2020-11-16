@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/TheDay.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/utils/DateUtils.dart';
-import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -13,10 +12,11 @@ class TheDayPage extends StatefulWidget {
   _PageState createState() => _PageState();
 }
 
-const MODE_CALENDAR = "日历";
-const MODE_LIST = "列表";
 class _PageState extends State<TheDayPage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+
+  static const MODE_CALENDAR = "日历";
+  static const MODE_LIST = "列表";
 
   @override
   bool get wantKeepAlive => true;

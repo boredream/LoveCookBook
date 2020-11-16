@@ -13,7 +13,6 @@ class TabTodoListPage extends StatefulWidget {
 
 class _PageState extends State<TabTodoListPage>
     with AutomaticKeepAliveClientMixin {
-  // FIXME bottomNavigation 页面切换不保留状态？
 
   @override
   bool get wantKeepAlive => true;
@@ -150,7 +149,6 @@ class _TodoListState extends State<TodoList>
           child: GestureDetector(
             child: Text("[" + (todo.todoDate ?? "未设置时间") + "] " + todo.name),
             onTap: () {
-              // FIXME 使用通知一类的方案刷新
               Navigator.pushNamed(context, "todoDetail",
                       arguments: {"type": type, "todo": todo})
                   .then((value) => loadData());

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/RegularInvestment.dart';
@@ -17,9 +16,13 @@ class MoneyPage extends StatefulWidget {
 }
 
 class _PageState extends State<MoneyPage> {
+  static const MODE_CALENDAR = "日历";
+  static const MODE_LIST = "列表";
 
+  String _curMode = MODE_CALENDAR;
   bool _hasLoadData = false;
   List<RegularInvestment> _dataList = [];
+  Map<String, int> _monthIncomeMap;
   ProgressDialog _dialog;
 
   @override
@@ -43,9 +46,22 @@ class _PageState extends State<MoneyPage> {
       setState(() {
         _hasLoadData = true;
         _dataList = (value.data as List)
-            .map((e) =>
-                RegularInvestment.fromJson(new Map<String, dynamic>.from(e)))
+            .map((e) => RegularInvestment.fromJson(new Map<String, dynamic>.from(e)))
             .toList();
+
+        // 按到期时间分组
+        _monthIncomeMap = Map();
+        _dataList.forEach((element) {
+          DateTime date = DateUtils.str2ymd(element.endDate);
+          String dateStr = "${date.year}-${date.month}";
+          int money = _monthIncomeMap[dateStr];
+          if (money == null) {
+            _monthIncomeMap[dateStr] = 0;
+          }
+          _monthIncomeMap[dateStr] += element.money;
+        });
+
+        print(_monthIncomeMap);
       });
     }).catchError(loadDataError);
   }
@@ -84,15 +100,17 @@ class _PageState extends State<MoneyPage> {
         children: [
           Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).primaryColor, width: 1),
+                border:
+                    Border.all(color: Theme.of(context).primaryColor, width: 1),
                 borderRadius: BorderRadius.all(Radius.circular(8))),
-            margin: EdgeInsets.all(16),
+            margin: EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: ListTile(
               title: Text("总投入：${StringUtils.formatMoney(totalMoney)} * "
                   "$totalRate% ~ "
                   "${(totalIncome ~/ 1200).toString()}/月"),
             ),
           ),
+          _buildYearIncomeGrid(),
           Expanded(child: getListView()),
         ],
       );
@@ -100,6 +118,71 @@ class _PageState extends State<MoneyPage> {
     } else {
       return Center(child: CircularProgressIndicator());
     }
+  }
+
+  _buildYearIncomeGrid() {
+    PageController controller = PageController(
+      initialPage: 0,
+      keepPage: true,
+    );
+
+    // 看未来5年的现金流
+    DateTime now = DateTime.now();
+    List<Widget> yearGridList = [];
+    for (int i = 0; i < 5; i++) {
+      int year = now.year + i;
+      yearGridList.add(Column(
+        children: [
+          Text("$year 年"),
+          GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 6,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                childAspectRatio: 1,
+              ),
+              itemCount: 12,
+              itemBuilder: (context, index) {
+                String monthStr = (index + 1).toString();
+                String date = "$year-$monthStr";
+                Color color = Colors.blue[50];
+                List<Widget> children = [
+                  Text("$monthStr 月", style: TextStyle(fontSize: 12))
+                ];
+                int money = _monthIncomeMap[date];
+                if (money != null) {
+                  // 当月有金额，颜色也分梯度取
+                  children.add(Text(StringUtils.formatMoney(money)));
+                  if (money < 50000) {
+                    color = Colors.blue[100];
+                  } else if (money < 100000) {
+                    color = Colors.blue[300];
+                  } else {
+                    color = Colors.blue[500];
+                  }
+                }
+
+                return Container(
+                  alignment: Alignment.center,
+                  color: color,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: children,
+                  ),
+                );
+              })
+        ],
+      ));
+    }
+    return SizedBox(
+        height: 142,
+        child: PageView(
+          controller: controller,
+          children: yearGridList,
+        )
+    );
   }
 
   getListView() {
@@ -125,8 +208,8 @@ class _PageState extends State<MoneyPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text("${data.startDate ?? ""} 至 ${data.endDate ?? ""}"),
-          Text("剩余：${DateUtils.calculateDayDiff(DateTime.now(),
-              DateUtils.str2ymd(data.endDate))}天"),
+          Text(
+              "剩余：${DateUtils.calculateDayDiff(DateTime.now(), DateUtils.str2ymd(data.endDate))}天"),
         ],
       ),
       onTap: () {
@@ -136,34 +219,36 @@ class _PageState extends State<MoneyPage> {
   }
 
   void showEditDialog({RegularInvestment invest}) {
-      showDialog<bool>(
-        context: context,
-        builder: (context) {
-          return EditDialog(dialog: _dialog, invest: invest ?? RegularInvestment(),
-          updateSuccess: () {
-            setState(() {
-              _hasLoadData = false;
+    showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return EditDialog(
+            dialog: _dialog,
+            invest: invest ?? RegularInvestment(),
+            updateSuccess: () {
+              setState(() {
+                _hasLoadData = false;
+              });
+              loadData();
             });
-            loadData();
-          });
-        },
-      );
+      },
+    );
   }
 }
 
 class EditDialog extends StatefulWidget {
-
   final ProgressDialog dialog;
   final RegularInvestment invest;
   final Function updateSuccess;
-  EditDialog({Key key, this.dialog, this.invest, this.updateSuccess}) : super(key: key);
+
+  EditDialog({Key key, this.dialog, this.invest, this.updateSuccess})
+      : super(key: key);
 
   @override
   _DialogState createState() => _DialogState();
 }
 
 class _DialogState extends State<EditDialog> {
-
   static const DATE_TYPE_START = 1;
   static const DATE_TYPE_END = 2;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -303,7 +388,7 @@ class _DialogState extends State<EditDialog> {
         initialDate: DateTime.now(),
         firstDate: DateTime(2000),
         lastDate: DateTime(2100));
-    if(date == null) return;
+    if (date == null) return;
     var format = DateFormat("yyyy-MM-dd").format(date);
     setState(() {
       if (dateType == DATE_TYPE_START) {
@@ -321,7 +406,8 @@ class _DialogState extends State<EditDialog> {
 
       widget.dialog.show();
       if (widget.invest.id != null) {
-        DataHelper.setData(DataHelper.COLLECTION_INVESTMENT, widget.invest.id, widget.invest)
+        DataHelper.setData(DataHelper.COLLECTION_INVESTMENT, widget.invest.id,
+                widget.invest)
             .then((value) => requestSuccess("修改"))
             .catchError((error) => requestError(error));
       } else {
@@ -346,5 +432,4 @@ class _DialogState extends State<EditDialog> {
     var msg = "操作失败 " + error.toString();
     Fluttertoast.showToast(msg: msg);
   }
-
 }

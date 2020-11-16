@@ -48,9 +48,6 @@ class _PageState extends State<ImageBrowserPage> {
               ),
             ),
           ),
-          // backgroundDecoration: widget.backgroundDecoration,
-          // pageController: widget.pageController,
-          // onPageChanged: onPageChanged,
         )
     );
   }
