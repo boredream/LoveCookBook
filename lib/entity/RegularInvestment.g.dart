@@ -12,7 +12,8 @@ RegularInvestment _$RegularInvestmentFromJson(Map<String, dynamic> json) {
     ..name = json['name'] as String
     ..startDate = json['startDate'] as String
     ..endDate = json['endDate'] as String
-    ..rate = (json['rate'] as num)?.toDouble();
+    ..rate = (json['rate'] as num)?.toDouble()
+    ..money = (json['money'] as num)?.toInt();
 }
 
 Map<String, dynamic> _$RegularInvestmentToJson(RegularInvestment instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$RegularInvestmentToJson(RegularInvestment instance) =>
       'startDate': instance.startDate,
       'endDate': instance.endDate,
       'rate': instance.rate,
+      'money': instance.money,
     };

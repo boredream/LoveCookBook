@@ -4,7 +4,7 @@ import 'BaseCloudBean.dart';
 
 part 'RegularInvestment.g.dart';
 
-// flutter packages pub run build_runner watch
+// flutter packages pub run build_runner build
 @JsonSerializable()
 class RegularInvestment extends BaseCloudBean {
   RegularInvestment();
@@ -13,6 +13,7 @@ class RegularInvestment extends BaseCloudBean {
   String startDate;
   String endDate;
   double rate;
+  int money;
 
   factory RegularInvestment.fromJson(Map<String, dynamic> json) =>
       _$RegularInvestmentFromJson(json);

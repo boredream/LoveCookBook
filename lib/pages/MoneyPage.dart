@@ -1,7 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/RegularInvestment.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:flutter_todo/utils/DateUtils.dart';
+import 'package:flutter_todo/utils/StringUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -15,12 +18,8 @@ class MoneyPage extends StatefulWidget {
 
 class _PageState extends State<MoneyPage> {
 
-  static const DATE_TYPE_START = 1;
-  static const DATE_TYPE_END = 2;
-
   bool _hasLoadData = false;
   List<RegularInvestment> _dataList = [];
-  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ProgressDialog _dialog;
 
   @override
@@ -32,7 +31,9 @@ class _PageState extends State<MoneyPage> {
   }
 
   void loadData() {
-    DataHelper.loadData(DataHelper.COLLECTION_INVESTMENT).then((value) {
+    DataHelper.loadData(DataHelper.COLLECTION_INVESTMENT,
+            orderField: "endDate", orderGrow: true)
+        .then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
         loadDataError(value.message);
@@ -71,7 +72,31 @@ class _PageState extends State<MoneyPage> {
 
   _buildBody() {
     if (_hasLoadData) {
-      return getListView();
+      int totalMoney = 0;
+      dynamic totalIncome = 0;
+      for (RegularInvestment data in _dataList) {
+        totalMoney += data.money;
+        totalIncome += data.money * data.rate;
+      }
+      String totalRate = NumberFormat("0.00").format(totalIncome / totalMoney);
+
+      return Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Theme.of(context).primaryColor, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            margin: EdgeInsets.all(16),
+            child: ListTile(
+              title: Text("总投入：${StringUtils.formatMoney(totalMoney)} * "
+                  "$totalRate% ~ "
+                  "${(totalIncome ~/ 1200).toString()}/月"),
+            ),
+          ),
+          Expanded(child: getListView()),
+        ],
+      );
+      // return getListView();
     } else {
       return Center(child: CircularProgressIndicator());
     }
@@ -90,15 +115,18 @@ class _PageState extends State<MoneyPage> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("[${data.rate}%] ${data.name}"),
-          Text("80/月"), // FIXME calculate
+          Text(data.name),
+          Text("${StringUtils.formatMoney(data.money)} * "
+              "${data.rate}% ~ "
+              "${data.money * data.rate ~/ 1200}/月"),
         ],
       ),
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("${data.startDate} 至 ${data.endDate}"),
-          Text("180天"),
+          Text("${data.startDate ?? ""} 至 ${data.endDate ?? ""}"),
+          Text("剩余：${DateUtils.calculateDayDiff(DateTime.now(),
+              DateUtils.str2ymd(data.endDate))}天"),
         ],
       ),
       onTap: () {
@@ -107,95 +135,28 @@ class _PageState extends State<MoneyPage> {
     );
   }
 
-  RegularInvestment editInvest;
-  TextEditingController _nameController = TextEditingController();
   void showEditDialog({RegularInvestment invest}) {
-      editInvest = invest;
-      if(editInvest == null) {
-        editInvest = RegularInvestment();
-      }
-      _nameController.text = editInvest.name;
-
       showDialog<bool>(
         context: context,
         builder: (context) {
-          bool isUpdate = true;
-          return StatefulBuilder(builder: (context, dialogStatueSetter) {
-            return AlertDialog(
-              content: Form(
-                key: _formKey,
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFormField(
-                        controller: _nameController,
-                        decoration: InputDecoration(
-                          labelText: "名称",
-                        ),
-                        validator: (value) {
-                          return value.trim().length > 0 ? null : "名称不能为空";
-                        },
-                        onSaved: (newValue) {
-                          editInvest.name = newValue;
-                        },
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      GestureDetector(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "开始日期：",
-                              style: Theme.of(context).textTheme.subtitle1,
-                            ),
-                            Text(
-                              editInvest.startDate ?? "未填写",
-                              style: Theme.of(context).textTheme.subtitle1,
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          dialogStatueSetter(() {
-                            editInvest.startDate = "2020/12/21";
-                          });
-                          // pickDate(dialogStatueSetter, DATE_TYPE_START);
-                        },
-                      ),
-                    ]),
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("取消"),
-                  onPressed: () => Navigator.pop(context), // 关闭对话框
-                ),
-                FlatButton(
-                  child: Text(editInvest != null ? "修改" : "新增"),
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                    // updateTodo(invest, isUpdate);
-                  },
-                ),
-              ],
-            );
+          return EditDialog(dialog: _dialog, invest: invest ?? RegularInvestment(),
+          updateSuccess: () {
+            setState(() {
+              _hasLoadData = false;
+            });
+            loadData();
           });
         },
       );
   }
-
-// deleteTheDay() {
-//   DialogUtils.showDeleteConfirmDialog(context, () {
-//     _dialog.show();
-//     DataHelper.deleteData(DataHelper.COLLECTION_THE_DAY, _theDay.id)
-//         .then((value) => requestSuccess("删除"))
-//         .catchError((error) => requestError(error));
-//   });
-// }
 }
 
 class EditDialog extends StatefulWidget {
+
+  final ProgressDialog dialog;
+  final RegularInvestment invest;
+  final Function updateSuccess;
+  EditDialog({Key key, this.dialog, this.invest, this.updateSuccess}) : super(key: key);
 
   @override
   _DialogState createState() => _DialogState();
@@ -205,87 +166,138 @@ class _DialogState extends State<EditDialog> {
 
   static const DATE_TYPE_START = 1;
   static const DATE_TYPE_END = 2;
-
-  RegularInvestment invest;
-  bool _isUpdate = false;
-  String _title = "";
-  TextEditingController _nameController;
-  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _rateController = TextEditingController();
+  TextEditingController _moneyController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-
-    // widget找state对应的组件，不用传进来
-    _nameController = TextEditingController();
-
-    if (invest == null) {
-      // 新增
-      invest = RegularInvestment();
-    } else {
-      // 修改
-      _isUpdate = true;
-      _nameController.text = invest.name;
-    }
+    _nameController.text = widget.invest.name;
+    _rateController.text = widget.invest.rate?.toString();
+    _moneyController.text = widget.invest.money?.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(_title),
+      content: Form(
+        key: _formKey,
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: "理财产品名称",
+                ),
+                validator: (value) {
+                  return value.trim().length > 0 ? null : "不能为空";
+                },
+                onSaved: (newValue) {
+                  setState(() {
+                    widget.invest.name = newValue;
+                  });
+                },
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              TextFormField(
+                controller: _moneyController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: "投入金额",
+                ),
+                validator: (value) {
+                  return value.trim().length > 0 ? null : "不能为空";
+                },
+                onSaved: (newValue) {
+                  setState(() {
+                    widget.invest.money = int.parse(newValue);
+                  });
+                },
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              TextFormField(
+                controller: _rateController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: "费率 (%)",
+                ),
+                validator: (value) {
+                  return value.trim().length > 0 ? null : "不能为空";
+                },
+                onSaved: (newValue) {
+                  setState(() {
+                    widget.invest.rate = double.parse(newValue);
+                  });
+                },
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              GestureDetector(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "开始日期：",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    Text(
+                      widget.invest.startDate ?? "未填写",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  pickDate(DATE_TYPE_START);
+                },
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              GestureDetector(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "结束日期：",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    Text(
+                      widget.invest.endDate ?? "未填写",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  pickDate(DATE_TYPE_END);
+                },
+              ),
+            ]),
+      ),
       actions: <Widget>[
         FlatButton(
-            onPressed: () {
-              final newText = 'Updated Title!';
-              setState(() {
-                _title = newText;
-              });
-              Navigator.pop(context);
-            },
-            child: Text('Change'))
+          child: Text("取消"),
+          onPressed: () => Navigator.pop(context), // 关闭对话框
+        ),
+        FlatButton(
+          child: Text(widget.invest != null ? "修改" : "新增"),
+          onPressed: () {
+            updateTodo();
+          },
+        ),
       ],
     );
   }
 
-  List<Widget> _buildFormFields() {
-    return [
-      TextFormField(
-        controller: _nameController,
-        decoration: InputDecoration(
-          labelText: "名称",
-        ),
-        validator: (value) {
-          return value.trim().length > 0 ? null : "名称不能为空";
-        },
-        onSaved: (newValue) {
-          invest.name = newValue;
-        },
-      ),
-      SizedBox(
-        height: 8,
-      ),
-      GestureDetector(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "开始日期：",
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            Text(
-              invest.startDate ?? "未填写",
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ],
-        ),
-        onTap: () {
-          pickDate(invest, DATE_TYPE_START);
-        },
-      ),
-    ];
-  }
-
-  pickDate(RegularInvestment invest, int dateType) async {
+  pickDate(int dateType) async {
     var date = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -295,42 +307,44 @@ class _DialogState extends State<EditDialog> {
     var format = DateFormat("yyyy-MM-dd").format(date);
     setState(() {
       if (dateType == DATE_TYPE_START) {
-        invest.startDate = format;
+        widget.invest.startDate = format;
       } else if (dateType == DATE_TYPE_END) {
-        invest.endDate = format;
+        widget.invest.endDate = format;
       }
     });
   }
 
-  // updateTodo(RegularInvestment invest, bool isUpdate) async {
-  //   if (_formKey.currentState.validate()) {
-  //     // 验证通过提交数据
-  //     _formKey.currentState.save();
-  //
-  //     _dialog.show();
-  //
-  //     if (isUpdate) {
-  //       DataHelper.setData(DataHelper.COLLECTION_LIST, invest.id, invest)
-  //           .then((value) => requestSuccess("修改"))
-  //           .catchError((error) => requestError(error));
-  //     } else {
-  //       DataHelper.saveData(DataHelper.COLLECTION_INVESTMENT, invest)
-  //           .then((value) => requestSuccess("新增"))
-  //           .catchError((error) => requestError(error));
-  //     }
-  //   }
-  // }
-  //
-  // requestSuccess(String operation) {
-  //   _dialog.hide();
-  //   var msg = operation + "成功";
-  //   Fluttertoast.showToast(msg: msg);
-  //   Navigator.pop(context, true);
-  // }
-  //
-  // requestError(error) {
-  //   _dialog.hide();
-  //   var msg = "操作失败 " + error.toString();
-  //   Fluttertoast.showToast(msg: msg);
-  // }
+  updateTodo() async {
+    if (_formKey.currentState.validate()) {
+      // 验证通过提交数据
+      _formKey.currentState.save();
+
+      widget.dialog.show();
+      if (widget.invest.id != null) {
+        DataHelper.setData(DataHelper.COLLECTION_INVESTMENT, widget.invest.id, widget.invest)
+            .then((value) => requestSuccess("修改"))
+            .catchError((error) => requestError(error));
+      } else {
+        DataHelper.saveData(DataHelper.COLLECTION_INVESTMENT, widget.invest)
+            .then((value) => requestSuccess("新增"))
+            .catchError((error) => requestError(error));
+      }
+    }
+  }
+
+  requestSuccess(String operation) {
+    widget.dialog.hide();
+    var msg = operation + "成功";
+    Fluttertoast.showToast(msg: msg);
+    Navigator.pop(context, true);
+
+    widget.updateSuccess.call();
+  }
+
+  requestError(error) {
+    widget.dialog.hide();
+    var msg = "操作失败 " + error.toString();
+    Fluttertoast.showToast(msg: msg);
+  }
+
 }
