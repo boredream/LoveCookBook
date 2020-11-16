@@ -12,15 +12,18 @@ class LifePage extends StatefulWidget {
 class _PageState extends State<LifePage> {
   @override
   Widget build(BuildContext context) {
-    return GridView(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, //横轴三个子widget
-            childAspectRatio: 1.0 //宽高比为1时，子widget
-            ),
-        children: <Widget>[
-          getRow(Icons.cake, "菜单", "menuMain"),
-          getRow(Icons.attach_money, "理财", "money"),
-        ]);
+    return Scaffold(
+      appBar: AppBar(title: Text("日常")),
+      body: GridView(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, //横轴三个子widget
+              childAspectRatio: 1.0 //宽高比为1时，子widget
+              ),
+          children: <Widget>[
+            getRow(Icons.cake, "菜单", "menuMain"),
+            getRow(Icons.attach_money, "理财", "money"),
+          ]),
+    );
   }
 
   getRow(var icon, var name, var routeName) {

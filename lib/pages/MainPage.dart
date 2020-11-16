@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 
-import 'EatPage.dart';
 import 'LifePage.dart';
 import 'TheDayPage.dart';
 import 'TodoListPage.dart';
@@ -15,7 +14,7 @@ class _PageState extends State<MainPage> {
   bool _hasInit = false;
   int _selectedIndex = 0;
 
-  List<Widget> _widgetOptions = <Widget>[
+  List<Widget> _pages = <Widget>[
     TabTodoListPage(),
     TheDayPage(),
     LifePage(),
@@ -44,8 +43,9 @@ class _PageState extends State<MainPage> {
 
   getBody() {
     if (_hasInit) {
-      return Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      return IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
       );
     } else {
       return Center(child: CircularProgressIndicator());
