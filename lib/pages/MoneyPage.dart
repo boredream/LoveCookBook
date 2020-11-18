@@ -49,7 +49,7 @@ class _PageState extends State<MoneyPage> {
         // 按到期时间分组
         _monthIncomeMap = Map();
         _dataList.forEach((element) {
-          DateTime date = DateUtils.str2ymd(element.endDate);
+          DateTime date = DateUtils.str2date(element.endDate);
           String dateStr = "${date.year}-${date.month}";
           int money = _monthIncomeMap[dateStr];
           if (money == null) {
@@ -207,7 +207,7 @@ class _PageState extends State<MoneyPage> {
         children: [
           Text("${data.startDate ?? ""} 至 ${data.endDate ?? ""}"),
           Text(
-              "剩余：${DateUtils.calculateDayDiff(DateTime.now(), DateUtils.str2ymd(data.endDate))}天"),
+              "剩余：${DateUtils.calculateDayDiff(DateTime.now(), DateUtils.str2date(data.endDate))}天"),
         ],
       ),
       onTap: () {

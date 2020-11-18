@@ -68,7 +68,7 @@ class _PageState extends State<TheDayPage>
             .toList();
         _groupTheDays();
 
-        _selectedDate = DateUtils.date2ymd(DateTime.now());
+        _selectedDate = DateUtils.dateClearHMS(DateTime.now());
         _selectedTheDays = _dateTheDayMap[_selectedDate] ?? [];
       });
     }).catchError(loadDataError);
@@ -90,7 +90,7 @@ class _PageState extends State<TheDayPage>
     // 数据按日分组
     _dateTheDayMap = Map();
     for(TheDay day in _theDayList) {
-      DateTime date = DateUtils.str2ymd(day.theDayDate);
+      DateTime date = DateUtils.str2date(day.theDayDate);
       List<TheDay> theDayList = _dateTheDayMap[date];
       if(theDayList == null) {
         _dateTheDayMap[date] = theDayList = List<TheDay>();
@@ -100,7 +100,7 @@ class _PageState extends State<TheDayPage>
   }
 
   void _onDaySelected(DateTime day, List events, List holidays) {
-    _selectedDate = DateUtils.date2ymd(day);
+    _selectedDate = DateUtils.dateClearHMS(day);
     setState(() {
       _selectedTheDays = _dateTheDayMap[_selectedDate] ?? [];
     });

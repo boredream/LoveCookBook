@@ -4,14 +4,14 @@ import 'package:intl/intl.dart';
 
 class DateUtils {
 
-  /// 字符串转年月日
-  static DateTime str2ymd(String timeStr) {
+  /// 字符串转日期
+  static DateTime str2date(String timeStr) {
     if(StringUtils.isEmpty(timeStr)) return null;
     return DateFormat("yyyy-MM-dd").parse(timeStr);
   }
 
-  /// 日期转年月日，清空时分秒信息
-  static DateTime date2ymd(DateTime date) {
+  /// 日期清空时分秒信息
+  static DateTime dateClearHMS(DateTime date) {
     return DateTime(date.year, date.month, date.day);
   }
 

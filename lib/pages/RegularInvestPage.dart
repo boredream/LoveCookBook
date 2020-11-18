@@ -49,7 +49,7 @@ class _PageState extends State<RegularInvestPage> {
         // 按到期时间分组
         _monthIncomeMap = Map();
         _dataList.forEach((element) {
-          DateTime date = DateUtils.str2ymd(element.endDate);
+          DateTime date = DateUtils.str2date(element.endDate);
           String dateStr = "${date.year}-${date.month}";
           int money = _monthIncomeMap[dateStr];
           if (money == null) {
@@ -83,13 +83,23 @@ class _PageState extends State<RegularInvestPage> {
 
   _buildBody() {
     if (_hasLoadData) {
-      int totalMoney = 0;
+      int totalOriMoney = 0;
+      int totalCurMoney = 0;
       dynamic totalIncome = 0;
       for (RegularInvest data in _dataList) {
-        totalMoney += data.money;
-        totalIncome += data.money * data.rate;
+        totalOriMoney += data.money;
+        double income = data.money * data.rate;
+        totalIncome += income;
+
+        int pastDays = DateUtils.calculateDayDiff(
+            DateUtils.str2date(data.startDate), DateTime.now());
+        int curIncome =
+            pastDays <= 0 ? 0 : data.money * data.rate / 100 * pastDays ~/ 365;
+        totalCurMoney += curIncome;
       }
-      String totalRate = NumberFormat("0.00").format(totalIncome / totalMoney);
+      totalCurMoney += totalOriMoney;
+      String totalRate =
+          NumberFormat("0.00").format(totalIncome / totalOriMoney);
 
       return Column(
         children: [
@@ -99,13 +109,18 @@ class _PageState extends State<RegularInvestPage> {
                     Border.all(color: Theme.of(context).primaryColor, width: 1),
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             margin: EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: ListTile(
-              title: Text("总投入：${StringUtils.formatMoney(totalMoney)} * "
-                  "$totalRate% ~ "
-                  "${(totalIncome ~/ 1200).toString()}/月"),
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(),
+                Text("总投入：${StringUtils.formatMoney(totalOriMoney)} * "
+                    "$totalRate% ~ "
+                    "${(totalIncome ~/ 1200).toString()}/月"),
+                Text("当前持有：${StringUtils.formatMoney(totalCurMoney)}"),
+              ],
             ),
           ),
-          _buildYearIncomeGrid(),
           Expanded(child: getListView()),
         ],
       );
@@ -182,28 +197,53 @@ class _PageState extends State<RegularInvestPage> {
   getListView() {
     return ListView.separated(
         itemBuilder: (context, index) => getRow(index),
-        separatorBuilder: (context, _) => SizedBox(height: 8),
-        itemCount: _dataList.length);
+        separatorBuilder: (context, _) => Divider(height: 1),
+        itemCount: _dataList.length + 1);
   }
 
   getRow(int index) {
+    if(index == 0) {
+      return _buildYearIncomeGrid();
+    }
+
+    index --;
     RegularInvest data = _dataList[index];
+
+    int totalDays = DateUtils.calculateDayDiff(
+        DateUtils.str2date(data.startDate), DateUtils.str2date(data.endDate));
+    int pastDays = DateUtils.calculateDayDiff(
+        DateUtils.str2date(data.startDate), DateTime.now());
+    int monthIncome = data.money * data.rate ~/ 1200;
+    int curIncome =
+        pastDays <= 0 ? 0 : data.money * data.rate / 100 * pastDays ~/ 365;
+
     return ListTile(
+      contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(data.name),
           Text("${StringUtils.formatMoney(data.money)} * "
-              "${data.rate}% ~ "
-              "${data.money * data.rate ~/ 1200}/月"),
+              "${data.rate}% ~ $monthIncome/月"),
         ],
       ),
-      subtitle: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      subtitle: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text("${data.startDate ?? ""} 至 ${data.endDate ?? ""}"),
-          Text(
-              "剩余：${DateUtils.calculateDayDiff(DateTime.now(), DateUtils.str2ymd(data.endDate))}天"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("${data.startDate ?? ""} 至 ${data.endDate ?? ""}"),
+              Text("剩余：${totalDays - pastDays}天"),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("$pastDays  /  $totalDays天"),
+              Text("当前收益：$curIncome"),
+            ],
+          ),
         ],
       ),
       onTap: () {

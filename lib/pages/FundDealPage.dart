@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 
-class EatPage extends StatefulWidget {
-  EatPage({Key key}) : super(key: key);
+class FundDealPage extends StatefulWidget {
+  FundDealPage({Key key}) : super(key: key);
 
   @override
   _PageState createState() => _PageState();
 }
 
-class _PageState extends State<EatPage> {
+class _PageState extends State<FundDealPage> {
   List widgets = [];
 
   @override
