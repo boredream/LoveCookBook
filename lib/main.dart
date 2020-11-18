@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_todo/pages/FundPage.dart';
 import 'package:flutter_todo/pages/MenuAllPage.dart';
 import 'package:flutter_todo/pages/MoneyPage.dart';
+import 'package:flutter_todo/pages/RegularInvestPage.dart';
 import 'package:flutter_todo/pages/TheDayDetailPage.dart';
 
 import 'helper/ChineseCupertinoLocalizations.dart';
@@ -35,13 +37,8 @@ class App extends StatelessWidget {
         "imageBrowser": (context) => ImageBrowserPage(),
         "theDayDetail": (context) => TheDayDetailPage(),
         "money": (context) => MoneyPage(),
-      },
-      onGenerateRoute: (RouteSettings settings) {
-        return MaterialPageRoute(builder: (context) {
-          String routeName = settings.name;
-          print('~~~~~~~~~~' + routeName);
-          return MainPage();
-        });
+        "regularInvest": (context) => RegularInvestPage(),
+        "fund": (context) => FundPage(),
       },
       localizationsDelegates: [
         ChineseCupertinoLocalizations.delegate,

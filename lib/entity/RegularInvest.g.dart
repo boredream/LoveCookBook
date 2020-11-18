@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'RegularInvestment.dart';
+part of 'RegularInvest.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-RegularInvestment _$RegularInvestmentFromJson(Map<String, dynamic> json) {
-  return RegularInvestment()
+RegularInvest _$RegularInvestFromJson(Map<String, dynamic> json) {
+  return RegularInvest()
     ..id = json['_id'] as String
     ..name = json['name'] as String
     ..startDate = json['startDate'] as String
     ..endDate = json['endDate'] as String
     ..rate = (json['rate'] as num)?.toDouble()
-    ..money = (json['money'] as num)?.toInt();
+    ..money = json['money'] as int;
 }
 
-Map<String, dynamic> _$RegularInvestmentToJson(RegularInvestment instance) =>
+Map<String, dynamic> _$RegularInvestToJson(RegularInvest instance) =>
     <String, dynamic>{
       '_id': instance.id,
       'name': instance.name,

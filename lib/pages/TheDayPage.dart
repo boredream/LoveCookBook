@@ -22,8 +22,8 @@ class _PageState extends State<TheDayPage>
   bool get wantKeepAlive => true;
 
   bool _hasLoadData = false;
-  List<TheDay> _theDayList = [];
-  Map<DateTime, List<TheDay>> _dateTheDayMap = {};
+  List<TheDay> _theDayList;
+  Map<DateTime, List<TheDay>> _dateTheDayMap;
   DateTime _selectedDate;
   List<TheDay> _selectedTheDays = [];
   AnimationController _animationController;
@@ -41,6 +41,13 @@ class _PageState extends State<TheDayPage>
     );
     _animationController.forward();
 
+    loadData();
+  }
+
+  void refresh() {
+    setState(() {
+      _hasLoadData = false;
+    });
     loadData();
   }
 
@@ -81,6 +88,7 @@ class _PageState extends State<TheDayPage>
   void _groupTheDays() {
     // TODO 周年纪念日的xxx循环添加
     // 数据按日分组
+    _dateTheDayMap = Map();
     for(TheDay day in _theDayList) {
       DateTime date = DateUtils.str2ymd(day.theDayDate);
       List<TheDay> theDayList = _dateTheDayMap[date];
@@ -121,7 +129,9 @@ class _PageState extends State<TheDayPage>
         child: Icon(Icons.add),
         onPressed: () {
           Navigator.pushNamed(context, "theDayDetail",
-              arguments: {"date": _selectedDate});
+              arguments: {"date": _selectedDate}).then((value) {
+            if (value) refresh();
+          });
         },
       ),
     );
@@ -260,4 +270,5 @@ class _PageState extends State<TheDayPage>
   getProgress() {
     return Center(child: CircularProgressIndicator());
   }
+
 }
