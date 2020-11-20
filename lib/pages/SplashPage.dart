@@ -2,14 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class LifePage extends StatefulWidget {
-  LifePage({Key key}) : super(key: key);
+class SplashPage extends StatefulWidget {
+  SplashPage({Key key}) : super(key: key);
 
   @override
   _PageState createState() => _PageState();
 }
 
-class _PageState extends State<LifePage> {
+class _PageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
