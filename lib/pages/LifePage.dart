@@ -1,6 +1,10 @@
 
+import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_todo/helper/CloudBaseHelper.dart';
+import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:leancloud_storage/leancloud.dart';
 
 class LifePage extends StatefulWidget {
   LifePage({Key key}) : super(key: key);
@@ -38,7 +42,9 @@ class _PageState extends State<LifePage> {
         ],
       ),
       onTap: () {
-        Navigator.pushNamed(context, routeName);
+        CloudBaseHelper.login("papi", "123456")
+            .then((value) => {print("登录 $value")});
+        // Navigator.pushNamed(context, routeName);
       },
     );
   }

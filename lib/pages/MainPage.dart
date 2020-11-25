@@ -33,12 +33,13 @@ class _PageState extends State<MainPage> {
   }
 
   void loadData() {
-    CloudBaseHelper.login().then((value) {
-      setState(() {
-        print("login success!");
-        _hasInit = true;
-      });
-    });
+    // TODO
+    // CloudBaseHelper.login().then((value) {
+    //   setState(() {
+    //     print("login success!");
+    //     _hasInit = true;
+    //   });
+    // });
   }
 
   getBody() {

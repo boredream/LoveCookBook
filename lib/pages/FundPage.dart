@@ -38,8 +38,6 @@ class _PageState extends State<FundPage> {
         return;
       }
 
-      print(json.encode(value.data));
-
       setState(() {
         _hasLoadData = true;
         _dataList = (value.data as List)

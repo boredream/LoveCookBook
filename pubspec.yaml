@@ -31,9 +31,11 @@ dependencies:
   cloudbase_auth: ^0.0.13
   cloudbase_storage: ^0.0.3
   cloudbase_database: ^0.0.12
+  cloudbase_function: ^0.0.2
   progress_dialog: ^1.2.4
   photo_view: ^0.10.2
   table_calendar: ^2.3.0
+  leancloud_storage: ^0.5.0
 
 
 dev_dependencies:

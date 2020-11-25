@@ -3,18 +3,22 @@
 import 'package:cloudbase_auth/cloudbase_auth.dart';
 import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:cloudbase_database/cloudbase_database.dart';
+import 'package:cloudbase_function/cloudbase_function.dart';
 import 'package:cloudbase_storage/cloudbase_storage.dart';
+import 'package:flutter_todo/entity/User.dart';
+import 'package:leancloud_storage/leancloud.dart';
 
 class CloudBaseHelper {
 
-  static CloudBaseCore core;
-  static CloudBaseDatabase db;
-  static CloudBaseStorage storage;
+  static CloudBaseCore _core;
+  static CloudBaseDatabase _db;
+  static CloudBaseStorage _storage;
+  static CloudBaseFunction _function;
 
   static CloudBaseCore init() {
-    if(core == null) {
+    if(_core == null) {
       // 初始化 CloudBase
-      core = CloudBaseCore.init({
+      _core = CloudBaseCore.init({
         // 填写您的云开发 env
         'env': 'lovecookbook-7gjn846l3db07924',
         // 填写您的移动应用安全来源凭证
@@ -27,40 +31,49 @@ class CloudBaseHelper {
         }
       });
     }
-    return core;
+    return _core;
   }
 
   static CloudBaseDatabase getDb() {
     CloudBaseCore core = init();
-    if(db == null) {
-      db = CloudBaseDatabase(core);
+    if(_db == null) {
+      _db = CloudBaseDatabase(core);
     }
-    return db;
+    return _db;
   }
 
   static CloudBaseStorage getStorage() {
     CloudBaseCore core = init();
-    if(storage == null) {
-      storage = CloudBaseStorage(core);
+    if(_storage == null) {
+      _storage = CloudBaseStorage(core);
     }
-    return storage;
+    return _storage;
   }
 
-  static Future<CloudBaseAuthState> login() async {
+  static CloudBaseFunction getFunction() {
     CloudBaseCore core = init();
-    // 获取登录状态
-    CloudBaseAuth auth = CloudBaseAuth(core);
-    CloudBaseAuthState authState = await auth.getAuthState();
+    if(_function == null) {
+      _function = CloudBaseFunction(core);
+    }
+    return _function;
+  }
 
-    // 唤起匿名登录
-    if (authState == null) {
+  static Future<bool> login(String username, String password) async {
+    CloudBaseResponse res = await CloudBaseHelper.getFunction()
+        .callFunction('register', {"username": username, "password": password});
+
+    if (res.code == null) {
+       // 用户名密码正确，继续CloudBase的自定义登录
+      CloudBaseCore core = init();
+      CloudBaseAuth auth = CloudBaseAuth(core);
+
       try {
-        authState = await auth.signInAnonymously();
+        await auth.signInAnonymously();
+        return true;
       } catch(e) {
         print("login error = " + e.toString());
       }
     }
-
-    return authState;
+    return false;
   }
 }
