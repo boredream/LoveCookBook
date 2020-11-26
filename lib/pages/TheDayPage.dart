@@ -111,7 +111,6 @@ class _PageState extends State<TheDayPage>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Text('纪念日'),
         actions: [
           FlatButton(

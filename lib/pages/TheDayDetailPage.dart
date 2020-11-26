@@ -63,6 +63,7 @@ class _PageState extends State<TheDayDetailPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColorDark,
         title: Text("纪念日"),
       ),
       body: getBody(),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/helper/CloudBaseHelper.dart';
+import 'package:flutter/services.dart';
 
 import 'LifePage.dart';
 import 'TheDayPage.dart';
@@ -11,7 +11,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _PageState extends State<MainPage> {
-  bool _hasInit = false;
   int _selectedIndex = 0;
 
   List<Widget> _pages = <Widget>[
@@ -26,35 +25,16 @@ class _PageState extends State<MainPage> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    loadData();
-  }
-
-  void loadData() {
-    // TODO
-    // CloudBaseHelper.login().then((value) {
-    //   setState(() {
-    //     print("login success!");
-    //     _hasInit = true;
-    //   });
-    // });
-  }
-
   getBody() {
-    if (_hasInit) {
-      return IndexedStack(
+    return IndexedStack(
         index: _selectedIndex,
         children: _pages,
-      );
-    } else {
-      return Center(child: CircularProgressIndicator());
-    }
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     return Scaffold(
       body: getBody(),
       bottomNavigationBar: BottomNavigationBar(

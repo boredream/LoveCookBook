@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_todo/pages/FundPage.dart';
+import 'package:flutter_todo/pages/LoginPage.dart';
 import 'package:flutter_todo/pages/MenuAllPage.dart';
 import 'package:flutter_todo/pages/MoneyPage.dart';
 import 'package:flutter_todo/pages/RegularInvestPage.dart';
+import 'package:flutter_todo/pages/SplashPage.dart';
 import 'package:flutter_todo/pages/TheDayDetailPage.dart';
 
 import 'helper/ChineseCupertinoLocalizations.dart';
@@ -24,12 +26,20 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primaryColor: Color(0xFFFB6565),
+        primaryColorLight: Color(0xFFffa5a5),
+        primaryColorDark: Color(0xFFFB6565),
+        accentColor: Color(0xFFFB6565),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        iconTheme: IconThemeData(color: Colors.white),
+        primaryColorBrightness: Brightness.dark,
+        primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.white)),
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => MainPage(),
+        "/": (context) => SplashPage(),
+        "login": (context) => LoginPage(),
+        "main": (context) => MainPage(),
         "todoDetail": (context) => TodoDetailPage(),
         "menuMain": (context) => MenuMainPage(),
         "menuAll": (context) => MenuAllPage(),

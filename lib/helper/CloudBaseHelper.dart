@@ -60,7 +60,7 @@ class CloudBaseHelper {
 
   static Future<bool> login(String username, String password) async {
     CloudBaseResponse res = await CloudBaseHelper.getFunction()
-        .callFunction('register', {"username": username, "password": password});
+        .callFunction('login', {"username": username, "password": password});
 
     if (res.code == null) {
        // 用户名密码正确，继续CloudBase的自定义登录
