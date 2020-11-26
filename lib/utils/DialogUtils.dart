@@ -3,29 +3,34 @@ import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class DialogUtils {
-  static showDeleteConfirmDialog(BuildContext context, Function onDelete) {
+  static showConfirmDialog(
+      BuildContext context, String content, String btn, Function onClick) {
     showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text("提示"),
-          content: Text("您确定要删除吗?"),
+          content: Text(content),
           actions: <Widget>[
             FlatButton(
               child: Text("取消"),
               onPressed: () => Navigator.pop(context), // 关闭对话框
             ),
             FlatButton(
-              child: Text("删除"),
+              child: Text(btn),
               onPressed: () {
                 Navigator.pop(context, true);
-                onDelete.call();
+                onClick.call();
               },
             ),
           ],
         );
       },
     );
+  }
+
+  static showDeleteConfirmDialog(BuildContext context, Function onDelete) {
+    showConfirmDialog(context, "您确定要删除吗？", "删除", () => onDelete.call());
   }
 
   static showImagePickDialog(
@@ -45,7 +50,7 @@ class DialogUtils {
     ]);
   }
 
-  static showItemsDialog (
+  static showItemsDialog(
       BuildContext context, List<String> items, List<Function> callbacks) {
     if (items == null ||
         items.length == 0 ||

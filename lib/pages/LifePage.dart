@@ -44,8 +44,7 @@ class _PageState extends State<LifePage> {
         ],
       ),
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SplashPage()));
-        // Navigator.pushNamed(context, routeName);
+        Navigator.pushNamed(context, routeName);
       },
     );
   }

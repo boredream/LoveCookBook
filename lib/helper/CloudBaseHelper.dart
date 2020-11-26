@@ -5,8 +5,7 @@ import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:cloudbase_database/cloudbase_database.dart';
 import 'package:cloudbase_function/cloudbase_function.dart';
 import 'package:cloudbase_storage/cloudbase_storage.dart';
-import 'package:flutter_todo/entity/User.dart';
-import 'package:leancloud_storage/leancloud.dart';
+import 'package:flutter_todo/helper/DataHelper.dart';
 
 class CloudBaseHelper {
 
@@ -58,22 +57,35 @@ class CloudBaseHelper {
     return _function;
   }
 
-  static Future<bool> login(String username, String password) async {
+  static Future<CloudBaseAuthState> login(String username, String password) async {
     CloudBaseResponse res = await CloudBaseHelper.getFunction()
         .callFunction('login', {"username": username, "password": password});
 
-    if (res.code == null) {
-       // 用户名密码正确，继续CloudBase的自定义登录
-      CloudBaseCore core = init();
-      CloudBaseAuth auth = CloudBaseAuth(core);
-
-      try {
-        await auth.signInAnonymously();
-        return true;
-      } catch(e) {
-        print("login error = " + e.toString());
-      }
+    if (res.code != null) {
+      throw Exception(res.message);
     }
-    return false;
+    if(res.data != null && res.data["code"] != 0) {
+      throw Exception(res.data["message"]);
+    }
+
+    // 用户名密码正确，继续CloudBase的自定义登录
+    CloudBaseCore core = init();
+    CloudBaseAuth auth = CloudBaseAuth(core);
+
+    return await auth.signInWithTicket(res.data);
   }
+
+  static Future<CloudBaseResponse> register(String username, String password) async {
+    CloudBaseResponse res = await CloudBaseHelper.getFunction()
+        .callFunction('register', {"username": username, "password": password});
+
+    if (res.code != null) {
+      throw Exception(res.message);
+    }
+    if(res.data != null && res.data["code"] != 0) {
+      throw Exception(res.data["message"]);
+    }
+    return res;
+  }
+
 }

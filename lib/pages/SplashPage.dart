@@ -1,4 +1,3 @@
-
 import 'package:cloudbase_auth/cloudbase_auth.dart';
 import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,31 +13,36 @@ class SplashPage extends StatefulWidget {
 }
 
 class _PageState extends State<SplashPage> {
-
   @override
   void initState() {
     super.initState();
     autoLogin();
   }
 
-  void autoLogin() {
+  void autoLogin() async {
     int startTime = DateTime.now().millisecond;
 
-    CloudBaseCore core = CloudBaseHelper.init();
-    CloudBaseAuth auth = CloudBaseAuth(core);
+    // FIXME 必须要先匿名登录，才能调用云函数？
+    CloudBaseAuth auth = CloudBaseAuth(CloudBaseHelper.init());
+    CloudBaseAuthState authState = await auth.getAuthState();
+    if (authState == null) {
+      authState = await auth.signInAnonymously();
+    }
+
     Function nextStep = () {
       Navigator.pop(context);
-      if(auth == null) {
+      if (authState.authType == CloudBaseAuthType.ANONYMOUS) {
         print("not login");
         Navigator.pushNamed(context, "login");
       } else {
         print("login success");
         Navigator.pushNamed(context, "main");
       }
+      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     };
 
     int dur = DateTime.now().millisecond - startTime;
-    if(dur < 2 * 1000) {
+    if (dur < 2 * 1000) {
       dur = 2000;
     }
     Future.delayed(Duration(milliseconds: dur), nextStep);
@@ -46,7 +50,9 @@ class _PageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    // FIXME ？
     SystemChrome.setEnabledSystemUIOverlays([]);
-    return Image(image: AssetImage('assets/images/splash.png'), fit: BoxFit.cover);
+    return Image(
+        image: AssetImage('assets/images/splash.png'), fit: BoxFit.cover);
   }
 }

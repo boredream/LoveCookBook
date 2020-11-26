@@ -34,7 +34,6 @@ class _PageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     return Scaffold(
       body: getBody(),
       bottomNavigationBar: BottomNavigationBar(
