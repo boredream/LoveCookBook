@@ -64,7 +64,8 @@ class CloudBaseHelper {
     if (res.code != null) {
       throw Exception(res.message);
     }
-    if(res.data != null && res.data["code"] != 0) {
+
+    if(res.data != null && res.data is Map && res.data["code"] != 0) {
       throw Exception(res.data["message"]);
     }
 
@@ -82,7 +83,7 @@ class CloudBaseHelper {
     if (res.code != null) {
       throw Exception(res.message);
     }
-    if(res.data != null && res.data["code"] != 0) {
+    if(res.data != null && res.data is Map && res.data["code"] != 0) {
       throw Exception(res.data["message"]);
     }
     return res;
