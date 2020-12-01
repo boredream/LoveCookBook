@@ -1,21 +1,23 @@
 import 'dart:convert';
 
 import 'package:cloudbase_database/cloudbase_database.dart';
-import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DataHelper {
+class SpDataHelper {
 
-  static const COLLECTION_LIST = "list";
-  static const COLLECTION_MENU = "menu";
-  static const COLLECTION_THE_DAY = "theDay";
-  static const COLLECTION_REGULAR_INVEST = "regularInvest";
-  static const COLLECTION_FUND = "fund";
+  static const COLLECTION_USER = "user";
 
   static Future<bool> saveData(
       String collection, dynamic data) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.setString(collection, json.encode(data));
+  }
+
+  static Future<bool> saveDataList(
+      String collection, dynamic data) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
     List<String> jsonList = sp.getStringList(collection);
+    if(jsonList == null) jsonList = [];
     jsonList.add(json.encode(data));
     return sp.setStringList(collection, jsonList);
   }
@@ -49,7 +51,12 @@ class DataHelper {
     return false;
   }
 
-  static Future<bool> deleteData(String collection, String id) async {
+  static Future<bool> deleteData(String collection) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.remove(COLLECTION_USER);
+  }
+
+  static Future<bool> deleteDataById(String collection, String id) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     List<String> jsonList = sp.getStringList(collection);
     int deleteIndex = -1;
@@ -66,7 +73,12 @@ class DataHelper {
     return false;
   }
 
-  static Future<DbQueryResponse> loadData(String collection,
+  static Future<String> loadData(String collection) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.getString(collection);
+  }
+
+  static Future<DbQueryResponse> loadDataList(String collection,
       {dynamic where, String orderField, bool orderGrow, int limit}) async {
     // FIXME
     SharedPreferences sp = await SharedPreferences.getInstance();

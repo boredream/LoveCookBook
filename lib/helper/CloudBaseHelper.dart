@@ -57,36 +57,4 @@ class CloudBaseHelper {
     return _function;
   }
 
-  static Future<CloudBaseAuthState> login(String username, String password) async {
-    CloudBaseResponse res = await CloudBaseHelper.getFunction()
-        .callFunction('login', {"username": username, "password": password});
-
-    if (res.code != null) {
-      throw Exception(res.message);
-    }
-
-    if(res.data != null && res.data is Map && res.data["code"] != 0) {
-      throw Exception(res.data["message"]);
-    }
-
-    // 用户名密码正确，继续CloudBase的自定义登录
-    CloudBaseCore core = init();
-    CloudBaseAuth auth = CloudBaseAuth(core);
-
-    return await auth.signInWithTicket(res.data);
-  }
-
-  static Future<CloudBaseResponse> register(String username, String password) async {
-    CloudBaseResponse res = await CloudBaseHelper.getFunction()
-        .callFunction('register', {"username": username, "password": password});
-
-    if (res.code != null) {
-      throw Exception(res.message);
-    }
-    if(res.data != null && res.data is Map && res.data["code"] != 0) {
-      throw Exception(res.data["message"]);
-    }
-    return res;
-  }
-
 }

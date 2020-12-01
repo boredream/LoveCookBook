@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'LifePage.dart';
 import 'TheDayPage.dart';
 import 'TodoListPage.dart';
+import 'UserPage.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -17,6 +17,7 @@ class _PageState extends State<MainPage> {
     TabTodoListPage(),
     TheDayPage(),
     LifePage(),
+    UserPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -37,6 +38,7 @@ class _PageState extends State<MainPage> {
     return Scaffold(
       body: getBody(),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
@@ -49,6 +51,10 @@ class _PageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.wb_sunny),
             label: '日常',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: '我',
           ),
         ],
         currentIndex: _selectedIndex,

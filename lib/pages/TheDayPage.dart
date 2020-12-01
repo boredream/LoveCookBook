@@ -165,13 +165,13 @@ class _PageState extends State<TheDayPage>
       availableGestures: AvailableGestures.all,
       calendarStyle: CalendarStyle(
         outsideDaysVisible: true,
-        weekendStyle: TextStyle().copyWith(color: Colors.blue),
-        outsideWeekendStyle: TextStyle().copyWith(color: Colors.blue[200]),
+        weekendStyle: TextStyle().copyWith(color: Theme.of(context).primaryColor),
+        outsideWeekendStyle: TextStyle().copyWith(color: Theme.of(context).primaryColorLight),
         selectedColor: Theme.of(context).primaryColor,
         todayColor: Theme.of(context).primaryColorLight,
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
-        weekendStyle: TextStyle().copyWith(color: Colors.blue),
+        weekendStyle: TextStyle().copyWith(color: Theme.of(context).primaryColor),
       ),
       headerStyle: HeaderStyle(
         centerHeaderTitle: true,
@@ -210,11 +210,7 @@ class _PageState extends State<TheDayPage>
   }
 
   _selectDate() async {
-    var date = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
+    var date = await DateUtils.showCustomDatePicker(context);
     if(date == null) return;
     setState(() {
       _calendarController.setFocusedDay(date);

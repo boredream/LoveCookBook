@@ -38,7 +38,7 @@ class _PageState extends State<LifePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 32),
+          Icon(icon, size: 32, color: Theme.of(context).primaryColor),
           SizedBox(height: 8),
           Text(name),
         ],

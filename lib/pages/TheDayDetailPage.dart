@@ -3,6 +3,7 @@ import 'package:flutter_todo/entity/ImageBean.dart';
 import 'package:flutter_todo/entity/TheDay.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
+import 'package:flutter_todo/utils/DateUtils.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/views/AddGridImageList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -196,11 +197,7 @@ class _PageState extends State<TheDayDetailPage> {
   }
 
   selectData() async {
-    var date = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
+    var date = await DateUtils.showCustomDatePicker(context);
     if (date == null) return;
     setState(() {
       _theDay.theDayDate = DateFormat("yyyy-MM-dd").format(date);

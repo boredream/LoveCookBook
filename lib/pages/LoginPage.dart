@@ -1,10 +1,7 @@
-import 'dart:convert';
 
-import 'package:cloudbase_auth/cloudbase_auth.dart';
-import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_todo/helper/CloudBaseHelper.dart';
+import 'package:flutter_todo/helper/UserHelper.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -110,7 +107,7 @@ class _PageState extends State<LoginPage> {
     // 验证通过提交数据
     _formKey.currentState.save();
     _dialog.show();
-    CloudBaseHelper.login(_usernameController.text, _passwordController.text)
+    UserHelper.login(_usernameController.text, _passwordController.text)
         .then((value) => loginSuccess())
         .catchError((error) => requestError(error));
   }
@@ -121,7 +118,7 @@ class _PageState extends State<LoginPage> {
       // 验证通过提交数据
       _formKey.currentState.save();
       _dialog.show();
-      CloudBaseHelper.register(_usernameController.text, _passwordController.text)
+      UserHelper.register(_usernameController.text, _passwordController.text)
           .then((value) => registerSuccess(value))
           .catchError((error) => requestError(error));
     });

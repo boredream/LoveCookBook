@@ -3,7 +3,9 @@ import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_todo/entity/User.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
+import 'package:flutter_todo/helper/UserHelper.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
@@ -28,10 +30,11 @@ class _PageState extends State<SplashPage> {
     if (authState == null) {
       authState = await auth.signInAnonymously();
     }
+    User user = await UserHelper.getUserInfo();
 
     Function nextStep = () {
       Navigator.pop(context);
-      if (authState.authType == CloudBaseAuthType.ANONYMOUS) {
+      if (authState.authType == CloudBaseAuthType.ANONYMOUS || user == null) {
         print("not login");
         Navigator.pushNamed(context, "login");
       } else {
