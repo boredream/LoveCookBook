@@ -28,7 +28,7 @@ class _PageState extends State<LifePage> {
           children: <Widget>[
             getRow(Icons.cake, "菜单", "menuMain"),
             // getRow(Icons.attach_money, "理财", "money"),
-            getRow(Icons.attach_money, "理财", "regularInvest"),
+            // getRow(Icons.attach_money, "理财", "regularInvest"),
           ]),
     );
   }

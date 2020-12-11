@@ -27,10 +27,12 @@ class _PageState extends State<SplashPage> {
     // FIXME 必须要先匿名登录，才能调用云函数？
     CloudBaseAuth auth = CloudBaseAuth(CloudBaseHelper.init());
     CloudBaseAuthState authState = await auth.getAuthState();
+    User user;
     if (authState == null) {
       authState = await auth.signInAnonymously();
+    } else {
+      user = await UserHelper.getUserInfo();
     }
-    User user = await UserHelper.getUserInfo();
 
     Function nextStep = () {
       Navigator.pop(context);
@@ -53,9 +55,7 @@ class _PageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    // FIXME ？
     SystemChrome.setEnabledSystemUIOverlays([]);
-    return Image(
-        image: AssetImage('assets/images/splash.png'), fit: BoxFit.cover);
+    return Image(image: AssetImage('assets/images/splash.png'), fit: BoxFit.cover);
   }
 }
