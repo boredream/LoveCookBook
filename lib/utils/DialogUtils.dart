@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class DialogUtils {
+  static ProgressDialog getProgressDialog(BuildContext context) {
+    ProgressDialog dialog = ProgressDialog(context,
+        customBody: Container(
+          width: 150,
+          height: 100,
+          padding: EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                  width: 32, height: 32, child: CircularProgressIndicator()),
+              SizedBox(width: 16),
+              Text("请等待..."),
+            ],
+          ),
+        ));
+    return dialog;
+  }
 
   static showConfirmDialog(
       BuildContext context, String content, String btn, Function onClick) {

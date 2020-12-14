@@ -26,7 +26,7 @@ class _PageState extends State<LifePage> {
               childAspectRatio: 1.0 //宽高比为1时，子widget
               ),
           children: <Widget>[
-            getRow(Icons.cake, "菜单", "menuMain"),
+            getRow(Icons.room_service_outlined, "菜单", "menuMain"),
             // getRow(Icons.attach_money, "理财", "money"),
             // getRow(Icons.attach_money, "理财", "regularInvest"),
           ]),

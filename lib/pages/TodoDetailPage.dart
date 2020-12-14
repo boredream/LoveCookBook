@@ -32,8 +32,7 @@ class _PageState extends State<TodoDetailPage> {
     super.initState();
     _titleController = TextEditingController();
     _descController = TextEditingController();
-    _dialog = ProgressDialog(context);
-    _dialog.style(message: "请等待...");
+    _dialog = DialogUtils.getProgressDialog(context);
   }
 
   @override

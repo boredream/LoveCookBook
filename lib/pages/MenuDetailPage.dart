@@ -27,8 +27,7 @@ class _PageState extends State<MenuDetailPage> {
     super.initState();
 
     _titleController = TextEditingController();
-    _dialog = ProgressDialog(context);
-    _dialog.style(message: "请等待...");
+    _dialog = DialogUtils.getProgressDialog(context);
   }
 
   @override

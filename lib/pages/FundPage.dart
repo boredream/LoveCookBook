@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/Fund.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/utils/StringUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -24,8 +25,7 @@ class _PageState extends State<FundPage> {
   @override
   void initState() {
     super.initState();
-    _dialog = ProgressDialog(context);
-    _dialog.style(message: "请等待...");
+    _dialog = DialogUtils.getProgressDialog(context);
     loadData();
   }
 
