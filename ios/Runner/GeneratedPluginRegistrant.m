@@ -10,6 +10,12 @@
 @import cloudbase_auth;
 #endif
 
+#if __has_include(<flutter_bugly/FlutterBuglyPlugin.h>)
+#import <flutter_bugly/FlutterBuglyPlugin.h>
+#else
+@import flutter_bugly;
+#endif
+
 #if __has_include(<flutter_image_compress/FlutterImageCompressPlugin.h>)
 #import <flutter_image_compress/FlutterImageCompressPlugin.h>
 #else
@@ -56,6 +62,7 @@
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [CloudbaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"CloudbaseAuthPlugin"]];
+  [FlutterBuglyPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterBuglyPlugin"]];
   [FlutterImageCompressPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterImageCompressPlugin"]];
   [FluttertoastPlugin registerWithRegistrar:[registry registrarForPlugin:@"FluttertoastPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
