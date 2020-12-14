@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_todo/pages/FundPage.dart';
 import 'package:flutter_todo/pages/LoginPage.dart';
@@ -17,7 +18,9 @@ import 'pages/MenuMainPage.dart';
 import 'pages/TodoDetailPage.dart';
 
 void main() {
-  runApp(App());
+  FlutterBugly.postCatchedException(() => runApp(App()), debugUpload: true);
+  // TODO iOS app id
+  FlutterBugly.init(androidAppId: "02a35ff82c",iOSAppId: "your iOS app id");
 }
 
 class App extends StatelessWidget {
