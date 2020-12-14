@@ -52,12 +52,6 @@
 @import sqflite;
 #endif
 
-#if __has_include(<umeng_analytics_plugin/UmengAnalyticsPlugin.h>)
-#import <umeng_analytics_plugin/UmengAnalyticsPlugin.h>
-#else
-@import umeng_analytics_plugin;
-#endif
-
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
@@ -69,7 +63,6 @@
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
-  [UmengAnalyticsPlugin registerWithRegistrar:[registry registrarForPlugin:@"UmengAnalyticsPlugin"]];
 }
 
 @end
