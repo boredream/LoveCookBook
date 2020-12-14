@@ -35,9 +35,9 @@ class App extends StatelessWidget {
         primaryColorBrightness: Brightness.dark,
         primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.white)),
       ),
-      initialRoute: "/",
+      initialRoute: "splash",
       routes: {
-        "/": (context) => SplashPage(),
+        "splash": (context) => SplashPage(),
         "login": (context) => LoginPage(),
         "main": (context) => MainPage(),
         "todoDetail": (context) => TodoDetailPage(),

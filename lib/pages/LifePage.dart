@@ -1,12 +1,6 @@
 
-import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_todo/helper/CloudBaseHelper.dart';
-import 'package:flutter_todo/helper/DataHelper.dart';
-import 'package:leancloud_storage/leancloud.dart';
-
-import 'SplashPage.dart';
 
 class LifePage extends StatefulWidget {
   LifePage({Key key}) : super(key: key);

@@ -35,7 +35,6 @@ dependencies:
   progress_dialog: ^1.2.4
   photo_view: ^0.10.2
   table_calendar: ^2.3.0
-  leancloud_storage: ^0.5.0
 
 
 dev_dependencies:

@@ -10,12 +10,6 @@
 @import cloudbase_auth;
 #endif
 
-#if __has_include(<flutter_bugly/FlutterBuglyPlugin.h>)
-#import <flutter_bugly/FlutterBuglyPlugin.h>
-#else
-@import flutter_bugly;
-#endif
-
 #if __has_include(<flutter_image_compress/FlutterImageCompressPlugin.h>)
 #import <flutter_image_compress/FlutterImageCompressPlugin.h>
 #else
@@ -58,11 +52,16 @@
 @import sqflite;
 #endif
 
+#if __has_include(<umeng_analytics_plugin/UmengAnalyticsPlugin.h>)
+#import <umeng_analytics_plugin/UmengAnalyticsPlugin.h>
+#else
+@import umeng_analytics_plugin;
+#endif
+
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [CloudbaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"CloudbaseAuthPlugin"]];
-  [FlutterBuglyPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterBuglyPlugin"]];
   [FlutterImageCompressPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterImageCompressPlugin"]];
   [FluttertoastPlugin registerWithRegistrar:[registry registrarForPlugin:@"FluttertoastPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
@@ -70,6 +69,7 @@
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
+  [UmengAnalyticsPlugin registerWithRegistrar:[registry registrarForPlugin:@"UmengAnalyticsPlugin"]];
 }
 
 @end

@@ -9,6 +9,7 @@ import 'package:flutter_todo/entity/User.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
+import 'package:umeng_analytics_plugin/umeng_analytics_plugin.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
@@ -27,6 +28,10 @@ class _PageState extends State<SplashPage> {
   void autoLogin() async {
     try {
       int startTime = DateTime.now().millisecond;
+
+      // 相关配置
+      var umengInit = await UmengAnalyticsPlugin.init(androidKey: "5fd7093c498d9e0d4d8cfa80", iosKey: "null");
+      print('umengInit = ${umengInit.toString()}');
 
       // FIXME 必须要先匿名登录，才能调用云函数？
       CloudBaseAuth auth = CloudBaseAuth(CloudBaseHelper.init());
