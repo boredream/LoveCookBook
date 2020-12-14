@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
@@ -17,10 +19,20 @@ import 'pages/MenuDetailPage.dart';
 import 'pages/MenuMainPage.dart';
 import 'pages/TodoDetailPage.dart';
 
-void main() {
-  FlutterBugly.postCatchedException(() => runApp(App()), debugUpload: true);
-  // TODO iOS app id
-  FlutterBugly.init(androidAppId: "02a35ff82c",iOSAppId: "your iOS app id");
+void main() async {
+  runZonedGuarded(() {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    FlutterError.onError = (FlutterErrorDetails errorDetails) {
+      FlutterBugly.uploadException(
+          message: errorDetails.exception.toString(),
+          detail: "onError: " + errorDetails.stack.toString());
+    };
+    runApp(App());
+  }, (Object error, StackTrace stack) {
+    FlutterBugly.uploadException(
+        message: error.toString(), detail: "error: " + stack.toString());
+  });
 }
 
 class App extends StatelessWidget {
