@@ -138,6 +138,7 @@ class _PageState extends State<MenuMainPage> {
 
   randomMenu() {
     List<Menu> list = getTargetMenuList();
+    if(list == null || list.length == 0) return;
     setState(() {
       _curRandomMenu = list[Random().nextInt(list.length)];
     });
