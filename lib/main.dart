@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_todo/pages/FundPage.dart';
 import 'package:flutter_todo/pages/LoginPage.dart';
@@ -16,8 +19,20 @@ import 'pages/MenuDetailPage.dart';
 import 'pages/MenuMainPage.dart';
 import 'pages/TodoDetailPage.dart';
 
-void main() {
-  runApp(App());
+void main() async {
+  runZonedGuarded(() {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    FlutterError.onError = (FlutterErrorDetails errorDetails) {
+      FlutterBugly.uploadException(
+          message: errorDetails.exception.toString(),
+          detail: "onError: " + errorDetails.stack.toString());
+    };
+    runApp(App());
+  }, (Object error, StackTrace stack) {
+    FlutterBugly.uploadException(
+        message: error.toString(), detail: "error: " + stack.toString());
+  });
 }
 
 class App extends StatelessWidget {

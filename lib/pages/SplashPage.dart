@@ -5,6 +5,7 @@ import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_todo/entity/User.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
@@ -22,6 +23,9 @@ class _PageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
+
+    // TODO iOS app id
+    FlutterBugly.init(androidAppId: "02a35ff82c",iOSAppId: "your iOS app id");
     autoLogin();
   }
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloudbase_auth/cloudbase_auth.dart';
 import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_todo/entity/User.dart';
 import 'package:flutter_todo/helper/SpDataHelper.dart';
 
@@ -56,6 +57,10 @@ class UserHelper {
     // 记录用户信息到本地
     _curUser = User.fromJson(data["user"]);
     SpDataHelper.saveData(SpDataHelper.COLLECTION_USER, _curUser);
+
+    // 记录用户信息到bugly
+    FlutterBugly.setUserId(_curUser.username);
+
     return authState;
   }
 
