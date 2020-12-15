@@ -23,11 +23,14 @@ void main() async {
   runZonedGuarded(() {
     WidgetsFlutterBinding.ensureInitialized();
 
-    FlutterError.onError = (FlutterErrorDetails errorDetails) {
-      FlutterBugly.uploadException(
-          message: errorDetails.exception.toString(),
-          detail: "onError: " + errorDetails.stack.toString());
-    };
+    const bool kReleaseMode = bool.fromEnvironment('dart.vm.product', defaultValue: false);
+    if(kReleaseMode) {
+      FlutterError.onError = (FlutterErrorDetails errorDetails) {
+        FlutterBugly.uploadException(
+            message: errorDetails.exception.toString(),
+            detail: "onError: " + errorDetails.stack.toString());
+      };
+    }
     runApp(App());
   }, (Object error, StackTrace stack) {
     FlutterBugly.uploadException(

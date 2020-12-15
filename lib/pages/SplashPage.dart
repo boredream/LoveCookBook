@@ -4,13 +4,10 @@ import 'package:cloudbase_auth/cloudbase_auth.dart';
 import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_todo/entity/User.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
-import 'package:flutter_todo/utils/DialogUtils.dart';
-import 'package:umeng_analytics_plugin/umeng_analytics_plugin.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
@@ -24,8 +21,6 @@ class _PageState extends State<SplashPage> {
   void initState() {
     super.initState();
 
-    // TODO iOS app id
-    FlutterBugly.init(androidAppId: "02a35ff82c",iOSAppId: "your iOS app id");
     autoLogin();
   }
 
@@ -33,9 +28,9 @@ class _PageState extends State<SplashPage> {
     try {
       int startTime = DateTime.now().millisecond;
 
-      // 相关配置
-      var umengInit = await UmengAnalyticsPlugin.init(androidKey: "5fd7093c498d9e0d4d8cfa80", iosKey: "null");
-      print('umengInit = ${umengInit.toString()}');
+      // TODO iOS app id
+      await FlutterBugly.init(
+          androidAppId: "02a35ff82c", iOSAppId: "your iOS app id");
 
       // FIXME 必须要先匿名登录，才能调用云函数？
       CloudBaseAuth auth = CloudBaseAuth(CloudBaseHelper.init());
@@ -56,7 +51,6 @@ class _PageState extends State<SplashPage> {
           print("login success");
           Navigator.pushNamed(context, "main");
         }
-        SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
       };
 
       int dur = DateTime.now().millisecond - startTime;
@@ -94,8 +88,9 @@ class _PageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
-    return Image(
-        image: AssetImage('assets/images/splash.png'), fit: BoxFit.cover);
+    // FIXME 系统和自定义splash间有个fade效果？？
+    return Scaffold(
+        body: Image(
+            image: AssetImage('assets/images/splash.png'), fit: BoxFit.fill));
   }
 }
