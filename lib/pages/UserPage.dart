@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/User.dart';
+import 'package:flutter_todo/helper/UpdateHelper.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 
@@ -12,7 +13,6 @@ class UserPage extends StatefulWidget {
 }
 
 class _PageState extends State<UserPage> {
-
   User _user;
   var settings = [
     {"icon": Icons.system_update, "name": "检查更新", "route": "update"},
@@ -31,8 +31,7 @@ class _PageState extends State<UserPage> {
   void initState() {
     super.initState();
 
-    UserHelper.getUserInfo()
-    .then((value) {
+    UserHelper.getUserInfo().then((value) {
       setState(() {
         _user = value;
       });
@@ -75,7 +74,9 @@ class _PageState extends State<UserPage> {
         title: Text(setting["name"]),
         trailing: Icon(Icons.chevron_right),
         onTap: () {
-
+          if (setting["name"] == "检查更新") {
+            UpdateHelper.showUpdateDialog(context);
+          }
         },
       ),
     );

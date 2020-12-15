@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 class DialogUtils {
+
   static ProgressDialog getProgressDialog(BuildContext context) {
     ProgressDialog dialog = ProgressDialog(context,
         customBody: Container(

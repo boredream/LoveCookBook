@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -18,6 +18,8 @@ class _PageState extends State<LoginPage> {
   TextEditingController _passwordController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ProgressDialog _dialog;
+  SharedPreferences _sp;
+  int _registerTime;
 
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _PageState extends State<LoginPage> {
             children: [
               SizedBox(height: 16),
               getForm(),
-              SizedBox(height: 92),
+              SizedBox(height: 64),
               SizedBox(
                   width: double.infinity,
                   height: 44,
@@ -57,6 +59,8 @@ class _PageState extends State<LoginPage> {
                       highlightedBorderColor: Colors.transparent,
                       child: Text("注册"),
                       onPressed: () => register())),
+              SizedBox(height: 16),
+              Text("首次使用，直接输入用户信息和密码，点击注册即可", style: TextStyle(fontSize: 14)),
             ],
           )),
     );
@@ -111,8 +115,17 @@ class _PageState extends State<LoginPage> {
         .catchError((error) => requestError(error));
   }
 
-  register() {
+  register() async {
     if (!_formKey.currentState.validate()) return;
+    if (_sp == null) {
+      _sp = await SharedPreferences.getInstance();
+    }
+    _registerTime = _sp.getInt("registerTime") ?? 0;
+    if (_registerTime > 3) {
+      Fluttertoast.showToast(msg: "为了防止恶意注册，同一台设备被限制只能注册三个账户");
+      return;
+    }
+
     DialogUtils.showConfirmDialog(context, "确定以当前输入的用户名和密码注册？", "注册", () {
       // 验证通过提交数据
       _formKey.currentState.save();
@@ -126,6 +139,7 @@ class _PageState extends State<LoginPage> {
   registerSuccess(var value) {
     _dialog.hide();
     Fluttertoast.showToast(msg: "注册成功，请继续登录");
+    _sp.setInt("registerTime", _registerTime + 1);
   }
 
   loginSuccess() {

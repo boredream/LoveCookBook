@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_todo/entity/User.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
+import 'package:flutter_todo/helper/UpdateHelper.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
 
 class SplashPage extends StatefulWidget {
@@ -40,6 +41,14 @@ class _PageState extends State<SplashPage> {
         authState = await auth.signInAnonymously();
       } else {
         user = await UserHelper.getUserInfo();
+      }
+
+      // 获取版本更新信息
+      await UpdateHelper.saveVersionInfo();
+      await UpdateHelper.saveUpdateInfoList();
+      if(UpdateHelper.hasForceVersion()) {
+        UpdateHelper.showUpdateDialog(context);
+        return;
       }
 
       Function nextStep = () {
