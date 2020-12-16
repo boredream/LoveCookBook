@@ -82,14 +82,22 @@ class _PageState extends State<TheDayDetailPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            FlatButton(
-              child: Text("删除"),
-              onPressed: () => deleteTheDay(),
-            ),
-            FlatButton(
-              child: Text(_isUpdate ? "修改" : "新增"),
-              onPressed: () => updateTheDay(),
-            ),
+            SizedBox(
+                width: 140,
+                height: 44,
+                child: OutlineButton(
+                    color: Theme.of(context).primaryColor,
+                    highlightedBorderColor: Colors.transparent,
+                    child: Text("删除"),
+                    onPressed: () => delete())),
+            SizedBox(
+                width: 140,
+                height: 44,
+                child: RaisedButton(
+                    textColor: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    child:  Text(_isUpdate ? "修改" : "新增"),
+                    onPressed: () => update())),
           ],
         ),
         SizedBox(
@@ -203,7 +211,7 @@ class _PageState extends State<TheDayDetailPage> {
     });
   }
 
-  deleteTheDay() {
+  delete() {
     DialogUtils.showDeleteConfirmDialog(context, () {
       _dialog.show();
       DataHelper.deleteData(DataHelper.COLLECTION_THE_DAY, _theDay.id)
@@ -241,7 +249,7 @@ class _PageState extends State<TheDayDetailPage> {
     return Row(children: list);
   }
 
-  updateTheDay() async {
+  update() async {
     if (_formKey.currentState.validate()) {
       // 验证通过提交数据
       _formKey.currentState.save();

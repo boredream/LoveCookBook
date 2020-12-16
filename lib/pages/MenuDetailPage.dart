@@ -69,14 +69,22 @@ class _PageState extends State<MenuDetailPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            FlatButton(
-              child: Text("删除"),
-              onPressed: () => deleteTodo(),
-            ),
-            FlatButton(
-              child: Text(_isUpdate ? "修改" : "新增"),
-              onPressed: () => updateTodo(),
-            ),
+            SizedBox(
+                width: 140,
+                height: 44,
+                child: OutlineButton(
+                    color: Theme.of(context).primaryColor,
+                    highlightedBorderColor: Colors.transparent,
+                    child: Text("删除"),
+                    onPressed: () => delete())),
+            SizedBox(
+                width: 140,
+                height: 44,
+                child: RaisedButton(
+                    textColor: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    child: Text(_isUpdate ? "修改" : "新增"),
+                    onPressed: () => update())),
           ],
         ),
         SizedBox(
@@ -155,14 +163,14 @@ class _PageState extends State<MenuDetailPage> {
         initialDate: DateTime.now(),
         firstDate: DateTime(2000),
         lastDate: DateTime(2100));
-    if(date == null) return;
+    if (date == null) return;
     var format = DateFormat("yyyy-MM-dd").format(date);
     setState(() {
       _menu.createDate = format;
     });
   }
 
-  deleteTodo() {
+  delete() {
     DialogUtils.showDeleteConfirmDialog(context, () {
       _dialog.show();
       DataHelper.deleteData(DataHelper.COLLECTION_MENU, _menu.id)
@@ -171,7 +179,7 @@ class _PageState extends State<MenuDetailPage> {
     });
   }
 
-  updateTodo() async {
+  update() async {
     if (_formKey.currentState.validate()) {
       // 验证通过提交数据
       _formKey.currentState.save();
