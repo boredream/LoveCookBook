@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_todo/pages/AboutPage.dart';
+import 'package:flutter_todo/pages/FeedbackPage.dart';
 import 'package:flutter_todo/pages/FundPage.dart';
 import 'package:flutter_todo/pages/LoginPage.dart';
 import 'package:flutter_todo/pages/MenuAllPage.dart';
@@ -24,8 +25,9 @@ void main() async {
   runZonedGuarded(() {
     WidgetsFlutterBinding.ensureInitialized();
 
-    const bool kReleaseMode = bool.fromEnvironment('dart.vm.product', defaultValue: false);
-    if(kReleaseMode) {
+    const bool kReleaseMode =
+        bool.fromEnvironment('dart.vm.product', defaultValue: false);
+    if (kReleaseMode) {
       FlutterError.onError = (FlutterErrorDetails errorDetails) {
         FlutterBugly.uploadException(
             message: errorDetails.exception.toString(),
@@ -69,6 +71,7 @@ class App extends StatelessWidget {
         "regularInvest": (context) => RegularInvestPage(),
         "fund": (context) => FundPage(),
         "about": (context) => AboutPage(),
+        "feedback": (context) => FeedbackPage(),
       },
       localizationsDelegates: [
         ChineseCupertinoLocalizations.delegate,

@@ -19,6 +19,7 @@ class _PageState extends State<UserPage> {
   var settings = [
     {"icon": Icons.system_update, "name": "检查更新"},
     {"icon": Icons.info, "name": "关于", "route": "about"},
+    {"icon": Icons.feedback, "name": "意见反馈", "route": "feedback"},
   ];
   ProgressDialog _dialog;
 

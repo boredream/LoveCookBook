@@ -9,6 +9,7 @@ class DataHelper {
   static const COLLECTION_REGULAR_INVEST = "regularInvest";
   static const COLLECTION_FUND = "fund";
   static const COLLECTION_VERSION = "version";
+  static const COLLECTION_FEEDBACK = "feedback";
 
   static Future<DbCreateResponse> saveData(
       String collection, dynamic data) async {

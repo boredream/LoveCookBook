@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cloudbase_auth/cloudbase_auth.dart';
 import 'package:cloudbase_core/cloudbase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_todo/entity/User.dart';
 import 'package:flutter_todo/helper/SpDataHelper.dart';
@@ -11,7 +10,7 @@ import 'CloudBaseHelper.dart';
 
 class UserHelper {
 
-  static User _curUser;
+  static User curUser;
 
   static Future<CloudBaseResponse> register(
       String username, String password) async {
@@ -55,11 +54,11 @@ class UserHelper {
 
     CloudBaseAuthState authState = await auth.signInWithTicket(ticket);
     // 记录用户信息到本地
-    _curUser = User.fromJson(data["user"]);
-    SpDataHelper.saveData(SpDataHelper.COLLECTION_USER, _curUser);
+    curUser = User.fromJson(data["user"]);
+    SpDataHelper.saveData(SpDataHelper.COLLECTION_USER, curUser);
 
     // 记录用户信息到bugly
-    FlutterBugly.setUserId(_curUser.username);
+    FlutterBugly.setUserId(curUser.username);
 
     return authState;
   }
@@ -78,12 +77,12 @@ class UserHelper {
   }
 
   static Future<User> getUserInfo() async {
-    if(_curUser == null) {
+    if(curUser == null) {
       String jsonStr = await SpDataHelper.loadData(SpDataHelper.COLLECTION_USER);
       if(jsonStr != null) {
-        _curUser = User.fromJson(json.decode(jsonStr));
+        curUser = User.fromJson(json.decode(jsonStr));
       }
     }
-    return _curUser;
+    return curUser;
   }
 }
