@@ -44,9 +44,9 @@ class _PageState extends State<SplashPage> {
       }
 
       // 获取版本更新信息
-      await UpdateHelper.saveVersionInfo();
-      await UpdateHelper.saveUpdateInfoList();
-      if(UpdateHelper.hasForceVersion()) {
+      await UpdateHelper.getAndSaveVersionInfo();
+      await UpdateHelper.getAndSaveUpdateInfoList();
+      if (UpdateHelper.hasForceVersion()) {
         UpdateHelper.showUpdateDialog(context);
         return;
       }
@@ -92,7 +92,6 @@ class _PageState extends State<SplashPage> {
         );
       },
     );
-    print('error = ' + e.toString());
   }
 
   @override

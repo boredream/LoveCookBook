@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_todo/pages/AboutPage.dart';
 import 'package:flutter_todo/pages/FundPage.dart';
 import 'package:flutter_todo/pages/LoginPage.dart';
 import 'package:flutter_todo/pages/MenuAllPage.dart';
@@ -67,6 +68,7 @@ class App extends StatelessWidget {
         "money": (context) => MoneyPage(),
         "regularInvest": (context) => RegularInvestPage(),
         "fund": (context) => FundPage(),
+        "about": (context) => AboutPage(),
       },
       localizationsDelegates: [
         ChineseCupertinoLocalizations.delegate,

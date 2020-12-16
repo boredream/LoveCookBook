@@ -14,6 +14,9 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UpdateHelper {
+  /// The app name. `CFBundleDisplayName` on iOS, `application/label` on Android.
+  static String appName;
+
   /// The package name. `bundleIdentifier` on iOS, `getPackageName` on Android.
   static String packageName;
 
@@ -25,35 +28,46 @@ class UpdateHelper {
 
   static List<Version> list;
 
-  static void showUpdateDialog(BuildContext context) {
+  static getAndSaveVersionInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appName = packageInfo.appName;
+    packageName = packageInfo.packageName;
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
+  }
+
+  static void showUpdateDialog(BuildContext context,
+      {bool cancelable = false}) {
     if (list == null) return;
 
     String updateInfo = getUpdateInfoListStr();
-
+    List<Widget> actionWidgets = [];
+    if (cancelable) {
+      actionWidgets.add(FlatButton(
+          child: Text("取消"), onPressed: () => Navigator.pop(context)));
+    }
+    actionWidgets.add(FlatButton(
+      child: Text("更新"),
+      onPressed: () => showDownloadDialog(context, cancelable: cancelable),
+    ));
     showDialog<bool>(
       context: context,
-      barrierDismissible: false, // outside cancel
+      barrierDismissible: cancelable, // outside cancel
       builder: (BuildContext context) {
         return WillPopScope(
-          onWillPop: () async => false, // back button cancel
+          onWillPop: () async => cancelable, // back button cancel
           child: AlertDialog(
             title: Text("版本更新"),
             content: Text(updateInfo),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("更新"),
-                onPressed: () {
-                  showDownloadDialog(context);
-                },
-              ),
-            ],
+            actions: actionWidgets,
           ),
         );
       },
     );
   }
 
-  static void showDownloadDialog(BuildContext context) async {
+  static void showDownloadDialog(BuildContext context,
+      {bool cancelable = false}) async {
     Version newest = getNewestUpdateInfo();
     // 判断是否可以直接走浏览器链接
     if (newest.link.startsWith("http")) {
@@ -72,11 +86,9 @@ class UpdateHelper {
       await file.create();
     }
 
-    print(file);
-
     // cloudbase fileId
     ProgressDialog dialog = new ProgressDialog(context,
-        type: ProgressDialogType.Download, isDismissible: false);
+        type: ProgressDialogType.Download, isDismissible: cancelable);
     CloudBaseStorage storage = CloudBaseHelper.getStorage();
     storage.downloadFile(
       fileId: newest.link,
@@ -87,45 +99,44 @@ class UpdateHelper {
         dialog.update(progress: progress);
         if (count >= total) {
           dialog.hide();
-          showDownloadSuccessDialog(context, file);
+          showDownloadSuccessDialog(context, file, cancelable: cancelable);
         }
       },
     );
     dialog.show();
   }
 
-  static void showDownloadSuccessDialog(BuildContext context, File file) {
+  static void showDownloadSuccessDialog(BuildContext context, File file,
+      {bool cancelable = false}) {
+    List<Widget> actionWidgets = [];
+    if (cancelable) {
+      actionWidgets.add(FlatButton(
+          child: Text("取消"), onPressed: () => Navigator.pop(context)));
+    }
+    actionWidgets.add(FlatButton(
+      child: Text("安装"),
+      onPressed: () {
+        InstallPlugin.installApk(file.path, packageName);
+      },
+    ));
+
     showDialog<bool>(
       context: context,
-      barrierDismissible: false, // outside cancel
+      barrierDismissible: cancelable, // outside cancel
       builder: (BuildContext context) {
         return WillPopScope(
-          onWillPop: () async => false, // back button cancel
+          onWillPop: () async => cancelable, // back button cancel
           child: AlertDialog(
             title: Text("下载完成"),
             content: Text("下载文件路径：${file.path}"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("安装"),
-                onPressed: () {
-                  InstallPlugin.installApk(file.path, packageName);
-                },
-              ),
-            ],
+            actions: actionWidgets,
           ),
         );
       },
     );
   }
 
-  static saveVersionInfo() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    packageName = packageInfo.packageName;
-    version = packageInfo.version;
-    buildNumber = packageInfo.buildNumber;
-  }
-
-  static saveUpdateInfoList() async {
+  static Future getAndSaveUpdateInfoList() async {
     // FIXME 区分iOS和安卓
     if (buildNumber == null) {
       throw Exception("buildNumber为空");
@@ -149,6 +160,7 @@ class UpdateHelper {
     list = (response.data as List)
         .map((e) => Version.fromJson(new Map<String, dynamic>.from(e)))
         .toList();
+    return list;
   }
 
   static Version getNewestUpdateInfo() {
