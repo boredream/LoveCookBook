@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'LifePage.dart';
 import 'TheDayPage.dart';
@@ -12,6 +14,7 @@ class MainPage extends StatefulWidget {
 
 class _PageState extends State<MainPage> {
   int _selectedIndex = 0;
+  DateTime _lastPopTime;
 
   List<Widget> _pages = <Widget>[
     TabTodoListPage(),
@@ -26,41 +29,52 @@ class _PageState extends State<MainPage> {
     });
   }
 
-  getBody() {
-    return IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: getBody(),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'List',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: '纪念日',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.wb_sunny),
-            label: '日常',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '我',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
-        onTap: _onItemTapped,
+    return WillPopScope(
+      child: Scaffold(
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _pages,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'List',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today),
+              label: '纪念日',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.wb_sunny),
+              label: '日常',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: '我',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Theme.of(context).primaryColor,
+          onTap: _onItemTapped,
+        ),
       ),
+      onWillPop: () async {
+        // 点击返回键的操作
+        if (_lastPopTime == null ||
+            DateTime.now().difference(_lastPopTime) > Duration(seconds: 2)) {
+          _lastPopTime = DateTime.now();
+          Fluttertoast.showToast(msg: '再按一次退出');
+        } else {
+          _lastPopTime = DateTime.now();
+          // 退出app
+          await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        }
+        return false;
+      },
     );
   }
 }
