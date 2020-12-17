@@ -39,7 +39,7 @@ class _PageState extends State<LoginPage> {
           padding: EdgeInsets.all(32),
           child: Column(
             children: [
-              SizedBox(height: 16),
+              SizedBox(height: 8),
               getForm(),
               SizedBox(height: 64),
               SizedBox(
@@ -60,7 +60,7 @@ class _PageState extends State<LoginPage> {
                       child: Text("注册"),
                       onPressed: () => register())),
               SizedBox(height: 16),
-              Text("首次使用，直接输入用户信息和密码，点击注册即可", style: TextStyle(fontSize: 14)),
+              Text("首次使用，直接输入用户信息和密码，点击注册即可", style: TextStyle(fontSize: 12)),
             ],
           )),
     );
@@ -74,6 +74,7 @@ class _PageState extends State<LoginPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text("可以两个人使用同一账户登录，共享信息", style: TextStyle(fontSize: 14)),
           TextFormField(
             controller: _usernameController,
             decoration: InputDecoration(
@@ -86,7 +87,7 @@ class _PageState extends State<LoginPage> {
               // TODO
             },
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 8),
           TextFormField(
             controller: _passwordController,
             keyboardType: TextInputType.visiblePassword,
@@ -96,9 +97,6 @@ class _PageState extends State<LoginPage> {
             validator: (value) {
               return value.trim().length > 0 ? null : "不能为空";
             },
-          ),
-          SizedBox(
-            height: 16,
           ),
         ],
       ),
