@@ -4,11 +4,14 @@ import 'package:cloudbase_auth/cloudbase_auth.dart';
 import 'package:cloudbase_core/cloudbase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_todo/entity/User.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
+import 'package:flutter_todo/helper/PermissionHelper.dart';
 import 'package:flutter_todo/helper/UpdateHelper.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
@@ -22,7 +25,8 @@ class _PageState extends State<SplashPage> {
   void initState() {
     super.initState();
 
-    autoLogin();
+    PermissionHelper.checkAndRequestPermission(
+        context, Permission.storage, "文件存储", () => autoLogin());
   }
 
   void autoLogin() async {
@@ -97,8 +101,7 @@ class _PageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     // FIXME 系统和自定义splash间有个fade效果？？release 就没了
-    return Scaffold(
-        body: Image(
-            image: AssetImage('assets/images/splash.png'), fit: BoxFit.fill));
+    return Image(
+        image: AssetImage('assets/images/splash.png'), fit: BoxFit.fill);
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
+import 'package:flutter_todo/helper/PermissionHelper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 class DialogUtils {
-
   static ProgressDialog getProgressDialog(BuildContext context) {
     ProgressDialog dialog = ProgressDialog(context,
         customBody: Container(
@@ -56,17 +57,26 @@ class DialogUtils {
 
   static showImagePickDialog(
       BuildContext context, Function(String) onPick) async {
+    Function(String) selectCall = (path) {
+      if (path != null) onPick.call(path);
+    };
+
     showItemsDialog(context, [
       "相册",
       "拍照"
     ], [
       () {
         ImageHelper.selectImage(ImageSource.gallery)
-            .then((value) => onPick.call(value));
+            .then((value) => selectCall.call(value));
       },
       () {
-        ImageHelper.selectImage(ImageSource.camera)
-            .then((value) => onPick.call(value));
+        PermissionHelper.checkAndRequestPermission(
+            context,
+            Permission.camera,
+            "相机",
+            () => ImageHelper.selectImage(ImageSource.camera)
+                .then((value) => selectCall.call(value)),
+            blockRequest: false);
       }
     ]);
   }
