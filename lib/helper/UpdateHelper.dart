@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_todo/entity/Version.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:install_plugin/install_plugin.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
@@ -38,7 +39,10 @@ class UpdateHelper {
 
   static void showUpdateDialog(BuildContext context,
       {bool cancelable = false}) {
-    if (list == null) return;
+    if (list == null || list.length == 0) {
+      if (cancelable) Fluttertoast.showToast(msg: "当前已是最新版本");
+      return;
+    }
 
     String updateInfo = getUpdateInfoListStr();
     List<Widget> actionWidgets = [];
@@ -164,12 +168,12 @@ class UpdateHelper {
   }
 
   static Version getNewestUpdateInfo() {
-    if (list == null) return null;
+    if (list == null || list.length == 0) return null;
     return list[0];
   }
 
   static getUpdateInfoListStr() {
-    if (list == null) return "";
+    if (list == null || list.length == 0) return "";
     String info = "";
     for (Version version in list) {
       info += ("${version.versionName}\n");
@@ -185,7 +189,7 @@ class UpdateHelper {
   }
 
   static bool hasForceVersion() {
-    if (list == null) return false;
+    if (list == null || list.length == 0) return false;
     for (Version version in list) {
       if (version.isForceUpdate) return true;
     }
