@@ -14,7 +14,6 @@ class TheDayPage extends StatefulWidget {
 
 class _PageState extends State<TheDayPage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
-
   static const MODE_CALENDAR = "日历";
   static const MODE_LIST = "列表";
 
@@ -84,15 +83,15 @@ class _PageState extends State<TheDayPage>
     _calendarController.dispose();
     super.dispose();
   }
-  
+
   void _groupTheDays() {
     // TODO 周年纪念日的xxx循环添加
     // 数据按日分组
     _dateTheDayMap = Map();
-    for(TheDay day in _theDayList) {
+    for (TheDay day in _theDayList) {
       DateTime date = DateUtils.str2date(day.theDayDate);
       List<TheDay> theDayList = _dateTheDayMap[date];
-      if(theDayList == null) {
+      if (theDayList == null) {
         _dateTheDayMap[date] = theDayList = List<TheDay>();
       }
       theDayList.add(day);
@@ -139,7 +138,7 @@ class _PageState extends State<TheDayPage>
   getBody() {
     if (_hasLoadData) {
       List<Widget> children = [];
-      if(_curMode == MODE_CALENDAR) {
+      if (_curMode == MODE_CALENDAR) {
         children.add(_buildTableCalendarWithBuilders());
       }
       children.add(Expanded(child: _buildEventList()));
@@ -165,13 +164,16 @@ class _PageState extends State<TheDayPage>
       availableGestures: AvailableGestures.all,
       calendarStyle: CalendarStyle(
         outsideDaysVisible: true,
-        weekendStyle: TextStyle().copyWith(color: Theme.of(context).primaryColor),
-        outsideWeekendStyle: TextStyle().copyWith(color: Theme.of(context).primaryColorLight),
+        weekendStyle:
+            TextStyle().copyWith(color: Theme.of(context).primaryColor),
+        outsideWeekendStyle:
+            TextStyle().copyWith(color: Theme.of(context).primaryColorLight),
         selectedColor: Theme.of(context).primaryColor,
         todayColor: Theme.of(context).primaryColorLight,
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
-        weekendStyle: TextStyle().copyWith(color: Theme.of(context).primaryColor),
+        weekendStyle:
+            TextStyle().copyWith(color: Theme.of(context).primaryColor),
       ),
       headerStyle: HeaderStyle(
         centerHeaderTitle: true,
@@ -211,7 +213,7 @@ class _PageState extends State<TheDayPage>
 
   _selectDate() async {
     var date = await DateUtils.showCustomDatePicker(context);
-    if(date == null) return;
+    if (date == null) return;
     setState(() {
       _calendarController.setFocusedDay(date);
       _calendarController.setSelectedDay(date);
@@ -222,9 +224,8 @@ class _PageState extends State<TheDayPage>
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: _calendarController.isSelected(date)
-            ? Colors.red
-            : Colors.red[200],
+        color:
+            _calendarController.isSelected(date) ? Colors.red : Colors.red[200],
       ),
       width: 16.0,
       height: 16.0,
@@ -251,19 +252,20 @@ class _PageState extends State<TheDayPage>
 
   Widget _buildEventRow(TheDay event) {
     String title = event.name;
-    if(_curMode == MODE_LIST) {
+    if (_curMode == MODE_LIST) {
       title = "[" + (event.theDayDate ?? "未设置时间") + "] " + title;
     }
     return ListTile(
       title: Text(title, style: TextStyle(fontSize: 16)),
       subtitle: Text(event.desc, maxLines: 1, style: TextStyle(fontSize: 14)),
       onTap: () => Navigator.pushNamed(context, "theDayDetail",
-          arguments: {"theDay": event}),
+          arguments: {"date": _selectedDate, "theDay": event}).then((value) {
+        if (value) refresh();
+      }),
     );
   }
 
   getProgress() {
     return Center(child: CircularProgressIndicator());
   }
-
 }

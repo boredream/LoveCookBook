@@ -24,8 +24,6 @@ import 'pages/TodoDetailPage.dart';
 
 void main() async {
   runZonedGuarded(() {
-    WidgetsFlutterBinding.ensureInitialized();
-
     const bool kReleaseMode =
         bool.fromEnvironment('dart.vm.product', defaultValue: false);
     if (kReleaseMode) {
@@ -46,7 +44,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: '恋爱手册',
       theme: ThemeData(
         primaryColor: Color(0xFFFB6565),
         primaryColorLight: Color(0xFFffa5a5),
