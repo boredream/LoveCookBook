@@ -7,8 +7,14 @@ class DateUtils {
 
   /// 字符串转日期
   static DateTime str2date(String timeStr) {
-    if(StringUtils.isEmpty(timeStr)) return null;
+    if (StringUtils.isEmpty(timeStr)) return null;
     return DateFormat("yyyy-MM-dd").parse(timeStr);
+  }
+
+  /// 字符串转日期+时间
+  static DateTime str2dateAndTime(String timeStr) {
+    if(StringUtils.isEmpty(timeStr)) return null;
+    return DateFormat("yyyy-MM-dd HH:mm").parse(timeStr);
   }
 
   /// 日期清空时分秒信息

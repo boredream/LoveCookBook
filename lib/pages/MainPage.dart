@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_todo/helper/NotificationHelper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'LifePage.dart';
@@ -30,6 +31,12 @@ class _PageState extends State<MainPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    NotificationHelper.init(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
@@ -42,7 +49,7 @@ class _PageState extends State<MainPage> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.list),
-              label: 'List',
+              label: '待办',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),

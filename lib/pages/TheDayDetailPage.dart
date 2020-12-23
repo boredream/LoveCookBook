@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/ImageBean.dart';
 import 'package:flutter_todo/entity/TheDay.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
+import 'package:flutter_todo/helper/NotificationHelper.dart';
 import 'package:flutter_todo/utils/DateUtils.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/views/AddGridImageList.dart';
@@ -227,7 +230,7 @@ class _PageState extends State<TheDayDetailPage> {
 
   getRemindPeriods() {
     List<Widget> list = List<Widget>();
-    list.add(Text("提醒：",  style: Theme.of(context).primaryTextTheme.subtitle1));
+    list.add(Text("提醒：", style: Theme.of(context).primaryTextTheme.subtitle1));
     for (String type in _remindPeriods) {
       list.add(GestureDetector(
           onTap: () {
@@ -254,7 +257,7 @@ class _PageState extends State<TheDayDetailPage> {
   }
 
   getRemindDate() {
-    if(_theDay.remindPeriod != "仅一次") {
+    if (_theDay.remindPeriod != "仅一次") {
       return Row();
     }
     return GestureDetector(
@@ -281,7 +284,6 @@ class _PageState extends State<TheDayDetailPage> {
     if (_formKey.currentState.validate()) {
       // 验证通过提交数据
       _formKey.currentState.save();
-
       _dialog.show();
 
       // 校验图片，上传未上传的
@@ -290,7 +292,7 @@ class _PageState extends State<TheDayDetailPage> {
           if (_images[i].url == null) {
             // 本地图片，上传之
             _images[i].url = await ImageHelper.uploadImage(_images[i].path);
-            print("image upload success = " + _images[i].url);
+            debugPrint("image upload success = " + _images[i].url);
           }
         }
       } catch (e) {
@@ -306,7 +308,6 @@ class _PageState extends State<TheDayDetailPage> {
 
       // 新增or更新
       if (_isUpdate) {
-        print(_theDay.id);
         DataHelper.setData(DataHelper.COLLECTION_THE_DAY, _theDay.id, _theDay)
             .then((value) => requestSuccess("修改"))
             .catchError((error) => requestError(error));
@@ -319,6 +320,14 @@ class _PageState extends State<TheDayDetailPage> {
   }
 
   requestSuccess(String operation) {
+    if (_theDay.remindPeriod == "仅一次" && _theDay.notifyDate != null) {
+      DateTime notifyDate = DateUtils.str2dateAndTime(_theDay.notifyDate);
+      NotificationHelper.showNotificationAtTime(
+          "theDay", _theDay.name, _theDay.desc ?? "", notifyDate,
+          payload: "theDay:::" + json.encode(_theDay));
+      return;
+    }
+
     _dialog.hide();
     var msg = operation + "成功";
     Fluttertoast.showToast(msg: msg);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/ImageBean.dart';
 import 'package:flutter_todo/entity/Todo.dart';
@@ -43,6 +45,7 @@ class _PageState extends State<TodoDetailPage> {
       if (_todo == null) {
         // 新增
         _todo = Todo();
+        _todo.type = args["type"];
       } else {
         // 修改
         _isUpdate = true;
@@ -52,13 +55,11 @@ class _PageState extends State<TodoDetailPage> {
       }
       _titleController.text = _todo.name;
       _descController.text = _todo.desc;
-
-      _todo.type = args["type"];
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("list 详情"),
+        title: Text("待办详情"),
       ),
       body: getBody(),
     );
@@ -247,7 +248,7 @@ class _PageState extends State<TodoDetailPage> {
           if (_images[i].url == null) {
             // 本地图片，上传之
             _images[i].url = await ImageHelper.uploadImage(_images[i].path);
-            print("image upload success = " + _images[i].url);
+            debugPrint("image upload success = " + _images[i].url);
           }
         }
       } catch (e) {
@@ -275,11 +276,11 @@ class _PageState extends State<TodoDetailPage> {
   }
 
   requestSuccess(String operation) {
-    if (_todo.todoDate != null) {
-      // FIXME hms
-      DateTime notifyDate = DateUtils.str2date(_todo.todoDate);
+    if (_todo.notifyDate != null) {
+      DateTime notifyDate = DateUtils.str2dateAndTime(_todo.notifyDate);
       NotificationHelper.showNotificationAtTime(
-          _todo.name, _todo.desc ?? "", notifyDate);
+          "todo", _todo.name, _todo.desc ?? "", notifyDate,
+          payload: "todo:::" + json.encode(_todo));
     }
 
     _dialog.hide();

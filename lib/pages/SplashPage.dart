@@ -7,7 +7,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_todo/entity/User.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
-import 'package:flutter_todo/helper/NotificationHelper.dart';
 import 'package:flutter_todo/helper/PermissionHelper.dart';
 import 'package:flutter_todo/helper/UpdateHelper.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
@@ -31,9 +30,6 @@ class _PageState extends State<SplashPage> {
 
   void autoLogin() async {
     try {
-      // init others
-      await NotificationHelper.init();
-
       int startTime = DateTime.now().millisecond;
 
       // TODO iOS app id
