@@ -11,8 +11,8 @@ class TheDay extends BaseCloudBean {
   TheDay();
   String name;
   String desc;
-  String createDate;
   String theDayDate;
+  String notifyDate;
   String remindPeriod;
   List<String> images = [];
 

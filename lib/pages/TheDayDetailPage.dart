@@ -16,6 +16,9 @@ class TheDayDetailPage extends StatefulWidget {
 }
 
 class _PageState extends State<TheDayDetailPage> {
+  static const DATE_TYPE_THE_DAY = 1;
+  static const DATE_TYPE_NOTIFY = 2;
+
   TheDay _theDay;
   bool _isUpdate = false;
   List<ImageBean> _images = [];
@@ -46,7 +49,7 @@ class _PageState extends State<TheDayDetailPage> {
       } else {
         // 修改
         _isUpdate = true;
-        if(_theDay.images == null) {
+        if (_theDay.images == null) {
           _theDay.images = [];
         }
         for (String url in _theDay.images) {
@@ -96,7 +99,7 @@ class _PageState extends State<TheDayDetailPage> {
                 child: RaisedButton(
                     textColor: Colors.white,
                     color: Theme.of(context).primaryColor,
-                    child:  Text(_isUpdate ? "修改" : "新增"),
+                    child: Text(_isUpdate ? "修改" : "新增"),
                     onPressed: () => update())),
           ],
         ),
@@ -143,44 +146,26 @@ class _PageState extends State<TheDayDetailPage> {
           SizedBox(
             height: 16,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "创建日期：",
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-              Text(
-                _theDay.createDate ?? "",
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 8,
-          ),
           GestureDetector(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "纪念日期：",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  "纪念日时间：",
+                  style: Theme.of(context).primaryTextTheme.subtitle1,
                 ),
                 Text(
-                  _theDay.theDayDate ?? "未填写",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  _theDay.theDayDate ?? "[点我修改]",
+                  style: Theme.of(context).primaryTextTheme.bodyText1,
                 ),
               ],
             ),
             onTap: () {
-              selectData();
+              selectData(DATE_TYPE_THE_DAY);
             },
           ),
-          SizedBox(
-            height: 8,
-          ),
           getRemindPeriods(),
+          getRemindDate(),
           SizedBox(
             height: 16,
           ),
@@ -203,11 +188,31 @@ class _PageState extends State<TheDayDetailPage> {
     });
   }
 
-  selectData() async {
-    var date = await DateUtils.showCustomDatePicker(context);
-    if (date == null) return;
+  selectData(int dateType) async {
+    DateTime initialDate = DateTime.now();
+    TimeOfDay initialTime = TimeOfDay(hour: 10, minute: 0);
+    if (dateType == DATE_TYPE_THE_DAY) {
+      if (_theDay.theDayDate != null) {
+        initialDate = DateTime.parse(_theDay.theDayDate);
+        initialTime =
+            TimeOfDay(hour: initialDate.hour, minute: initialDate.minute);
+      }
+    } else if (dateType == DATE_TYPE_NOTIFY) {
+      if (_theDay.notifyDate != null) {
+        initialDate = DateTime.parse(_theDay.notifyDate);
+        initialTime =
+            TimeOfDay(hour: initialDate.hour, minute: initialDate.minute);
+      }
+    }
+
+    var format = await DateUtils.showCustomDateTimePicker(context,
+        initialDate: initialDate, initialTime: initialTime);
     setState(() {
-      _theDay.theDayDate = DateFormat("yyyy-MM-dd").format(date);
+      if (dateType == DATE_TYPE_THE_DAY) {
+        _theDay.theDayDate = format;
+      } else if (dateType == DATE_TYPE_NOTIFY) {
+        _theDay.notifyDate = format;
+      }
     });
   }
 
@@ -222,9 +227,8 @@ class _PageState extends State<TheDayDetailPage> {
 
   getRemindPeriods() {
     List<Widget> list = List<Widget>();
-    list.add(Text("提醒："));
+    list.add(Text("提醒：",  style: Theme.of(context).primaryTextTheme.subtitle1));
     for (String type in _remindPeriods) {
-      // FIXME 横向radio？
       list.add(GestureDetector(
           onTap: () {
             setState(() {
@@ -247,6 +251,30 @@ class _PageState extends State<TheDayDetailPage> {
           )));
     }
     return Row(children: list);
+  }
+
+  getRemindDate() {
+    if(_theDay.remindPeriod != "仅一次") {
+      return Row();
+    }
+    return GestureDetector(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "提醒时间：",
+            style: Theme.of(context).primaryTextTheme.subtitle1,
+          ),
+          Text(
+            _theDay.notifyDate ?? "[点我修改]",
+            style: Theme.of(context).primaryTextTheme.bodyText1,
+          ),
+        ],
+      ),
+      onTap: () {
+        selectData(DATE_TYPE_NOTIFY);
+      },
+    );
   }
 
   update() async {
@@ -283,8 +311,6 @@ class _PageState extends State<TheDayDetailPage> {
             .then((value) => requestSuccess("修改"))
             .catchError((error) => requestError(error));
       } else {
-        _theDay.createDate =
-            DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
         DataHelper.saveData(DataHelper.COLLECTION_THE_DAY, _theDay)
             .then((value) => requestSuccess("新增"))
             .catchError((error) => requestError(error));

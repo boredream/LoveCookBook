@@ -16,6 +16,7 @@ class UserPage extends StatefulWidget {
 
 class _PageState extends State<UserPage> {
   User _user;
+
   var settings = [
     {"icon": Icons.system_update, "name": "检查更新"},
     {"icon": Icons.info, "name": "关于", "route": "about"},
@@ -35,7 +36,6 @@ class _PageState extends State<UserPage> {
   void initState() {
     super.initState();
 
-    _dialog = DialogUtils.getProgressDialog(context);
     UserHelper.getUserInfo().then((value) {
       setState(() {
         _user = value;
@@ -123,6 +123,9 @@ class _PageState extends State<UserPage> {
   }
 
   void checkUpdate() {
+    if(_dialog == null) {
+      _dialog = DialogUtils.getProgressDialog(context);
+    }
     _dialog.show();
     UpdateHelper.getAndSaveUpdateInfoList().then((value) {
       _dialog.hide();

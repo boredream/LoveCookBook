@@ -22,12 +22,13 @@ class DateUtils {
     return endDate.difference(startDate).inDays;
   }
 
-  static Future<DateTime> showCustomDatePicker(BuildContext context) {
+  /// 选择日期
+  static Future<DateTime> showCustomDatePicker(BuildContext context, {DateTime initialDate}) {
     return showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100),
+        initialDate: initialDate,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2200),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light().copyWith(
@@ -38,6 +39,44 @@ class DateUtils {
             child: child,
           );
         }
-      );
+    );
+  }
+
+  /// 选择日期+时间
+  static Future<String> showCustomDateTimePicker(BuildContext context, {DateTime initialDate, TimeOfDay initialTime}) async {
+    DateTime date = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2200),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light().copyWith(
+                primary: Theme.of(context).primaryColor,
+              ),
+            ),
+            child: child,
+          );
+        });
+    if (date == null) return null;
+    TimeOfDay time = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light().copyWith(
+                primary: Theme.of(context).primaryColor,
+              ),
+            ),
+            child: child,
+          );
+        }
+    );
+    if (time == null) return null;
+
+    date = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    return DateFormat("yyyy-MM-dd HH:mm").format(date);
   }
 }

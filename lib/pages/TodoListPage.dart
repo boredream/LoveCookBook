@@ -13,7 +13,6 @@ class TabTodoListPage extends StatefulWidget {
 
 class _PageState extends State<TabTodoListPage>
     with AutomaticKeepAliveClientMixin {
-
   @override
   bool get wantKeepAlive => true;
 
@@ -38,7 +37,12 @@ class _PageState extends State<TabTodoListPage>
   List<Widget> getTabs() {
     List<Widget> tabs = [];
     for (String type in GlobalConstants.todoTypes) {
-      tabs.add( Tab(text: type));
+      tabs.add(Tab(
+          child: Text(type,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: Colors.white))));
     }
     return tabs;
   }
@@ -46,7 +50,7 @@ class _PageState extends State<TabTodoListPage>
   List<Widget> getTabViews() {
     List<Widget> tabs = [];
     for (String type in GlobalConstants.todoTypes) {
-      tabs.add( TodoList(type));
+      tabs.add(TodoList(type));
     }
     return tabs;
   }
@@ -141,8 +145,8 @@ class _TodoListState extends State<TodoList>
             setState(() {
               todo.done = !todo.done;
             });
-            DataHelper.updateData(DataHelper.COLLECTION_LIST,
-                todo.id, {"done": todo.done});
+            DataHelper.updateData(
+                DataHelper.COLLECTION_LIST, todo.id, {"done": todo.done});
           },
         ),
         Expanded(

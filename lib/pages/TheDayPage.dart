@@ -212,7 +212,7 @@ class _PageState extends State<TheDayPage>
   }
 
   _selectDate() async {
-    var date = await DateUtils.showCustomDatePicker(context);
+    var date = await DateUtils.showCustomDatePicker(context, initialDate: _selectedDate);
     if (date == null) return;
     setState(() {
       _calendarController.setFocusedDay(date);

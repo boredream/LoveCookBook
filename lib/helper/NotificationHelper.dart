@@ -27,7 +27,7 @@ class NotificationHelper {
   }
 
   static _getAndroidNotificationDetails() {
-    return AndroidNotificationDetails('channel.lovecookbook', '代办清单', '',
+    return AndroidNotificationDetails('channel.lovecookbook', '待办清单', '',
         importance: Importance.max, priority: Priority.high, ticker: 'ticker');
   }
 

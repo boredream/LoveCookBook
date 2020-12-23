@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -54,7 +53,12 @@ class App extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         iconTheme: IconThemeData(color: Colors.white),
         primaryColorBrightness: Brightness.dark,
-        primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.white)),
+        primaryTextTheme: TextTheme(
+          headline6: TextStyle(color: Colors.white),
+          subtitle1: TextStyle(color: Colors.black87, fontSize: 16),
+          bodyText1: TextStyle(color: Colors.black87, fontSize: 14),
+          bodyText2: TextStyle(color: Colors.black54, fontSize: 14),
+        ),
       ),
       initialRoute: "splash",
       routes: {

@@ -14,7 +14,8 @@ AppFeedback _$AppFeedbackFromJson(Map<String, dynamic> json) {
     ..feedback = json['feedback'] as String;
 }
 
-Map<String, dynamic> _$AppFeedbackToJson(AppFeedback instance) => <String, dynamic>{
+Map<String, dynamic> _$AppFeedbackToJson(AppFeedback instance) =>
+    <String, dynamic>{
       '_id': instance.id,
       'name': instance.name,
       'contact': instance.contact,

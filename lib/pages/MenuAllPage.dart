@@ -56,7 +56,12 @@ class _PageState extends State<MenuAllPage>
   List<Widget> _getTabs() {
     List<Widget> list = [];
     for (var tab in _tabList) {
-      list.add(Tab(text: tab));
+      list.add(Tab(
+          child: Text(tab,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: Colors.white))));
     }
     return list;
   }

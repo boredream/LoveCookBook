@@ -1,13 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/ImageBean.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
+import 'package:flutter_todo/helper/NotificationHelper.dart';
+import 'package:flutter_todo/utils/DateUtils.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/views/AddGridImageList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 class TodoDetailPage extends StatefulWidget {
@@ -17,7 +17,7 @@ class TodoDetailPage extends StatefulWidget {
 
 class _PageState extends State<TodoDetailPage> {
   static const DATE_TYPE_TODO = 1;
-  static const DATE_TYPE_DONE = 2;
+  static const DATE_TYPE_NOTIFY = 2;
 
   Todo _todo;
   bool _isUpdate = false;
@@ -90,7 +90,7 @@ class _PageState extends State<TodoDetailPage> {
                 child: RaisedButton(
                     textColor: Colors.white,
                     color: Theme.of(context).primaryColor,
-                    child:  Text(_isUpdate ? "修改" : "新增"),
+                    child: Text(_isUpdate ? "修改" : "新增"),
                     onPressed: () => update())),
           ],
         ),
@@ -104,7 +104,6 @@ class _PageState extends State<TodoDetailPage> {
   getForm() {
     return Form(
       key: _formKey,
-      autovalidate: true,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,33 +136,17 @@ class _PageState extends State<TodoDetailPage> {
           SizedBox(
             height: 16,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "创建日期：",
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-              Text(
-                _todo.createDate ?? "",
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 8,
-          ),
           GestureDetector(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "预计完成日期：",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  "预计完成时间：",
+                  style: Theme.of(context).primaryTextTheme.subtitle1,
                 ),
                 Text(
-                  _todo.todoDate ?? "未填写",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  _todo.todoDate ?? "[点我修改]",
+                  style: Theme.of(context).primaryTextTheme.bodyText1,
                 ),
               ],
             ),
@@ -179,17 +162,17 @@ class _PageState extends State<TodoDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "实际完成日期：",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  "提醒时间：",
+                  style: Theme.of(context).primaryTextTheme.subtitle1,
                 ),
                 Text(
-                  _todo.doneDate ?? "未填写",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  _todo.notifyDate ?? "[默认不提醒，点我修改]",
+                  style: Theme.of(context).primaryTextTheme.bodyText1,
                 ),
               ],
             ),
             onTap: () {
-              selectData(DATE_TYPE_DONE);
+              selectData(DATE_TYPE_NOTIFY);
             },
           ),
           SizedBox(
@@ -215,18 +198,29 @@ class _PageState extends State<TodoDetailPage> {
   }
 
   selectData(int dateType) async {
-    var date = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
-    if(date == null) return;
-    var format = DateFormat("yyyy-MM-dd").format(date);
+    DateTime initialDate = DateTime.now();
+    TimeOfDay initialTime = TimeOfDay(hour: 10, minute: 0);
+    if (dateType == DATE_TYPE_TODO) {
+      if (_todo.todoDate != null) {
+        initialDate = DateTime.parse(_todo.todoDate);
+        initialTime =
+            TimeOfDay(hour: initialDate.hour, minute: initialDate.minute);
+      }
+    } else if (dateType == DATE_TYPE_NOTIFY) {
+      if (_todo.notifyDate != null) {
+        initialDate = DateTime.parse(_todo.notifyDate);
+        initialTime =
+            TimeOfDay(hour: initialDate.hour, minute: initialDate.minute);
+      }
+    }
+
+    var format = await DateUtils.showCustomDateTimePicker(context,
+        initialDate: initialDate, initialTime: initialTime);
     setState(() {
       if (dateType == DATE_TYPE_TODO) {
         _todo.todoDate = format;
-      } else if (dateType == DATE_TYPE_DONE) {
-        _todo.doneDate = format;
+      } else if (dateType == DATE_TYPE_NOTIFY) {
+        _todo.notifyDate = format;
       }
     });
   }
@@ -273,8 +267,6 @@ class _PageState extends State<TodoDetailPage> {
             .then((value) => requestSuccess("修改"))
             .catchError((error) => requestError(error));
       } else {
-        _todo.createDate = DateFormat("yyyy-MM-dd HH:mm:ss")
-            .format(DateTime.now());
         DataHelper.saveData(DataHelper.COLLECTION_LIST, _todo)
             .then((value) => requestSuccess("新增"))
             .catchError((error) => requestError(error));
@@ -283,6 +275,13 @@ class _PageState extends State<TodoDetailPage> {
   }
 
   requestSuccess(String operation) {
+    if (_todo.todoDate != null) {
+      // FIXME hms
+      DateTime notifyDate = DateUtils.str2date(_todo.todoDate);
+      NotificationHelper.showNotificationAtTime(
+          _todo.name, _todo.desc ?? "", notifyDate);
+    }
+
     _dialog.hide();
     var msg = operation + "成功";
     Fluttertoast.showToast(msg: msg);

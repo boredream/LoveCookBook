@@ -13,9 +13,8 @@ class Todo extends BaseCloudBean {
   String name;
   String desc;
   List<String> images = [];
-  String createDate;
   String todoDate;
-  String doneDate;
+  String notifyDate;
 
   factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
   Map<String, dynamic> toJson() => _$TodoToJson(this);

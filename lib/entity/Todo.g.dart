@@ -15,9 +15,8 @@ Todo _$TodoFromJson(Map<String, dynamic> json) {
     ..name = json['name'] as String
     ..desc = json['desc'] as String
     ..images = (json['images'] as List)?.map((e) => e as String)?.toList()
-    ..createDate = json['createDate'] as String
     ..todoDate = json['todoDate'] as String
-    ..doneDate = json['doneDate'] as String;
+    ..notifyDate = json['notifyDate'] as String;
 }
 
 Map<String, dynamic> _$TodoToJson(Todo instance) => <String, dynamic>{
@@ -27,7 +26,6 @@ Map<String, dynamic> _$TodoToJson(Todo instance) => <String, dynamic>{
       'name': instance.name,
       'desc': instance.desc,
       'images': instance.images,
-      'createDate': instance.createDate,
       'todoDate': instance.todoDate,
-      'doneDate': instance.doneDate,
+      'notifyDate': instance.notifyDate,
     };
