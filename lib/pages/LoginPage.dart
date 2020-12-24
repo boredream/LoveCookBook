@@ -83,9 +83,6 @@ class _PageState extends State<LoginPage> {
             validator: (value) {
               return value.trim().length > 0 ? null : "不能为空";
             },
-            onSaved: (newValue) {
-              // TODO
-            },
           ),
           SizedBox(height: 8),
           TextFormField(

@@ -99,7 +99,7 @@ class _PageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    // FIXME 系统和自定义splash间有个fade效果？？release 就没了
+    // 系统和自定义splash间有个fade效果。release 就没了
     return Image(
         image: AssetImage('assets/images/splash.png'), fit: BoxFit.fill);
   }
