@@ -93,9 +93,33 @@ class _TodoListState extends State<TodoList>
 
       setState(() {
         _hasLoadData = true;
-        _todoList = (value.data as List)
+        List<Todo> todoList = (value.data as List)
             .map((e) => Todo.fromJson(new Map<String, dynamic>.from(e)))
             .toList();
+        todoList.sort((a, b) {
+          // 有日期的在前，同日期的按时间or名字排序
+          String aDate;
+          String bDate;
+          if (a.todoDate != null) {
+            aDate = a.todoDate;
+          }
+          if (a.notifyDate != null) {
+            aDate = a.notifyDate;
+          }
+          if (b.todoDate != null) {
+            bDate = b.todoDate;
+          }
+          if (b.notifyDate != null) {
+            bDate = b.notifyDate;
+          }
+          if (aDate != null && bDate != null) {
+            return aDate.compareTo(bDate);
+          } else if (aDate == null && bDate == null) {
+            return a.name.compareTo(b.name);
+          } else {
+            return aDate != null ? 1 : -1;
+          }
+        });
       });
     }).catchError(loadDataError);
   }
@@ -137,6 +161,13 @@ class _TodoListState extends State<TodoList>
 
   getRow(int index) {
     Todo todo = _todoList[index];
+    String date = "[未设置时间]";
+    if (todo.todoDate != null) {
+      date = "[" + todo.todoDate + "]";
+    }
+    if (todo.notifyDate != null) {
+      date = "[" + todo.notifyDate + "]";
+    }
     return Row(
       children: [
         Checkbox(
@@ -151,7 +182,7 @@ class _TodoListState extends State<TodoList>
         ),
         Expanded(
           child: GestureDetector(
-            child: Text("[" + (todo.todoDate ?? "未设置时间") + "] " + todo.name),
+            child: Text(date + " " + todo.name),
             onTap: () {
               Navigator.pushNamed(context, "todoDetail",
                       arguments: {"type": type, "todo": todo})

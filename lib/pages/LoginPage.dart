@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -76,6 +77,11 @@ class _PageState extends State<LoginPage> {
         children: [
           Text("可以两个人使用同一账户登录，共享信息", style: TextStyle(fontSize: 14)),
           TextFormField(
+            maxLength: 20,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp("[a-z,A-Z,0-9]")),
+              //限制只允许输入字母和数字
+            ],
             controller: _usernameController,
             decoration: InputDecoration(
               labelText: "用户名",
@@ -86,13 +92,20 @@ class _PageState extends State<LoginPage> {
           ),
           SizedBox(height: 8),
           TextFormField(
+            maxLength: 20,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp("[a-z,A-Z,0-9]")),
+              //限制只允许输入字母和数字
+            ],
             controller: _passwordController,
-            keyboardType: TextInputType.visiblePassword,
             decoration: InputDecoration(
               labelText: "密码",
             ),
             validator: (value) {
-              return value.trim().length > 0 ? null : "不能为空";
+              if (value.trim().length >= 6 && value.trim().length <= 20) {
+                return null;
+              }
+              return "密码必须是6~20位的字母和数字组合";
             },
           ),
         ],

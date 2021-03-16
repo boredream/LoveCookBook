@@ -6,7 +6,7 @@ import 'package:flutter_todo/entity/TheDay.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:flutter_todo/helper/NotificationHelper.dart';
-import 'package:flutter_todo/utils/DateUtils.dart';
+import 'package:flutter_todo/utils/DateStrUtils.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/views/AddGridImageList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -208,7 +208,7 @@ class _PageState extends State<TheDayDetailPage> {
       }
     }
 
-    var format = await DateUtils.showCustomDateTimePicker(context,
+    var format = await DateStrUtils.showCustomDateTimePicker(context,
         initialDate: initialDate, initialTime: initialTime);
     setState(() {
       if (dateType == DATE_TYPE_THE_DAY) {
@@ -321,7 +321,7 @@ class _PageState extends State<TheDayDetailPage> {
 
   requestSuccess(String operation) {
     if (_theDay.remindPeriod == "仅一次" && _theDay.notifyDate != null) {
-      DateTime notifyDate = DateUtils.str2dateAndTime(_theDay.notifyDate);
+      DateTime notifyDate = DateStrUtils.str2dateAndTime(_theDay.notifyDate);
       NotificationHelper.showNotificationAtTime(
           "theDay", _theDay.name, _theDay.desc ?? "", notifyDate,
           payload: "theDay:::" + json.encode(_theDay));

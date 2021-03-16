@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/RegularInvest.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
-import 'package:flutter_todo/utils/DateUtils.dart';
+import 'package:flutter_todo/utils/DateStrUtils.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/utils/StringUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -49,7 +49,7 @@ class _PageState extends State<RegularInvestPage> {
         // 按到期时间分组
         _monthIncomeMap = Map();
         _dataList.forEach((element) {
-          DateTime date = DateUtils.str2date(element.endDate);
+          DateTime date = DateStrUtils.str2date(element.endDate);
           String dateStr = "${date.year}-${date.month}";
           int money = _monthIncomeMap[dateStr];
           if (money == null) {
@@ -91,8 +91,8 @@ class _PageState extends State<RegularInvestPage> {
         double income = data.money * data.rate;
         totalIncome += income;
 
-        int pastDays = DateUtils.calculateDayDiff(
-            DateUtils.str2date(data.startDate), DateTime.now());
+        int pastDays = DateStrUtils.calculateDayDiff(
+            DateStrUtils.str2date(data.startDate), DateTime.now());
         int curIncome =
             pastDays <= 0 ? 0 : data.money * data.rate / 100 * pastDays ~/ 365;
         totalCurMoney += curIncome;
@@ -209,10 +209,10 @@ class _PageState extends State<RegularInvestPage> {
     index --;
     RegularInvest data = _dataList[index];
 
-    int totalDays = DateUtils.calculateDayDiff(
-        DateUtils.str2date(data.startDate), DateUtils.str2date(data.endDate));
-    int pastDays = DateUtils.calculateDayDiff(
-        DateUtils.str2date(data.startDate), DateTime.now());
+    int totalDays = DateStrUtils.calculateDayDiff(
+        DateStrUtils.str2date(data.startDate), DateStrUtils.str2date(data.endDate));
+    int pastDays = DateStrUtils.calculateDayDiff(
+        DateStrUtils.str2date(data.startDate), DateTime.now());
     int monthIncome = data.money * data.rate ~/ 1200;
     int curIncome =
         pastDays <= 0 ? 0 : data.money * data.rate / 100 * pastDays ~/ 365;

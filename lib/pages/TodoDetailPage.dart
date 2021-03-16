@@ -6,7 +6,7 @@ import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:flutter_todo/helper/NotificationHelper.dart';
-import 'package:flutter_todo/utils/DateUtils.dart';
+import 'package:flutter_todo/utils/DateStrUtils.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/views/AddGridImageList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -215,7 +215,7 @@ class _PageState extends State<TodoDetailPage> {
       }
     }
 
-    var format = await DateUtils.showCustomDateTimePicker(context,
+    var format = await DateStrUtils.showCustomDateTimePicker(context,
         initialDate: initialDate, initialTime: initialTime);
     setState(() {
       if (dateType == DATE_TYPE_TODO) {
@@ -277,7 +277,7 @@ class _PageState extends State<TodoDetailPage> {
 
   requestSuccess(String operation) {
     if (_todo.notifyDate != null) {
-      DateTime notifyDate = DateUtils.str2dateAndTime(_todo.notifyDate);
+      DateTime notifyDate = DateStrUtils.str2dateAndTime(_todo.notifyDate);
       NotificationHelper.showNotificationAtTime(
           "todo", _todo.name, _todo.desc ?? "", notifyDate,
           payload: "todo:::" + json.encode(_todo));

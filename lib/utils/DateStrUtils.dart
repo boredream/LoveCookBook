@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todo/utils/StringUtils.dart';
 import 'package:intl/intl.dart';
 
-class DateUtils {
+class DateStrUtils {
 
   /// 字符串转日期
   static DateTime str2date(String timeStr) {

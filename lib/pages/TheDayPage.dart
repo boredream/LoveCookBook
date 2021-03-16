@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/TheDay.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
-import 'package:flutter_todo/utils/DateUtils.dart';
+import 'package:flutter_todo/utils/DateStrUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -67,7 +67,7 @@ class _PageState extends State<TheDayPage>
             .toList();
         _groupTheDays();
 
-        _selectedDate = DateUtils.dateClearHMS(DateTime.now());
+        _selectedDate = DateStrUtils.dateClearHMS(DateTime.now());
         _selectedTheDays = _dateTheDayMap[_selectedDate] ?? [];
       });
     }).catchError(loadDataError);
@@ -89,7 +89,7 @@ class _PageState extends State<TheDayPage>
     // 数据按日分组
     _dateTheDayMap = Map();
     for (TheDay day in _theDayList) {
-      DateTime date = DateUtils.str2date(day.theDayDate);
+      DateTime date = DateStrUtils.str2date(day.theDayDate);
       List<TheDay> theDayList = _dateTheDayMap[date];
       if (theDayList == null) {
         _dateTheDayMap[date] = theDayList = List<TheDay>();
@@ -99,7 +99,7 @@ class _PageState extends State<TheDayPage>
   }
 
   void _onDaySelected(DateTime day, List events, List holidays) {
-    _selectedDate = DateUtils.dateClearHMS(day);
+    _selectedDate = DateStrUtils.dateClearHMS(day);
     setState(() {
       _selectedTheDays = _dateTheDayMap[_selectedDate] ?? [];
     });
@@ -212,7 +212,7 @@ class _PageState extends State<TheDayPage>
   }
 
   _selectDate() async {
-    var date = await DateUtils.showCustomDatePicker(context, initialDate: _selectedDate);
+    var date = await DateStrUtils.showCustomDatePicker(context, initialDate: _selectedDate);
     if (date == null) return;
     setState(() {
       _calendarController.setFocusedDay(date);
