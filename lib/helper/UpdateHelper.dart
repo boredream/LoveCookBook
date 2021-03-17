@@ -8,7 +8,6 @@ import 'package:flutter_todo/entity/Version.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:install_plugin/install_plugin.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -120,7 +119,7 @@ class UpdateHelper {
     actionWidgets.add(FlatButton(
       child: Text("安装"),
       onPressed: () {
-        InstallPlugin.installApk(file.path, packageName);
+        // InstallPlugin.installApk(file.path, packageName);
       },
     ));
 

@@ -38,7 +38,7 @@ dependencies:
   flutter_bugly: ^0.3.0+2
   package_info: ^0.4.3+2
   url_launcher: ^5.7.10
-  install_plugin: ^2.0.1
+#  install_plugin: ^2.0.1
   permission_handler: ^5.0.1+1
   flutter_local_notifications: ^3.0.2
   device_info: ^1.0.0
