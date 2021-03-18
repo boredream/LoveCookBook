@@ -112,7 +112,7 @@ class _PageState extends State<TheDayPage>
       appBar: AppBar(
         title: const Text('纪念日'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text(_curMode + "模式", style: TextStyle(color: Colors.white)),
             onPressed: () {
               setState(() {

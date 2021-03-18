@@ -97,7 +97,10 @@ class _TodoListState extends State<TodoList>
             .map((e) => Todo.fromJson(new Map<String, dynamic>.from(e)))
             .toList();
         todoList.sort((a, b) {
-          // 有日期的在前，同日期的按时间or名字排序
+          // 未完成的在前，已完成的在后
+          if(a.done && !b.done) return 1;
+          if(!a.done && b.done) return -1;
+
           String aDate;
           String bDate;
           if (a.todoDate != null) {
@@ -112,14 +115,19 @@ class _TodoListState extends State<TodoList>
           if (b.notifyDate != null) {
             bDate = b.notifyDate;
           }
+
           if (aDate != null && bDate != null) {
+            // 都有日期，按日期排
             return aDate.compareTo(bDate);
           } else if (aDate == null && bDate == null) {
+            // 都没日期，按名字排
             return a.name.compareTo(b.name);
           } else {
+            // 无日期的在前，有日期的在后
             return aDate != null ? 1 : -1;
           }
         });
+        _todoList = todoList;
       });
     }).catchError(loadDataError);
   }

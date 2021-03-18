@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_todo/helper/UserHelper.dart';
 
 class LifePage extends StatefulWidget {
   LifePage({Key key}) : super(key: key);
@@ -12,6 +13,15 @@ class LifePage extends StatefulWidget {
 class _PageState extends State<LifePage> {
   @override
   Widget build(BuildContext context) {
+
+    List<Widget> items = [
+      getRow(Icons.room_service_outlined, "菜单", "menuMain"),
+      getRow(Icons.assignment_turned_in_outlined, "目标", "targetList"),
+    ];
+    if (UserHelper.curUser.username == "papi") {
+      items.add(getRow(Icons.attach_money, "理财", "regularInvest"));
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text("日常")),
       body: GridView(
@@ -19,11 +29,7 @@ class _PageState extends State<LifePage> {
               crossAxisCount: 3, //横轴三个子widget
               childAspectRatio: 1.0 //宽高比为1时，子widget
               ),
-          children: <Widget>[
-            getRow(Icons.room_service_outlined, "菜单", "menuMain"),
-            // getRow(Icons.attach_money, "理财", "money"),
-            // getRow(Icons.attach_money, "理财", "regularInvest"),
-          ]),
+          children: items),
     );
   }
 

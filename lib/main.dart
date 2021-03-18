@@ -12,6 +12,9 @@ import 'package:flutter_todo/pages/MenuAllPage.dart';
 import 'package:flutter_todo/pages/MoneyPage.dart';
 import 'package:flutter_todo/pages/RegularInvestPage.dart';
 import 'package:flutter_todo/pages/SplashPage.dart';
+import 'package:flutter_todo/pages/TargetItemPage.dart';
+import 'package:flutter_todo/pages/TargetListPage.dart';
+import 'package:flutter_todo/pages/TargetPage.dart';
 import 'package:flutter_todo/pages/TheDayDetailPage.dart';
 
 import 'helper/ChineseCupertinoLocalizations.dart';
@@ -74,6 +77,9 @@ class App extends StatelessWidget {
         "money": (context) => MoneyPage(),
         "regularInvest": (context) => RegularInvestPage(),
         "fund": (context) => FundPage(),
+        "targetList": (context) => TargetListPage(),
+        "target": (context) => TargetPage(),
+        "targetItem": (context) => TargetItemPage(),
         "about": (context) => AboutPage(),
         "feedback": (context) => FeedbackPage(),
       },

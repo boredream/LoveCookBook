@@ -64,7 +64,7 @@ class _PageState extends State<MenuMainPage> {
         title: Text("菜单"),
         actions: [
           Center(
-              child: FlatButton(
+              child: TextButton(
             child: Text("全部菜品", style: TextStyle(color: Colors.white)),
             onPressed: () => Navigator.pushNamed(context, "menuAll"),
           )),
@@ -96,7 +96,7 @@ class _PageState extends State<MenuMainPage> {
       return Column(
         children: [
           SizedBox(height: 16),
-          OutlineButton(
+          OutlinedButton(
             onPressed: () => randomMenu(),
             child: Text(randomBtnText,
                 style: TextStyle(

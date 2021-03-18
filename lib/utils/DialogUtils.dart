@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:flutter_todo/helper/PermissionHelper.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -58,6 +59,8 @@ class DialogUtils {
   static showImagePickDialog(
       BuildContext context, Function(String) onPick) async {
     Function(String) selectCall = (path) {
+      print('path = ' + path);
+      Fluttertoast.showToast(msg: 'path = ' + path);
       if (path != null) onPick.call(path);
     };
 

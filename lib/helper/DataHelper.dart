@@ -10,6 +10,8 @@ class DataHelper {
   static const COLLECTION_FUND = "fund";
   static const COLLECTION_VERSION = "version";
   static const COLLECTION_FEEDBACK = "feedback";
+  static const COLLECTION_TARGET = "target";
+  static const COLLECTION_TARGET_ITEM = "targetItem";
 
   static Future<DbCreateResponse> saveData(
       String collection, dynamic data) async {
