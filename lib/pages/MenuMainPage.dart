@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Menu.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/GlobalConstants.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class MenuMainPage extends StatefulWidget {
@@ -66,7 +67,7 @@ class _PageState extends State<MenuMainPage> {
           Center(
               child: TextButton(
             child: Text("全部菜品", style: TextStyle(color: Colors.white)),
-            onPressed: () => Navigator.pushNamed(context, "menuAll"),
+            onPressed: () => MyRouteDelegate.of(context).push("menuAll"),
           )),
         ],
       ),
@@ -119,10 +120,11 @@ class _PageState extends State<MenuMainPage> {
                     )),
                 onTap: () {
                   if (_curRandomMenu != null) {
-                    Navigator.pushNamed(context, "menuDetail", arguments: {
+                    MyRouteDelegate.of(context).push("menuDetail", arguments: {
                       "type": _curRandomMenu.type,
                       "menu": _curRandomMenu
-                    }).then((value) => loadData());
+                    });
+                    // .then((value) => loadData());
                   }
                 },
               ),

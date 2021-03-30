@@ -1,28 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_todo/pages/AboutPage.dart';
-import 'package:flutter_todo/pages/FeedbackPage.dart';
-import 'package:flutter_todo/pages/FundPage.dart';
-import 'package:flutter_todo/pages/LoginPage.dart';
-import 'package:flutter_todo/pages/MenuAllPage.dart';
-import 'package:flutter_todo/pages/MoneyPage.dart';
-import 'package:flutter_todo/pages/RegularInvestPage.dart';
-import 'package:flutter_todo/pages/SplashPage.dart';
-import 'package:flutter_todo/pages/TargetItemPage.dart';
-import 'package:flutter_todo/pages/TargetListPage.dart';
-import 'package:flutter_todo/pages/TargetPage.dart';
-import 'package:flutter_todo/pages/TheDayDetailPage.dart';
+import 'package:flutter_todo/helper/GlobalConstants.dart';
 
 import 'helper/ChineseCupertinoLocalizations.dart';
-import 'pages/ImageBrowerPage.dart';
-import 'pages/MainPage.dart';
-import 'pages/MenuDetailPage.dart';
-import 'pages/MenuMainPage.dart';
-import 'pages/TodoDetailPage.dart';
 
 void main() async {
   runZonedGuarded(() {
@@ -43,9 +28,13 @@ void main() async {
 }
 
 class App extends StatelessWidget {
+  final delegate = MyRouteDelegate();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routeInformationParser: MyRouteParser(),
+      routerDelegate: delegate,
       debugShowCheckedModeBanner: false,
       title: '恋爱手册',
       theme: ThemeData(
@@ -63,26 +52,6 @@ class App extends StatelessWidget {
           bodyText2: TextStyle(color: Colors.black54, fontSize: 14),
         ),
       ),
-      initialRoute: "splash",
-      routes: {
-        "splash": (context) => SplashPage(),
-        "login": (context) => LoginPage(),
-        "main": (context) => MainPage(),
-        "todoDetail": (context) => TodoDetailPage(),
-        "menuMain": (context) => MenuMainPage(),
-        "menuAll": (context) => MenuAllPage(),
-        "menuDetail": (context) => MenuDetailPage(),
-        "imageBrowser": (context) => ImageBrowserPage(),
-        "theDayDetail": (context) => TheDayDetailPage(),
-        "money": (context) => MoneyPage(),
-        "regularInvest": (context) => RegularInvestPage(),
-        "fund": (context) => FundPage(),
-        "targetList": (context) => TargetListPage(),
-        "target": (context) => TargetPage(),
-        "targetItem": (context) => TargetItemPage(),
-        "about": (context) => AboutPage(),
-        "feedback": (context) => FeedbackPage(),
-      },
       localizationsDelegates: [
         ChineseCupertinoLocalizations.delegate,
         DefaultCupertinoLocalizations.delegate,
@@ -96,6 +65,127 @@ class App extends StatelessWidget {
         const Locale('zh', ''),
       ],
       locale: Locale("zh"),
+    );
+  }
+}
+
+class MyPage extends Page {
+  MyPage({
+    LocalKey key,
+    String name,
+    Object arguments,
+  }) : super(
+          key: key,
+          name: name,
+          arguments: arguments,
+        );
+
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (BuildContext context) {
+        return GlobalConstants.pages[name];
+      },
+    );
+  }
+}
+
+class MyRouteParser extends RouteInformationParser<MyRoutePath> {
+  @override
+  Future<MyRoutePath> parseRouteInformation(RouteInformation routeInformation) {
+    return SynchronousFuture(MyRoutePath(routeInformation.location, routeInformation.state));
+  }
+
+  @override
+  RouteInformation restoreRouteInformation(MyRoutePath configuration) {
+    return RouteInformation(location: configuration.name, state: configuration.arguments);
+  }
+}
+
+class MyRoutePath {
+  String name;
+  Object arguments;
+
+  MyRoutePath(this.name, this.arguments);
+
+  @override
+  bool operator ==(Object other) => other is MyRoutePath && other.name == name;
+
+  @override
+  int get hashCode => name.hashCode;
+}
+
+class MyRouteDelegate extends RouterDelegate<MyRoutePath>
+    with PopNavigatorRouterDelegateMixin<MyRoutePath>, ChangeNotifier {
+  final _stack = <MyRoutePath>[];
+
+  static MyRouteDelegate of(BuildContext context) {
+    final delegate = Router.of(context).routerDelegate;
+    assert(delegate is MyRouteDelegate, 'Delegate type must match');
+    return delegate as MyRouteDelegate;
+  }
+
+  @override
+  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  MyRoutePath get currentConfiguration =>
+      _stack.isNotEmpty ? _stack.last : null;
+
+  List<String> get stack => List.unmodifiable(_stack);
+
+  void push(String routeName, {Object arguments}) {
+    _stack.add(MyRoutePath(routeName, arguments));
+    notifyListeners();
+  }
+
+  void remove(MyRoutePath route) {
+    _stack.remove(route);
+    notifyListeners();
+  }
+
+  void pop() {
+    _stack.removeLast();
+    notifyListeners();
+  }
+
+  @override
+  Future<void> setInitialRoutePath(MyRoutePath configuration) {
+    return setNewRoutePath(configuration);
+  }
+
+  @override
+  Future<void> setNewRoutePath(MyRoutePath configuration) {
+    _stack
+      ..clear()
+      ..add(configuration);
+    return SynchronousFuture<void>(null);
+  }
+
+  bool _onPopPage(Route<dynamic> route, dynamic result) {
+    if (_stack.isNotEmpty) {
+      if (_stack.last.name == route.settings.name) {
+        _stack.removeLast();
+        notifyListeners();
+      }
+    }
+    return route.didPop(result);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('${describeIdentity(this)}.stack: $_stack');
+    return Navigator(
+      key: navigatorKey,
+      onPopPage: _onPopPage,
+      pages: [
+        for (final path in _stack)
+          MyPage(
+            key: ValueKey(path.name),
+            name: path.name,
+            arguments: path.arguments,
+          ),
+      ],
     );
   }
 }

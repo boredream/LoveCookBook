@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:http/http.dart' as http;
 
 class EatPage extends StatefulWidget {
@@ -49,7 +50,7 @@ class _PageState extends State<EatPage> {
 //                    MaterialPageRoute(builder: (context) {
 //                      return DishPage();
 //                    }));
-                Navigator.pushNamed(context, "dish");
+                MyRouteDelegate.of(context).push("dish");
               }),
           FlatButton(
             padding: EdgeInsets.all(20),

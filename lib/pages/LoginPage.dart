@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -153,7 +154,7 @@ class _PageState extends State<LoginPage> {
   loginSuccess() {
     _dialog.hide();
     Navigator.pop(context);
-    Navigator.pushNamed(context, "main");
+    MyRouteDelegate.of(context).push("main");
     Fluttertoast.showToast(msg: "登录成功");
   }
 

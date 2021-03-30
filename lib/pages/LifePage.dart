@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
+import 'package:flutter_todo/main.dart';
 
 class LifePage extends StatefulWidget {
   LifePage({Key key}) : super(key: key);
@@ -44,7 +45,7 @@ class _PageState extends State<LifePage> {
         ],
       ),
       onTap: () {
-        Navigator.pushNamed(context, routeName);
+        MyRouteDelegate.of(context).push(routeName);
       },
     );
   }

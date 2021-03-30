@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/User.dart';
 import 'package:flutter_todo/helper/UpdateHelper.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -114,7 +115,7 @@ class _PageState extends State<UserPage> {
               checkUpdate();
               break;
             default:
-              Navigator.pushNamed(context, route);
+              MyRouteDelegate.of(context).push(route);
               break;
           }
         },
@@ -140,7 +141,7 @@ class _PageState extends State<UserPage> {
     DialogUtils.showConfirmDialog(context, "是否确认退出登录？", "确定", () {
       UserHelper.logout();
       Navigator.pop(context);
-      Navigator.pushNamed(context, "login");
+      MyRouteDelegate.of(context).push("login");
     });
   }
 }

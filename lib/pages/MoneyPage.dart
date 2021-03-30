@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/RegularInvest.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DateStrUtils.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/utils/StringUtils.dart';
@@ -115,7 +116,7 @@ class _PageState extends State<MoneyPage> {
 
   _buildRow(var name, var routeName) {
     return FlatButton(
-        onPressed: () => Navigator.pushNamed(context, routeName),
+        onPressed: () => MyRouteDelegate.of(context).push(routeName),
         child: Text(name));
   }
 

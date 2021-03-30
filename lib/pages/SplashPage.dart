@@ -10,6 +10,7 @@ import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 import 'package:flutter_todo/helper/PermissionHelper.dart';
 import 'package:flutter_todo/helper/UpdateHelper.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SplashPage extends StatefulWidget {
@@ -55,13 +56,13 @@ class _PageState extends State<SplashPage> {
       }
 
       Function nextStep = () {
-        Navigator.pop(context);
+        MyRouteDelegate.of(context).pop();
         if (authState.authType == CloudBaseAuthType.ANONYMOUS || user == null) {
           print("not login");
-          Navigator.pushNamed(context, "login");
+          MyRouteDelegate.of(context).push("login");
         } else {
           print("login success");
-          Navigator.pushNamed(context, "main");
+          MyRouteDelegate.of(context).push("main");
         }
       };
 
@@ -86,7 +87,7 @@ class _PageState extends State<SplashPage> {
             title: Text('提示'),
             content: Text('初始化异常，请尝试重新打开app\n${e.toString()}'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () => exit(0),
                 child: Text('关闭应用'),
               ),

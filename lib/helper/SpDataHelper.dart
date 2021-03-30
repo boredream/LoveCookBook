@@ -78,15 +78,4 @@ class SpDataHelper {
     return sp.getString(collection);
   }
 
-  static Future<DbQueryResponse> loadDataList(String collection,
-      {dynamic where, String orderField, bool orderGrow, int limit}) async {
-    // FIXME
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    List<String> jsonList = sp.getStringList(collection);
-
-    DbQueryResponse response = DbQueryResponse();
-    response.data = jsonList;
-    return response;
-  }
-
 }

@@ -1,7 +1,23 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_todo/entity/Menu.dart';
+import 'package:flutter_todo/pages/AboutPage.dart';
+import 'package:flutter_todo/pages/FeedbackPage.dart';
+import 'package:flutter_todo/pages/ImageBrowerPage.dart';
+import 'package:flutter_todo/pages/LoginPage.dart';
+import 'package:flutter_todo/pages/MainPage.dart';
+import 'package:flutter_todo/pages/MenuAllPage.dart';
+import 'package:flutter_todo/pages/MenuDetailPage.dart';
+import 'package:flutter_todo/pages/MenuMainPage.dart';
+import 'package:flutter_todo/pages/MoneyPage.dart';
+import 'package:flutter_todo/pages/RegularInvestPage.dart';
+import 'package:flutter_todo/pages/SplashPage.dart';
+import 'package:flutter_todo/pages/TargetItemPage.dart';
+import 'package:flutter_todo/pages/TargetListPage.dart';
+import 'package:flutter_todo/pages/TargetPage.dart';
+import 'package:flutter_todo/pages/TheDayDetailPage.dart';
+import 'package:flutter_todo/pages/TodoDetailPage.dart';
 
 class GlobalConstants {
-
   static const EAT_TYPE_ALL = '全部';
   static const EAT_TYPE_HOME = '自己做';
   static const EAT_TYPE_OUTSIDE = '出去吃';
@@ -21,4 +37,23 @@ class GlobalConstants {
   ];
 
   static List<Menu> allMenu;
+
+  static Map<String, StatefulWidget> pages = {
+    "login": LoginPage(),
+    "main": MainPage(),
+    "todoDetail": TodoDetailPage(),
+    "menuMain": MenuMainPage(),
+    "menuAll": MenuAllPage(),
+    "menuDetail": MenuDetailPage(),
+    "imageBrowser": ImageBrowserPage(),
+    "theDayDetail": TheDayDetailPage(),
+    "money": MoneyPage(),
+    "regularInvest": RegularInvestPage(),
+    "targetList": TargetListPage(),
+    "target": TargetPage(),
+    "targetItem": TargetItemPage(),
+    "about": AboutPage(),
+    "feedback": FeedbackPage(),
+    "/": SplashPage(),
+  };
 }

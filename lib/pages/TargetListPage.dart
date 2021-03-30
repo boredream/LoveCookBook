@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Target.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class TargetListPage extends StatefulWidget {
@@ -67,9 +68,10 @@ class _PageState extends State<TargetListPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.pushNamed(context, "target").then((value) {
-            if (value) refresh();
-          });
+          MyRouteDelegate.of(context).push("target");
+          // .then((value) {
+            // if (value) refresh();
+          // });
         },
       ),
     );
@@ -95,11 +97,10 @@ class _PageState extends State<TargetListPage> {
     return ListTile(
       title: Text(data.name),
       subtitle: Text("当前进度: ${data.totalProgress}%"),
-      onTap: () =>
-          Navigator.pushNamed(context, "target", arguments: {"data": data})
-              .then((value) {
-        if (value) refresh();
-      }),
+      onTap: () =>  MyRouteDelegate.of(context).push("target", arguments: {"data": data})
+              // .then((value) {
+        // if (value) refresh();
+      // }
     );
   }
 

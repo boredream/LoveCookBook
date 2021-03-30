@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/TheDay.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DateStrUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -85,7 +86,6 @@ class _PageState extends State<TheDayPage>
   }
 
   void _groupTheDays() {
-    // TODO 周年纪念日的xxx循环添加
     // 数据按日分组
     _dateTheDayMap = Map();
     for (TheDay day in _theDayList) {
@@ -126,10 +126,11 @@ class _PageState extends State<TheDayPage>
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.pushNamed(context, "theDayDetail",
-              arguments: {"date": _selectedDate}).then((value) {
-            if (value) refresh();
-          });
+          MyRouteDelegate.of(context).push("theDayDetail",
+              arguments: {"date": _selectedDate});
+          // .then((value) {
+          //   if (value) refresh();
+          // });
         },
       ),
     );
@@ -258,10 +259,11 @@ class _PageState extends State<TheDayPage>
     return ListTile(
       title: Text(title, style: TextStyle(fontSize: 16)),
       subtitle: Text(event.desc, maxLines: 1, style: TextStyle(fontSize: 14)),
-      onTap: () => Navigator.pushNamed(context, "theDayDetail",
-          arguments: {"date": _selectedDate, "theDay": event}).then((value) {
-        if (value) refresh();
-      }),
+      onTap: () => MyRouteDelegate.of(context).push("theDayDetail",
+          arguments: {"date": _selectedDate, "theDay": event})
+      // .then((value) {
+      //   if (value) refresh();
+      // }),
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/Target.dart';
 import 'package:flutter_todo/entity/TargetItem.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -338,10 +339,10 @@ class _PageState extends State<TargetPage> {
   }
 
   void toEditPage(TargetItem data) {
-    Navigator.pushNamed(context, "targetItem",
-        arguments: {"target": _data, "data": data}).then((value) {
+    MyRouteDelegate.of(context).push("targetItem",
+        arguments: {"target": _data, "data": data});
+    // .then((value) {
       // if (value) refresh();
-      // TODO
-    });
+    // });
   }
 }

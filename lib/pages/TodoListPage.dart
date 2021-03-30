@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/GlobalConstants.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class TabTodoListPage extends StatefulWidget {
@@ -145,8 +146,9 @@ class _TodoListState extends State<TodoList>
         heroTag: type,
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.pushNamed(context, "todoDetail", arguments: {"type": type})
-              .then((value) => loadData());
+          MyRouteDelegate.of(context).push("todoDetail", arguments: {"type": type});
+          // Navigator.pushNamed(context, "todoDetail", arguments: {"type": type})
+          //     .then((value) => loadData());
         },
       ),
     );
@@ -192,9 +194,8 @@ class _TodoListState extends State<TodoList>
           child: GestureDetector(
             child: Text(date + " " + todo.name),
             onTap: () {
-              Navigator.pushNamed(context, "todoDetail",
-                      arguments: {"type": type, "todo": todo})
-                  .then((value) => loadData());
+              MyRouteDelegate.of(context).push("todoDetail", arguments: {"type": type, "todo": todo});
+              //     .then((value) => loadData());
             },
           ),
         ),

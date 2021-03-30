@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/ImageBean.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 
 class AddGridImageList extends StatefulWidget {
@@ -68,7 +69,7 @@ class _State extends State<AddGridImageList> {
                 child: ImageHelper.getImage(_images[index])),
           ),
           onTap: () {
-            Navigator.pushNamed(context, "imageBrowser",
+            MyRouteDelegate.of(context).push("imageBrowser",
                 arguments: {"index": index, "images": _images});
           },
         ),

@@ -3,6 +3,7 @@ import 'package:flutter_todo/entity/Menu.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/GlobalConstants.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class MenuAllPage extends StatefulWidget {
@@ -151,8 +152,8 @@ class _ListPageState extends State<MenuPageList>
           heroTag: type,
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.pushNamed(context, "menuDetail",
-                arguments: {"type": type}).then((value) => loadData());
+            MyRouteDelegate.of(context).push("menuDetail", arguments: {"type": type});
+            // .then((value) => loadData());
           },
         ),
       );
@@ -176,9 +177,8 @@ class _ListPageState extends State<MenuPageList>
         ],
       ),
       onTap: () {
-        Navigator.pushNamed(context, "menuDetail",
-                arguments: {"type": type, "menu": menu})
-            .then((value) => loadData());
+        MyRouteDelegate.of(context).push("menuDetail", arguments: {"type": type, "menu": menu});
+            // .then((value) => loadData());
       },
     );
   }

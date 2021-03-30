@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_todo/entity/TheDay.dart';
 import 'package:flutter_todo/entity/Todo.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -25,10 +26,10 @@ class NotificationHelper {
         String type = payload.split(":::")[0];
         String data = payload.split(":::")[1];
         if (type == "theDay") {
-          Navigator.pushNamed(context, "theDayDetail",
+          MyRouteDelegate.of(context).push("theDayDetail",
               arguments: {"theDay": TheDay.fromJson(json.decode(data))});
         } else if(type == "todo") {
-          Navigator.pushNamed(context, "todoDetail",
+          MyRouteDelegate.of(context).push("todoDetail",
               arguments: {"todo": Todo.fromJson(json.decode(data))});
         }
       }
