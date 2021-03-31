@@ -39,16 +39,18 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color primaryColor = Color(0xFFFB6565);
+
     return MaterialApp.router(
       routeInformationParser: MyRouteParser(),
       routerDelegate: delegate,
       debugShowCheckedModeBanner: false,
       title: '恋爱手册',
       theme: ThemeData(
-        primaryColor: Color(0xFFFB6565),
+        primaryColor: primaryColor,
         primaryColorLight: Color(0xFFffa5a5),
-        primaryColorDark: Color(0xFFFB6565),
-        accentColor: Color(0xFFFB6565),
+        primaryColorDark: primaryColor,
+        accentColor: primaryColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         iconTheme: IconThemeData(color: Colors.white),
         primaryColorBrightness: Brightness.dark,
@@ -57,6 +59,15 @@ class App extends StatelessWidget {
           subtitle1: TextStyle(color: Colors.black87, fontSize: 16),
           bodyText1: TextStyle(color: Colors.black87, fontSize: 14),
           bodyText2: TextStyle(color: Colors.black54, fontSize: 14),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(primary: primaryColor),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(primary: primaryColor),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(primary: primaryColor),
         ),
       ),
       localizationsDelegates: [

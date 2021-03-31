@@ -11,6 +11,7 @@ import 'package:flutter_todo/pages/MenuMainPage.dart';
 import 'package:flutter_todo/pages/MoneyPage.dart';
 import 'package:flutter_todo/pages/RegularInvestPage.dart';
 import 'package:flutter_todo/pages/SplashPage.dart';
+import 'package:flutter_todo/pages/TargetDetailEditPage.dart';
 import 'package:flutter_todo/pages/TargetItemPage.dart';
 import 'package:flutter_todo/pages/TargetListPage.dart';
 import 'package:flutter_todo/pages/TargetDetailPage.dart';
@@ -51,6 +52,7 @@ class GlobalConstants {
     "regularInvest": RegularInvestPage(),
     "targetList": TargetListPage(),
     "targetDetail": TargetDetailPage(),
+    "targetDetailEdit": TargetDetailEditPage(),
     "targetItem": TargetItemPage(),
     "about": AboutPage(),
     "feedback": FeedbackPage(),

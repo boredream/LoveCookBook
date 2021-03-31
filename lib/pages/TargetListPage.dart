@@ -114,13 +114,9 @@ class _PageState extends State<TargetListPage> {
 
   getRow(int index) {
     Target data = _dataList[index];
-    int totalProgress = 0;
-    for (TargetItem item in data.items ?? []) {
-      totalProgress += item.progress ?? 0;
-    }
     return ListTile(
         title: Text(data.name),
-        subtitle: Text("当前进度: $totalProgress%"),
+        subtitle: Text("当前进度: ${data.getTotalProgress()}%"),
         onTap: () => MyRouteDelegate.of(context)
             .push("targetDetail", arguments: {"data": data}));
   }
