@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_todo/helper/GlobalConstants.dart';
+import 'package:provider/provider.dart';
 
 import 'helper/ChineseCupertinoLocalizations.dart';
 
@@ -20,7 +22,12 @@ void main() async {
             detail: "onError: " + errorDetails.stack.toString());
       };
     }
-    runApp(App());
+    runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => RefreshNotifier()),
+      ],
+      child: App(),
+    ));
   }, (Object error, StackTrace stack) {
     FlutterBugly.uploadException(
         message: error.toString(), detail: "error: " + stack.toString());
@@ -69,6 +76,15 @@ class App extends StatelessWidget {
   }
 }
 
+class RefreshNotifier with ChangeNotifier {
+  Set<String> refreshList = Set();
+
+  void needRefresh(String name) {
+    refreshList.add(name);
+    notifyListeners();
+  }
+}
+
 class MyPage extends Page {
   MyPage({
     LocalKey key,
@@ -93,12 +109,14 @@ class MyPage extends Page {
 class MyRouteParser extends RouteInformationParser<MyRoutePath> {
   @override
   Future<MyRoutePath> parseRouteInformation(RouteInformation routeInformation) {
-    return SynchronousFuture(MyRoutePath(routeInformation.location, routeInformation.state));
+    return SynchronousFuture(
+        MyRoutePath(routeInformation.location, routeInformation.state));
   }
 
   @override
   RouteInformation restoreRouteInformation(MyRoutePath configuration) {
-    return RouteInformation(location: configuration.name, state: configuration.arguments);
+    return RouteInformation(
+        location: configuration.name, state: configuration.arguments);
   }
 }
 
@@ -113,6 +131,11 @@ class MyRoutePath {
 
   @override
   int get hashCode => name.hashCode;
+
+  @override
+  String toString() {
+    return name;
+  }
 }
 
 class MyRouteDelegate extends RouterDelegate<MyRoutePath>
@@ -174,7 +197,7 @@ class MyRouteDelegate extends RouterDelegate<MyRoutePath>
 
   @override
   Widget build(BuildContext context) {
-    print('${describeIdentity(this)}.stack: $_stack');
+    print('stack: $_stack');
     return Navigator(
       key: navigatorKey,
       onPopPage: _onPopPage,

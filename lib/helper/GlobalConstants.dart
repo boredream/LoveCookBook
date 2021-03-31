@@ -13,7 +13,7 @@ import 'package:flutter_todo/pages/RegularInvestPage.dart';
 import 'package:flutter_todo/pages/SplashPage.dart';
 import 'package:flutter_todo/pages/TargetItemPage.dart';
 import 'package:flutter_todo/pages/TargetListPage.dart';
-import 'package:flutter_todo/pages/TargetPage.dart';
+import 'package:flutter_todo/pages/TargetDetailPage.dart';
 import 'package:flutter_todo/pages/TheDayDetailPage.dart';
 import 'package:flutter_todo/pages/TodoDetailPage.dart';
 
@@ -50,7 +50,7 @@ class GlobalConstants {
     "money": MoneyPage(),
     "regularInvest": RegularInvestPage(),
     "targetList": TargetListPage(),
-    "target": TargetPage(),
+    "targetDetail": TargetDetailPage(),
     "targetItem": TargetItemPage(),
     "about": AboutPage(),
     "feedback": FeedbackPage(),

@@ -4,6 +4,7 @@ import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/GlobalConstants.dart';
 import 'package:flutter_todo/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class TabTodoListPage extends StatefulWidget {
   TabTodoListPage({Key key}) : super(key: key);
@@ -84,6 +85,7 @@ class _TodoListState extends State<TodoList>
   }
 
   void loadData() {
+    print('load data todo list');
     var where = {"type": type};
     DataHelper.loadData(DataHelper.COLLECTION_LIST, where: where).then((value) {
       if (!this.mounted) return;
@@ -147,14 +149,19 @@ class _TodoListState extends State<TodoList>
         child: Icon(Icons.add),
         onPressed: () {
           MyRouteDelegate.of(context).push("todoDetail", arguments: {"type": type});
-          // Navigator.pushNamed(context, "todoDetail", arguments: {"type": type})
-          //     .then((value) => loadData());
         },
       ),
     );
   }
 
   getBody() {
+    RefreshNotifier notifier = Provider.of<RefreshNotifier>(context);
+    if(notifier.refreshList.contains("todoList")) {
+      _hasLoadData = false;
+      loadData();
+      notifier.refreshList.remove("todoList");
+    }
+
     if (_hasLoadData) {
       return getListView();
     } else {
@@ -203,3 +210,4 @@ class _TodoListState extends State<TodoList>
     );
   }
 }
+

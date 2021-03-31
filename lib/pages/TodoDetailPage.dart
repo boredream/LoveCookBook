@@ -6,11 +6,13 @@ import 'package:flutter_todo/entity/Todo.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:flutter_todo/helper/NotificationHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DateStrUtils.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/views/AddGridImageList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 
 class TodoDetailPage extends StatefulWidget {
   @override
@@ -286,7 +288,8 @@ class _PageState extends State<TodoDetailPage> {
     _dialog.hide();
     var msg = operation + "成功";
     Fluttertoast.showToast(msg: msg);
-    Navigator.pop(context, true);
+    Provider.of<RefreshNotifier>(context, listen: false).needRefresh("todoList");
+    MyRouteDelegate.of(context).pop();
   }
 
   requestError(error) {

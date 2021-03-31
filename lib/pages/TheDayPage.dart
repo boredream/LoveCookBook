@@ -92,7 +92,7 @@ class _PageState extends State<TheDayPage>
       DateTime date = DateStrUtils.str2date(day.theDayDate);
       List<TheDay> theDayList = _dateTheDayMap[date];
       if (theDayList == null) {
-        _dateTheDayMap[date] = theDayList = List<TheDay>();
+        _dateTheDayMap[date] = theDayList = [];
       }
       theDayList.add(day);
     }
@@ -126,11 +126,7 @@ class _PageState extends State<TheDayPage>
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          MyRouteDelegate.of(context).push("theDayDetail",
-              arguments: {"date": _selectedDate});
-          // .then((value) {
-          //   if (value) refresh();
-          // });
+          MyRouteDelegate.of(context).push("theDayDetail", arguments: {"date": _selectedDate});
         },
       ),
     );
@@ -259,11 +255,7 @@ class _PageState extends State<TheDayPage>
     return ListTile(
       title: Text(title, style: TextStyle(fontSize: 16)),
       subtitle: Text(event.desc, maxLines: 1, style: TextStyle(fontSize: 14)),
-      onTap: () => MyRouteDelegate.of(context).push("theDayDetail",
-          arguments: {"date": _selectedDate, "theDay": event})
-      // .then((value) {
-      //   if (value) refresh();
-      // }),
+      onTap: () => MyRouteDelegate.of(context).push("theDayDetail", arguments: {"date": _selectedDate, "theDay": event})
     );
   }
 

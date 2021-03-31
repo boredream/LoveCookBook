@@ -43,6 +43,10 @@ class _PageState extends State<TargetItemPage> {
       if (_data == null) {
         // 新增
         _data = TargetItem();
+        // 默认数据
+        _data.progress = 1;
+        _data.title = "打卡";
+        _data.date = DateFormat("yyyy-MM-dd").format(DateTime.now());
       } else {
         // 修改
         _isUpdate = true;
@@ -140,6 +144,27 @@ class _PageState extends State<TargetItemPage> {
             },
           ),
           SizedBox(
+            height: 16,
+          ),
+          Text(
+            "本次新增进度：${_data.progress.round()}%",
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          Slider(
+            value: _data.progress.toDouble(),
+            min: 0,
+            max: 100,
+            divisions: 100,
+            label: _data.progress.round().toString(),
+            activeColor: Theme.of(context).primaryColor,
+            inactiveColor: Theme.of(context).primaryColorLight,
+            onChanged: (double value) {
+              setState(() {
+                _data.progress = value.round();
+              });
+            },
+          ),
+          SizedBox(
             height: 8,
           ),
           AddGridImageList(_images, selectImage, (image) {
@@ -177,9 +202,10 @@ class _PageState extends State<TargetItemPage> {
   delete() {
     DialogUtils.showDeleteConfirmDialog(context, () {
       _dialog.show();
-      DataHelper.deleteData(DataHelper.COLLECTION_MENU, _data.id)
-          .then((value) => requestSuccess("删除"))
-          .catchError((error) => requestError(error));
+      // FIXME delete
+      // DataHelper.deleteData(DataHelper.COLLECTION_MENU, _data.id)
+      //     .then((value) => requestSuccess("删除"))
+      //     .catchError((error) => requestError(error));
     });
   }
 
@@ -212,11 +238,12 @@ class _PageState extends State<TargetItemPage> {
 
       // 新增or更新
       if (_isUpdate) {
-        DataHelper.setData(DataHelper.COLLECTION_MENU, _data.id, _data)
+        DataHelper.setData(DataHelper.COLLECTION_TARGET, _target.id, _target)
             .then((value) => requestSuccess("修改"))
             .catchError((error) => requestError(error));
       } else {
-        DataHelper.saveData(DataHelper.COLLECTION_MENU, _data)
+        _target.items.add(_data);
+        DataHelper.setData(DataHelper.COLLECTION_TARGET, _target.id, _target)
             .then((value) => requestSuccess("新增"))
             .catchError((error) => requestError(error));
       }

@@ -6,7 +6,7 @@ part 'TargetItem.g.dart';
 
 // flutter packages pub run build_runner watch
 @JsonSerializable()
-class TargetItem extends BaseCloudBean {
+class TargetItem {
 
   TargetItem();
   String targetId;

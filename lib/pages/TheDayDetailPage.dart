@@ -6,12 +6,14 @@ import 'package:flutter_todo/entity/TheDay.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
 import 'package:flutter_todo/helper/NotificationHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DateStrUtils.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/views/AddGridImageList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 
 class TheDayDetailPage extends StatefulWidget {
   @override
@@ -325,13 +327,13 @@ class _PageState extends State<TheDayDetailPage> {
       NotificationHelper.showNotificationAtTime(
           "theDay", _theDay.name, _theDay.desc ?? "", notifyDate,
           payload: "theDay:::" + json.encode(_theDay));
-      return;
     }
 
     _dialog.hide();
     var msg = operation + "成功";
     Fluttertoast.showToast(msg: msg);
-    Navigator.pop(context, true);
+    // Provider.of<RefreshNotifier>(context, listen: false).needRefresh("theDayList");
+    MyRouteDelegate.of(context).pop();
   }
 
   requestError(error) {

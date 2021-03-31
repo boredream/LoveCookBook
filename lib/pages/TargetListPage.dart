@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/entity/Target.dart';
+import 'package:flutter_todo/entity/TargetItem.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -31,22 +32,18 @@ class _PageState extends State<TargetListPage> {
 
       setState(() {
         _hasLoadData = true;
-        List<Target> dataList = (value.data as List)
-            .map((e) => Target.fromJson(new Map<String, dynamic>.from(e)))
-            .toList();
+        List<Target> dataList = (value.data as List).map((e) {
+          // FIXME 成员变量是 list object 的 无法直接转？
+          List<TargetItem> items = (e['items'] as List)
+              .map((e) => TargetItem.fromJson(new Map<String, dynamic>.from(e)))
+              .toList();
+          e['items'] = null;
+          Map<String, dynamic> map = new Map<String, dynamic>.from(e);
+          Target target = Target.fromJson(map);
+          target.items = items;
+          return target;
+        }).toList();
         dataList.sort((a, b) {
-          // // 未完成的在前，已完成的在后
-          //
-          // if (aDate != null && bDate != null) {
-          //   // 都有日期，按日期排
-          //   return aDate.compareTo(bDate);
-          // } else if (aDate == null && bDate == null) {
-          //   // 都没日期，按名字排
-          //   return a.name.compareTo(b.name);
-          // } else {
-          //   // 无日期的在前，有日期的在后
-          //   return aDate != null ? 1 : -1;
-          // }
           return a.name.compareTo(b.name);
         });
         _dataList = dataList;
@@ -55,6 +52,7 @@ class _PageState extends State<TargetListPage> {
   }
 
   loadDataError(error) {
+    print(error);
     Fluttertoast.showToast(msg: "加载失败 " + error.toString());
   }
 
@@ -68,10 +66,7 @@ class _PageState extends State<TargetListPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          MyRouteDelegate.of(context).push("target");
-          // .then((value) {
-            // if (value) refresh();
-          // });
+          MyRouteDelegate.of(context).push("targetDetail");
         },
       ),
     );
@@ -94,14 +89,15 @@ class _PageState extends State<TargetListPage> {
 
   getRow(int index) {
     Target data = _dataList[index];
+    int totalProgress = 0;
+    for (TargetItem item in data.items ?? []) {
+      totalProgress += item.progress ?? 0;
+    }
     return ListTile(
-      title: Text(data.name),
-      subtitle: Text("当前进度: ${data.totalProgress}%"),
-      onTap: () =>  MyRouteDelegate.of(context).push("target", arguments: {"data": data})
-              // .then((value) {
-        // if (value) refresh();
-      // }
-    );
+        title: Text(data.name),
+        subtitle: Text("当前进度: $totalProgress%"),
+        onTap: () => MyRouteDelegate.of(context)
+            .push("targetDetail", arguments: {"data": data}));
   }
 
   void refresh() {

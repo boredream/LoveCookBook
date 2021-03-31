@@ -12,7 +12,6 @@ class Target extends BaseCloudBean {
   Target();
   String name;
   String doneDate;
-  int totalProgress;
   List<TargetItem> items;
 
   factory Target.fromJson(Map<String, dynamic> json) => _$TargetFromJson(json);
