@@ -13,19 +13,12 @@ class TargetDetailPage extends StatefulWidget {
 
 class _PageState extends State<TargetDetailPage> {
   Target _data;
-  bool _isUpdate = false;
 
   @override
   Widget build(BuildContext context) {
     if (_data == null) {
       Map args = ModalRoute.of(context).settings.arguments as Map;
-      if (args != null) {
-        _data = args["data"];
-      }
-      if (_data != null) {
-        // 修改
-        _isUpdate = true;
-      }
+      _data = args["data"];
     }
 
     return Scaffold(
@@ -34,30 +27,14 @@ class _PageState extends State<TargetDetailPage> {
         title: Text("目标详情"),
       ),
       body: _buildBody(),
-      floatingActionButton: _isUpdate
-          ? FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () => toEditItemPage(null),
-            )
-          : null,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => toEditItemPage(null),
+      ),
     );
   }
 
   _buildBody() {
-    Widget card;
-    if (_isUpdate) {
-      card = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(),
-          Text("目标名称：${_data.name}"),
-          Text("目标进度：${_data.getTotalProgress()}%"),
-        ],
-      );
-    } else {
-      card = Text("[点我新增目标]");
-    }
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +47,14 @@ class _PageState extends State<TargetDetailPage> {
                   borderRadius: BorderRadius.all(Radius.circular(8))),
               margin: EdgeInsets.fromLTRB(16, 16, 16, 8),
               padding: EdgeInsets.all(16),
-              child: card),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(),
+                  Text("目标名称：${_data.name}"),
+                  Text("目标进度：${_data.getTotalProgress()}%"),
+                ],
+              )),
           onTap: () => toEditPage(),
         ),
         Expanded(child: getListView()),

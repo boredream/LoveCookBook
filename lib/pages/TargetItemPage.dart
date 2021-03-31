@@ -4,11 +4,13 @@ import 'package:flutter_todo/entity/Target.dart';
 import 'package:flutter_todo/entity/TargetItem.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/helper/ImageHelper.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:flutter_todo/views/AddGridImageList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 
 class TargetItemPage extends StatefulWidget {
   @override
@@ -243,6 +245,12 @@ class _PageState extends State<TargetItemPage> {
             .catchError((error) => requestError(error));
       } else {
         _target.items.add(_data);
+        _target.items.sort((a, b) {
+          // 时间倒序
+          String aDate = a.date ?? "2100-01-01";
+          String bDate = b.date ?? "2100-01-01";
+          return bDate.compareTo(aDate);
+        });
         DataHelper.setData(DataHelper.COLLECTION_TARGET, _target.id, _target)
             .then((value) => requestSuccess("新增"))
             .catchError((error) => requestError(error));
@@ -254,7 +262,8 @@ class _PageState extends State<TargetItemPage> {
     _dialog.hide();
     var msg = operation + "成功";
     Fluttertoast.showToast(msg: msg);
-    Navigator.pop(context, true);
+    Provider.of<RefreshNotifier>(context, listen: false).needRefresh("targetList");
+    MyRouteDelegate.of(context).pop();
   }
 
   requestError(error) {

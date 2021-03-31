@@ -173,8 +173,8 @@ class MyRouteDelegate extends RouterDelegate<MyRoutePath>
     notifyListeners();
   }
 
-  void remove(MyRoutePath route) {
-    _stack.remove(route);
+  void remove(String routeName) {
+    _stack.remove(MyRoutePath(routeName, null));
     notifyListeners();
   }
 
@@ -208,7 +208,6 @@ class MyRouteDelegate extends RouterDelegate<MyRoutePath>
 
   @override
   Widget build(BuildContext context) {
-    print('stack: $_stack');
     return Navigator(
       key: navigatorKey,
       onPopPage: _onPopPage,

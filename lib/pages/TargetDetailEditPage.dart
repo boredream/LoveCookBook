@@ -5,6 +5,7 @@ import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 
 class TargetDetailEditPage extends StatefulWidget {
   @override
@@ -29,7 +30,9 @@ class _PageState extends State<TargetDetailEditPage> {
   Widget build(BuildContext context) {
     if (_data == null) {
       Map args = ModalRoute.of(context).settings.arguments as Map;
-      _data = args["data"];
+      if(args != null) {
+        _data = args["data"];
+      }
       if (_data == null) {
         // 新增
         _data = Target();
@@ -44,7 +47,7 @@ class _PageState extends State<TargetDetailEditPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColorDark,
-        title: Text("编辑目标详情"),
+        title: Text("${_isUpdate ? "编辑" : "新增"}目标详情"),
       ),
       body: getBody(),
     );
@@ -143,6 +146,10 @@ class _PageState extends State<TargetDetailEditPage> {
     _dialog.hide();
     var msg = operation + "成功";
     Fluttertoast.showToast(msg: msg);
+    Provider.of<RefreshNotifier>(context, listen: false).needRefresh("targetList");
+    if("修改" != operation) {
+      MyRouteDelegate.of(context).remove("targetDetail");
+    }
     MyRouteDelegate.of(context).pop();
   }
 

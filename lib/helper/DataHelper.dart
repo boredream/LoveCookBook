@@ -62,6 +62,7 @@ class DataHelper {
 
   static Future<DbQueryResponse> loadData(String collection,
       {dynamic where, String orderField, bool orderGrow, int limit}) async {
+    print('loadData $collection');
     dynamic col = CloudBaseHelper.getDb().collection(collection);
     if (where != null) {
       col = col.where(where);

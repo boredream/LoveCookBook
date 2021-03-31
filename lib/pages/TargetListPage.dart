@@ -4,6 +4,7 @@ import 'package:flutter_todo/entity/TargetItem.dart';
 import 'package:flutter_todo/helper/DataHelper.dart';
 import 'package:flutter_todo/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class TargetListPage extends StatefulWidget {
   TargetListPage({Key key}) : super(key: key);
@@ -35,17 +36,21 @@ class _PageState extends State<TargetListPage> {
         _hasLoadData = true;
         List<Target> dataList = (value.data as List).map((e) {
           // FIXME 成员变量是 list object 的 无法直接转？
-          List<TargetItem> items = (e['items'] as List)
-              .map((e) => TargetItem.fromJson(new Map<String, dynamic>.from(e)))
-              .toList();
-          e['items'] = null;
-          if(items != null) {
-            items.sort((a, b) {
-              // 时间倒序
-              String aDate = a.date ?? "2100-01-01";
-              String bDate = b.date ?? "2100-01-01";
-              return bDate.compareTo(aDate);
-            });
+          List<TargetItem> items = [];
+          if (e['items'] != null) {
+            items = (e['items'] as List)
+                .map((e) =>
+                    TargetItem.fromJson(new Map<String, dynamic>.from(e)))
+                .toList();
+            e['items'] = null;
+            if (items != null) {
+              items.sort((a, b) {
+                // 时间倒序
+                String aDate = a.date ?? "2100-01-01";
+                String bDate = b.date ?? "2100-01-01";
+                return bDate.compareTo(aDate);
+              });
+            }
           }
 
           Map<String, dynamic> map = new Map<String, dynamic>.from(e);
@@ -63,10 +68,10 @@ class _PageState extends State<TargetListPage> {
           if (b.items != null && b.items.length > 0) {
             bDate = b.items[0].date;
           }
-          if(aDate == null) {
+          if (aDate == null) {
             aDate = "2100-01-01";
           }
-          if(bDate == null) {
+          if (bDate == null) {
             bDate = "2100-01-01";
           }
           return bDate.compareTo(aDate);
@@ -91,13 +96,20 @@ class _PageState extends State<TargetListPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          MyRouteDelegate.of(context).push("targetDetail");
+          MyRouteDelegate.of(context).push("targetDetailEdit");
         },
       ),
     );
   }
 
   getBody() {
+    RefreshNotifier notifier = Provider.of<RefreshNotifier>(context);
+    if (notifier.refreshList.contains("targetList")) {
+      _hasLoadData = false;
+      loadData();
+      notifier.refreshList.remove("targetList");
+    }
+
     if (_hasLoadData) {
       return getListView();
     } else {
