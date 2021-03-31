@@ -23,7 +23,8 @@ class _PageState extends State<TargetListPage> {
   }
 
   void loadData() {
-    DataHelper.loadData(DataHelper.COLLECTION_TARGET).then((value) {
+    DataHelper.loadData(DataHelper.COLLECTION_TARGET, orderGrow: true)
+        .then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
         loadDataError(value.message);
@@ -38,13 +39,37 @@ class _PageState extends State<TargetListPage> {
               .map((e) => TargetItem.fromJson(new Map<String, dynamic>.from(e)))
               .toList();
           e['items'] = null;
+          if(items != null) {
+            items.sort((a, b) {
+              // 时间倒序
+              String aDate = a.date ?? "2100-01-01";
+              String bDate = b.date ?? "2100-01-01";
+              return bDate.compareTo(aDate);
+            });
+          }
+
           Map<String, dynamic> map = new Map<String, dynamic>.from(e);
           Target target = Target.fromJson(map);
           target.items = items;
           return target;
         }).toList();
         dataList.sort((a, b) {
-          return a.name.compareTo(b.name);
+          // 按照最近更新日期倒序
+          String aDate;
+          String bDate;
+          if (a.items != null && a.items.length > 0) {
+            aDate = a.items[0].date;
+          }
+          if (b.items != null && b.items.length > 0) {
+            bDate = b.items[0].date;
+          }
+          if(aDate == null) {
+            aDate = "2100-01-01";
+          }
+          if(bDate == null) {
+            bDate = "2100-01-01";
+          }
+          return bDate.compareTo(aDate);
         });
         _dataList = dataList;
       });

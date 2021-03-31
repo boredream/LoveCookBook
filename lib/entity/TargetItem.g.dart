@@ -8,7 +8,6 @@ part of 'TargetItem.dart';
 
 TargetItem _$TargetItemFromJson(Map<String, dynamic> json) {
   return TargetItem()
-    ..targetId = json['targetId'] as String
     ..progress = json['progress'] as int
     ..type = json['type'] as int
     ..title = json['title'] as String
@@ -19,7 +18,6 @@ TargetItem _$TargetItemFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$TargetItemToJson(TargetItem instance) =>
     <String, dynamic>{
-      'targetId': instance.targetId,
       'progress': instance.progress,
       'type': instance.type,
       'title': instance.title,

@@ -9,7 +9,6 @@ part 'TargetItem.g.dart';
 class TargetItem {
 
   TargetItem();
-  String targetId;
   int progress;
   int type;
   String title;

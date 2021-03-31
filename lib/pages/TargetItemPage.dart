@@ -202,10 +202,10 @@ class _PageState extends State<TargetItemPage> {
   delete() {
     DialogUtils.showDeleteConfirmDialog(context, () {
       _dialog.show();
-      // FIXME delete
-      // DataHelper.deleteData(DataHelper.COLLECTION_MENU, _data.id)
-      //     .then((value) => requestSuccess("删除"))
-      //     .catchError((error) => requestError(error));
+      _target.items.remove(_data);
+      DataHelper.setData(DataHelper.COLLECTION_TARGET, _target.id, _target)
+          .then((value) => requestSuccess("删除"))
+          .catchError((error) => requestError(error));
     });
   }
 
