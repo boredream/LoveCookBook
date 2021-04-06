@@ -16,6 +16,17 @@ class Todo extends BaseCloudBean {
   String todoDate;
   String notifyDate;
 
+  String getShownDate() {
+    String date = "[未设置时间]";
+    if (todoDate != null) {
+      date = "[" + todoDate + "]";
+    }
+    if (notifyDate != null) {
+      date = "[" + notifyDate + "]";
+    }
+    return date;
+  }
+
   factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
   Map<String, dynamic> toJson() => _$TodoToJson(this);
 

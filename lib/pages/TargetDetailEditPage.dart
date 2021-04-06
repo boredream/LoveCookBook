@@ -16,6 +16,7 @@ class _PageState extends State<TargetDetailEditPage> {
   Target _data;
   bool _isUpdate = false;
   TextEditingController _titleController;
+  TextEditingController _descController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ProgressDialog _dialog;
 
@@ -23,6 +24,7 @@ class _PageState extends State<TargetDetailEditPage> {
   void initState() {
     super.initState();
     _titleController = TextEditingController();
+    _descController = TextEditingController();
     _dialog = DialogUtils.getProgressDialog(context);
   }
 
@@ -42,6 +44,7 @@ class _PageState extends State<TargetDetailEditPage> {
       }
 
       _titleController.text = _data.name;
+      _titleController.text = _data.desc;
     }
 
     return Scaffold(
@@ -107,6 +110,40 @@ class _PageState extends State<TargetDetailEditPage> {
             },
             onSaved: (newValue) {
               _data.name = newValue;
+            },
+          ),
+          TextFormField(
+            controller: _descController,
+            keyboardType: TextInputType.multiline,
+            textAlignVertical: TextAlignVertical.top,
+            minLines: 1,
+            maxLines: 10,
+            decoration: InputDecoration(
+              labelText: "描述",
+            ),
+            onSaved: (newValue) {
+              _data.desc = newValue;
+            },
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Text(
+            "默认新增进度：${_data.defaultAddProgress ?? 2}%",
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          Slider(
+            value: (_data.defaultAddProgress ?? 2).toDouble(),
+            min: 0,
+            max: 100,
+            divisions: 100,
+            label: (_data.defaultAddProgress ?? 2).toDouble().round().toString(),
+            activeColor: Theme.of(context).primaryColor,
+            inactiveColor: Theme.of(context).primaryColorLight,
+            onChanged: (double value) {
+              setState(() {
+                _data.defaultAddProgress = value.round();
+              });
             },
           ),
         ],

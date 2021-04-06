@@ -178,13 +178,6 @@ class _TodoListState extends State<TodoList>
 
   getRow(int index) {
     Todo todo = _todoList[index];
-    String date = "[未设置时间]";
-    if (todo.todoDate != null) {
-      date = "[" + todo.todoDate + "]";
-    }
-    if (todo.notifyDate != null) {
-      date = "[" + todo.notifyDate + "]";
-    }
     return Row(
       children: [
         Checkbox(
@@ -199,7 +192,7 @@ class _TodoListState extends State<TodoList>
         ),
         Expanded(
           child: GestureDetector(
-            child: Text(date + " " + todo.name),
+            child: Text(todo.getShownDate() + " " + todo.name),
             onTap: () {
               MyRouteDelegate.of(context).push("todoDetail", arguments: {"type": type, "todo": todo});
               //     .then((value) => loadData());

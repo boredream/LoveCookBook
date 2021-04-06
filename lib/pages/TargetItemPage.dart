@@ -46,7 +46,7 @@ class _PageState extends State<TargetItemPage> {
         // 新增
         _data = TargetItem();
         // 默认数据
-        _data.progress = 1;
+        _data.progress = _target.defaultAddProgress ?? 2;
         _data.title = "打卡";
         _data.date = DateFormat("yyyy-MM-dd").format(DateTime.now());
       } else {

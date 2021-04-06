@@ -250,7 +250,7 @@ class _PageState extends State<TheDayPage>
   Widget _buildEventRow(TheDay event) {
     String title = event.name;
     if (_curMode == MODE_LIST) {
-      title = "[" + (event.theDayDate ?? "未设置时间") + "] " + title;
+      title = event.getShownDate() + " " + title;
     }
     return ListTile(
       title: Text(title, style: TextStyle(fontSize: 16)),

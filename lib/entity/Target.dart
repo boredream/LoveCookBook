@@ -11,7 +11,9 @@ class Target extends BaseCloudBean {
   Target();
 
   String name;
+  String desc;
   String doneDate;
+  int defaultAddProgress;
   List<TargetItem> items;
 
   int getTotalProgress() {
