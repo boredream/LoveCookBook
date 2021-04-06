@@ -121,7 +121,7 @@ class _TodoListState extends State<TodoList>
 
           if (aDate != null && bDate != null) {
             // 都有日期，按日期排
-            return aDate.compareTo(bDate);
+            return bDate.compareTo(aDate);
           } else if (aDate == null && bDate == null) {
             // 都没日期，按名字排
             return a.name.compareTo(b.name);

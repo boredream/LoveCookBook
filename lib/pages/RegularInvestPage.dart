@@ -31,7 +31,7 @@ class _PageState extends State<RegularInvestPage> {
 
   void loadData() {
     DataHelper.loadData(DataHelper.COLLECTION_REGULAR_INVEST,
-            orderField: "endDate", orderGrow: true)
+        orderField: "endDate", orderGrow: true)
         .then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
@@ -94,19 +94,21 @@ class _PageState extends State<RegularInvestPage> {
         int pastDays = DateStrUtils.calculateDayDiff(
             DateStrUtils.str2date(data.startDate), DateTime.now());
         int curIncome =
-            pastDays <= 0 ? 0 : data.money * data.rate / 100 * pastDays ~/ 365;
+        pastDays <= 0 ? 0 : data.money * data.rate / 100 * pastDays ~/ 365;
         totalCurMoney += curIncome;
       }
       totalCurMoney += totalOriMoney;
       String totalRate =
-          NumberFormat("0.00").format(totalIncome / totalOriMoney);
+      NumberFormat("0.00").format(totalIncome / totalOriMoney);
 
       return Column(
         children: [
           Container(
             decoration: BoxDecoration(
                 border:
-                    Border.all(color: Theme.of(context).primaryColor, width: 1),
+                Border.all(color: Theme
+                    .of(context)
+                    .primaryColor, width: 1),
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             margin: EdgeInsets.fromLTRB(16, 16, 16, 8),
             padding: EdgeInsets.all(16),
@@ -202,7 +204,7 @@ class _PageState extends State<RegularInvestPage> {
   }
 
   getRow(int index) {
-    if(index == 0) {
+    if (index == 0) {
       return _buildYearIncomeGrid();
     }
 
@@ -210,12 +212,13 @@ class _PageState extends State<RegularInvestPage> {
     RegularInvest data = _dataList[index];
 
     int totalDays = DateStrUtils.calculateDayDiff(
-        DateStrUtils.str2date(data.startDate), DateStrUtils.str2date(data.endDate));
+        DateStrUtils.str2date(data.startDate),
+        DateStrUtils.str2date(data.endDate));
     int pastDays = DateStrUtils.calculateDayDiff(
         DateStrUtils.str2date(data.startDate), DateTime.now());
     int monthIncome = data.money * data.rate ~/ 1200;
     int curIncome =
-        pastDays <= 0 ? 0 : data.money * data.rate / 100 * pastDays ~/ 365;
+    pastDays <= 0 ? 0 : data.money * data.rate / 100 * pastDays ~/ 365;
 
     return ListTile(
       contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -246,10 +249,59 @@ class _PageState extends State<RegularInvestPage> {
           ),
         ],
       ),
-      onTap: () {
-        showEditDialog(invest: data);
+      onTap: () => showEditDialog(invest: data),
+      onLongPress: () => showDeleteDialog(data),
+    );
+  }
+
+  void showDeleteDialog(RegularInvest invest) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            title: Text('提示'),
+            content: Text('是否确认删除？'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('取消'),
+              ),
+              TextButton(
+                onPressed: () => deleteData(invest),
+                child: Text('删除'),
+              ),
+            ],
+          ),
+        );
       },
     );
+  }
+
+  deleteData(RegularInvest invest) async {
+    _dialog.show();
+    DataHelper.deleteData(DataHelper.COLLECTION_REGULAR_INVEST, invest.id)
+        .then((value) => requestSuccess("删除"))
+        .catchError((error) => requestError(error));
+  }
+
+  requestSuccess(String operation) {
+    _dialog.hide();
+    var msg = operation + "成功";
+    Fluttertoast.showToast(msg: msg);
+    Navigator.pop(context, true);
+
+    setState(() {
+      _hasLoadData = false;
+    });
+    loadData();
+  }
+
+  requestError(error) {
+    _dialog.hide();
+    var msg = "操作失败 " + error.toString();
+    Fluttertoast.showToast(msg: msg);
   }
 
   void showEditDialog({RegularInvest invest}) {
@@ -314,7 +366,9 @@ class _DialogState extends State<EditDialog> {
                     labelText: "理财产品名称",
                   ),
                   validator: (value) {
-                    return value.trim().length > 0 ? null : "不能为空";
+                    return value
+                        .trim()
+                        .length > 0 ? null : "不能为空";
                   },
                   onSaved: (newValue) {
                     setState(() {
@@ -332,7 +386,9 @@ class _DialogState extends State<EditDialog> {
                     labelText: "投入金额",
                   ),
                   validator: (value) {
-                    return value.trim().length > 0 ? null : "不能为空";
+                    return value
+                        .trim()
+                        .length > 0 ? null : "不能为空";
                   },
                   onSaved: (newValue) {
                     setState(() {
@@ -345,12 +401,14 @@ class _DialogState extends State<EditDialog> {
                 ),
                 TextFormField(
                   controller: _rateController,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                   decoration: InputDecoration(
                     labelText: "费率 (%)",
                   ),
                   validator: (value) {
-                    return value.trim().length > 0 ? null : "不能为空";
+                    return value
+                        .trim()
+                        .length > 0 ? null : "不能为空";
                   },
                   onSaved: (newValue) {
                     setState(() {
@@ -367,11 +425,17 @@ class _DialogState extends State<EditDialog> {
                     children: [
                       Text(
                         "开始日期：",
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .subtitle1,
                       ),
                       Text(
                         widget.invest.startDate ?? "未填写",
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .subtitle1,
                       ),
                     ],
                   ),
@@ -388,11 +452,17 @@ class _DialogState extends State<EditDialog> {
                     children: [
                       Text(
                         "结束日期：",
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .subtitle1,
                       ),
                       Text(
                         widget.invest.endDate ?? "未填写",
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .subtitle1,
                       ),
                     ],
                   ),
@@ -443,7 +513,7 @@ class _DialogState extends State<EditDialog> {
       widget.dialog.show();
       if (widget.invest.id != null) {
         DataHelper.setData(DataHelper.COLLECTION_REGULAR_INVEST,
-                widget.invest.id, widget.invest)
+            widget.invest.id, widget.invest)
             .then((value) => requestSuccess("修改"))
             .catchError((error) => requestError(error));
       } else {
