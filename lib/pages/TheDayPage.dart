@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_todo/entity/TheDay.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DateStrUtils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class TheDayPage extends StatefulWidget {
@@ -28,6 +30,7 @@ class _PageState extends State<TheDayPage>
   List<TheDay> _selectedTheDays = [];
   AnimationController _animationController;
   CalendarController _calendarController;
+  RefreshController _refreshController;
   String _curMode = MODE_CALENDAR;
 
   @override
@@ -40,6 +43,7 @@ class _PageState extends State<TheDayPage>
       duration: const Duration(milliseconds: 400),
     );
     _animationController.forward();
+    _refreshController = RefreshController(initialRefresh: false);
 
     loadData();
   }
@@ -71,11 +75,13 @@ class _PageState extends State<TheDayPage>
         _selectedDate = DateStrUtils.dateClearHMS(DateTime.now());
         _selectedTheDays = _dateTheDayMap[_selectedDate] ?? [];
       });
+      _refreshController.refreshCompleted();
     }).catchError(loadDataError);
   }
 
   loadDataError(error) {
     Fluttertoast.showToast(msg: "加载失败 " + error.toString());
+    _refreshController.refreshCompleted();
   }
 
   @override
@@ -126,7 +132,8 @@ class _PageState extends State<TheDayPage>
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          MyRouteDelegate.of(context).push("theDayDetail", arguments: {"date": _selectedDate});
+          MyRouteDelegate.of(context)
+              .push("theDayDetail", arguments: {"date": _selectedDate});
         },
       ),
     );
@@ -138,7 +145,7 @@ class _PageState extends State<TheDayPage>
       if (_curMode == MODE_CALENDAR) {
         children.add(_buildTableCalendarWithBuilders());
       }
-      children.add(Expanded(child: _buildEventList()));
+      children.add(Expanded(child: _buildEventRefreshList()));
 
       return Column(
         mainAxisSize: MainAxisSize.max,
@@ -209,7 +216,8 @@ class _PageState extends State<TheDayPage>
   }
 
   _selectDate() async {
-    var date = await DateStrUtils.showCustomDatePicker(context, initialDate: _selectedDate);
+    var date = await DateStrUtils.showCustomDatePicker(context,
+        initialDate: _selectedDate);
     if (date == null) return;
     setState(() {
       _calendarController.setFocusedDay(date);
@@ -238,6 +246,15 @@ class _PageState extends State<TheDayPage>
     );
   }
 
+  Widget _buildEventRefreshList() {
+    return SmartRefresher(
+      enablePullDown: true,
+      controller: _refreshController,
+      onRefresh: loadData,
+      child: _buildEventList(),
+    );
+  }
+
   Widget _buildEventList() {
     var children = _curMode == MODE_CALENDAR ? _selectedTheDays : _theDayList;
     return ListView.separated(
@@ -253,10 +270,10 @@ class _PageState extends State<TheDayPage>
       title = event.getShownDate() + " " + title;
     }
     return ListTile(
-      title: Text(title, style: TextStyle(fontSize: 16)),
-      subtitle: Text(event.desc, maxLines: 1, style: TextStyle(fontSize: 14)),
-      onTap: () => MyRouteDelegate.of(context).push("theDayDetail", arguments: {"date": _selectedDate, "theDay": event})
-    );
+        title: Text(title, style: TextStyle(fontSize: 16)),
+        subtitle: Text(event.desc, maxLines: 1, style: TextStyle(fontSize: 14)),
+        onTap: () => MyRouteDelegate.of(context).push("theDayDetail",
+            arguments: {"date": _selectedDate, "theDay": event}));
   }
 
   getProgress() {

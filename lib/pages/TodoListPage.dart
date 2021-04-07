@@ -5,6 +5,7 @@ import 'package:flutter_todo/helper/GlobalConstants.dart';
 import 'package:flutter_todo/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TabTodoListPage extends StatefulWidget {
   TabTodoListPage({Key key}) : super(key: key);
@@ -69,6 +70,7 @@ class TodoList extends StatefulWidget {
 
 class _TodoListState extends State<TodoList>
     with AutomaticKeepAliveClientMixin {
+
   @override
   bool get wantKeepAlive => true;
 
@@ -77,10 +79,12 @@ class _TodoListState extends State<TodoList>
   final type;
   bool _hasLoadData = false;
   List<Todo> _todoList = [];
+  RefreshController _refreshController;
 
   @override
   void initState() {
     super.initState();
+    _refreshController = RefreshController(initialRefresh: false);
     loadData();
   }
 
@@ -131,12 +135,14 @@ class _TodoListState extends State<TodoList>
           }
         });
         _todoList = todoList;
+        _refreshController.refreshCompleted();
       });
     }).catchError(loadDataError);
   }
 
   loadDataError(error) {
     Fluttertoast.showToast(msg: "加载失败 " + error.toString());
+    _refreshController.refreshCompleted();
   }
 
   @override
@@ -170,10 +176,15 @@ class _TodoListState extends State<TodoList>
   }
 
   getListView() {
-    return ListView.separated(
-        itemBuilder: (context, index) => getRow(index),
-        separatorBuilder: (context, _) => SizedBox(height: 8),
-        itemCount: _todoList.length);
+    return SmartRefresher(
+      enablePullDown: true,
+      controller: _refreshController,
+      onRefresh: loadData,
+      child: ListView.separated(
+          itemBuilder: (context, index) => getRow(index),
+          separatorBuilder: (context, _) => SizedBox(height: 8),
+          itemCount: _todoList.length),
+    );
   }
 
   getRow(int index) {

@@ -43,6 +43,7 @@ dependencies:
   permission_handler: ^5.0.1+1
   flutter_local_notifications: ^3.0.2
   device_info: ^1.0.0
+  pull_to_refresh: ^1.6.4
 
 
 dev_dependencies:
