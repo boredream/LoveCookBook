@@ -28,7 +28,10 @@ class _PageState extends State<AboutPage> {
             Text(UpdateHelper.appName),
             Text(UpdateHelper.version),
             SizedBox(height: 32),
-            Text("App现在还在持续更新中，可以通过意见反馈提供您宝贵的意见！\n\n待开发功能：\n * 手机号绑定\n * 日历提醒"),
+            Text("App现在还在持续更新中，可以通过意见反馈提供您宝贵的意见！\n\n待开发功能："
+                "\n * 手机号绑定"
+                "\n * 地图"
+            ),
           ],
         ),
       ),

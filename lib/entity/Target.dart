@@ -5,7 +5,7 @@ import 'BaseCloudBean.dart';
 
 part 'Target.g.dart';
 
-// flutter packages pub run build_runner watch
+// flutter packages pub run build_runner build
 @JsonSerializable()
 class Target extends BaseCloudBean {
   Target();
@@ -15,6 +15,17 @@ class Target extends BaseCloudBean {
   String doneDate;
   int defaultAddProgress;
   List<TargetItem> items;
+  List<String> rewardList;
+
+  static String getRewardName(String reward) {
+    if(reward == null || reward.split("::").length != 2) return null;
+    return reward.split("::")[0];
+  }
+
+  static String getRewardProgress(String reward) {
+    if(reward == null || reward.split("::").length != 2) return null;
+    return reward.split("::")[1];
+  }
 
   int getTotalProgress() {
     int totalProgress = 0;

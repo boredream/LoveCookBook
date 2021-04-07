@@ -13,6 +13,7 @@ TargetItem _$TargetItemFromJson(Map<String, dynamic> json) {
     ..title = json['title'] as String
     ..desc = json['desc'] as String
     ..date = json['date'] as String
+    ..newReward = json['newReward'] as String
     ..images = (json['images'] as List)?.map((e) => e as String)?.toList();
 }
 
@@ -23,5 +24,6 @@ Map<String, dynamic> _$TargetItemToJson(TargetItem instance) =>
       'title': instance.title,
       'desc': instance.desc,
       'date': instance.date,
+      'newReward': instance.newReward,
       'images': instance.images,
     };

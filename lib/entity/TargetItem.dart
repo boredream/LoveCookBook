@@ -14,6 +14,7 @@ class TargetItem {
   String title;
   String desc;
   String date;
+  String newReward;
   List<String> images = [];
 
   factory TargetItem.fromJson(Map<String, dynamic> json) => _$TargetItemFromJson(json);

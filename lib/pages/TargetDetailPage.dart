@@ -35,6 +35,17 @@ class _PageState extends State<TargetDetailPage> {
   }
 
   _buildBody() {
+    String nextReward = "无";
+    int curProgress = 0;
+    for(String reward in _data.rewardList ?? []) {
+      String name = Target.getRewardName(reward);
+      String progress = Target.getRewardProgress(reward);
+      curProgress += int.parse(progress);
+      if(curProgress > _data.getTotalProgress()) {
+        nextReward = "[$progress%] $name";
+        break;
+      }
+    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +63,8 @@ class _PageState extends State<TargetDetailPage> {
                 children: [
                   Row(),
                   Text("目标名称：${_data.name}"),
-                  Text("目标进度：${_data.getTotalProgress()}%"),
+                  Text("总体进度：${_data.getTotalProgress()}%"),
+                  Text("下个奖励：$nextReward"),
                 ],
               )),
           onTap: () => toEditPage(),
@@ -63,6 +75,39 @@ class _PageState extends State<TargetDetailPage> {
   }
 
   getListView() {
+    // 计算每次进度增加时正好可新获得的奖励
+    if (_data != null &&
+        _data.rewardList != null &&
+        _data.rewardList.length > 0 &&
+        _data.items != null &&
+        _data.items.length > 0) {
+
+      // 先清空新增奖励信息
+      for(TargetItem item in _data.items) {
+        item.newReward = null;
+      }
+
+      int rewardIndex = 0;
+      int targetItemIndex = _data.items.length - 1;
+      int curTotalProgress = 0;
+      for (; rewardIndex < _data.rewardList.length && targetItemIndex >= 0;) {
+        // 获取奖励信息
+        String reward = _data.rewardList[rewardIndex];
+        String name = Target.getRewardName(reward);
+        String progress = Target.getRewardProgress(reward);
+
+        curTotalProgress += _data.items[targetItemIndex].progress;
+        if (curTotalProgress > int.parse(progress)) {
+          // 如果当前累计进度超过奖励所需，记录本次打卡新增奖励信息
+          _data.items[targetItemIndex].newReward = name;
+          // 判断下个奖励
+          rewardIndex++;
+        } else {
+          // 当前累计进度不足
+          targetItemIndex--;
+        }
+      }
+    }
     return ListView.separated(
         itemBuilder: (context, index) => getRow(index),
         separatorBuilder: (context, _) => SizedBox(height: 8),
@@ -71,13 +116,19 @@ class _PageState extends State<TargetDetailPage> {
 
   getRow(int index) {
     TargetItem data = _data.items[index];
+    String titleInfo = "[${data.date}] ${data.title}";
+    String progressInfo = "+ ${data.progress}%";
+    if(data.newReward != null) {
+      titleInfo += "\n奖励：${data.newReward}";
+    }
     return GestureDetector(
       child: Container(
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: Text("[${data.date}] ${data.title}")),
-              Text("+ ${data.progress}%"),
+              Expanded(child: Text(titleInfo)),
+              Text(progressInfo),
             ],
           )),
       onTap: () => toEditItemPage(data),
