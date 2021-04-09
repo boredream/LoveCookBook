@@ -11,10 +11,14 @@ import 'package:flutter_todo/pages/MenuMainPage.dart';
 import 'package:flutter_todo/pages/MoneyPage.dart';
 import 'package:flutter_todo/pages/RegularInvestPage.dart';
 import 'package:flutter_todo/pages/SplashPage.dart';
+import 'package:flutter_todo/pages/StockDetailEditPage.dart';
+import 'package:flutter_todo/pages/StockDetailPage.dart';
+import 'package:flutter_todo/pages/StockItemPage.dart';
+import 'package:flutter_todo/pages/StockListPage.dart';
 import 'package:flutter_todo/pages/TargetDetailEditPage.dart';
+import 'package:flutter_todo/pages/TargetDetailPage.dart';
 import 'package:flutter_todo/pages/TargetItemPage.dart';
 import 'package:flutter_todo/pages/TargetListPage.dart';
-import 'package:flutter_todo/pages/TargetDetailPage.dart';
 import 'package:flutter_todo/pages/TheDayDetailPage.dart';
 import 'package:flutter_todo/pages/TodoDetailPage.dart';
 
@@ -29,13 +33,7 @@ class GlobalConstants {
   static const TODO_TYPE_TRAVEL = "出游";
   static const TODO_TYPE_HOME = "宅家";
   static const TODO_TYPE_OTHER = "其它";
-  static const todoTypes = [
-    TODO_TYPE_EAT,
-    TODO_TYPE_VIDEO,
-    TODO_TYPE_TRAVEL,
-    TODO_TYPE_HOME,
-    TODO_TYPE_OTHER
-  ];
+  static const todoTypes = [TODO_TYPE_EAT, TODO_TYPE_VIDEO, TODO_TYPE_TRAVEL, TODO_TYPE_HOME, TODO_TYPE_OTHER];
 
   static List<Menu> allMenu;
 
@@ -54,6 +52,10 @@ class GlobalConstants {
     "targetDetail": TargetDetailPage(),
     "targetDetailEdit": TargetDetailEditPage(),
     "targetItem": TargetItemPage(),
+    "stockList": StockListPage(),
+    "stockDetail": StockDetailPage(),
+    "stockDetailEdit": StockDetailEditPage(),
+    "stockItem": StockItemPage(),
     "about": AboutPage(),
     "feedback": FeedbackPage(),
     "/": SplashPage(),

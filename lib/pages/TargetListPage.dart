@@ -58,31 +58,13 @@ class _PageState extends State<TargetListPage> {
           target.items = items;
           return target;
         }).toList();
-        dataList.sort((a, b) {
-          // 按照最近更新日期倒序
-          String aDate;
-          String bDate;
-          if (a.items != null && a.items.length > 0) {
-            aDate = a.items[0].date;
-          }
-          if (b.items != null && b.items.length > 0) {
-            bDate = b.items[0].date;
-          }
-          if (aDate == null) {
-            aDate = "2100-01-01";
-          }
-          if (bDate == null) {
-            bDate = "2100-01-01";
-          }
-          return bDate.compareTo(aDate);
-        });
+
         _dataList = dataList;
       });
     }).catchError(loadDataError);
   }
 
   loadDataError(error) {
-    print(error);
     Fluttertoast.showToast(msg: "加载失败 " + error.toString());
   }
 
@@ -120,7 +102,7 @@ class _PageState extends State<TargetListPage> {
   getListView() {
     return ListView.separated(
         itemBuilder: (context, index) => getRow(index),
-        separatorBuilder: (context, _) => SizedBox(height: 8),
+        separatorBuilder: (context, _) => Divider(height: 1),
         itemCount: _dataList.length);
   }
 

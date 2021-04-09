@@ -2,7 +2,6 @@ import 'package:cloudbase_database/cloudbase_database.dart';
 import 'package:flutter_todo/helper/CloudBaseHelper.dart';
 
 class DataHelper {
-  
   static const COLLECTION_LIST = "list";
   static const COLLECTION_MENU = "menu";
   static const COLLECTION_THE_DAY = "theDay";
@@ -11,40 +10,33 @@ class DataHelper {
   static const COLLECTION_VERSION = "version";
   static const COLLECTION_FEEDBACK = "feedback";
   static const COLLECTION_TARGET = "target";
-  static const COLLECTION_TARGET_ITEM = "targetItem";
+  static const COLLECTION_STOCK = "stock";
 
-  static Future<DbCreateResponse> saveData(
-      String collection, dynamic data) async {
-    DbCreateResponse response =
-        await CloudBaseHelper.getDb().collection(collection).add(data.toJson());
+  static Future<DbCreateResponse> saveData(String collection, dynamic data) async {
+    Map<String, dynamic> newData = data.toJson();
+    DbCreateResponse response = await CloudBaseHelper.getDb().collection(collection).add(newData);
+    print('saveData $collection\n$newData');
     if (response.code != null) {
       throw Exception(response.message);
     }
     return response;
   }
 
-  static Future<DbUpdateResponse> setData(
-      String collection, String id, dynamic data) async {
+  static Future<DbUpdateResponse> setData(String collection, String id, dynamic data) async {
     Map<String, dynamic> newData = data.toJson();
+    print('setData $collection\n$newData');
     // 更新的时候不能带 _id
     newData.remove("_id");
 
-    DbUpdateResponse response = await CloudBaseHelper.getDb()
-        .collection(collection)
-        .doc(id)
-        .set(newData);
+    DbUpdateResponse response = await CloudBaseHelper.getDb().collection(collection).doc(id).set(newData);
     if (response.code != null) {
       throw Exception(response.message);
     }
     return response;
   }
 
-  static Future<DbUpdateResponse> updateData(
-      String collection, String id, Map<String, dynamic> update) async {
-    DbUpdateResponse response = await CloudBaseHelper.getDb()
-        .collection(collection)
-        .doc(id)
-        .update(update);
+  static Future<DbUpdateResponse> updateData(String collection, String id, Map<String, dynamic> update) async {
+    DbUpdateResponse response = await CloudBaseHelper.getDb().collection(collection).doc(id).update(update);
     if (response.code != null) {
       throw Exception(response.message);
     }
@@ -52,8 +44,7 @@ class DataHelper {
   }
 
   static Future<DbRemoveResponse> deleteData(String collection, String id) async {
-    DbRemoveResponse response =
-        await CloudBaseHelper.getDb().collection(collection).doc(id).remove();
+    DbRemoveResponse response = await CloudBaseHelper.getDb().collection(collection).doc(id).remove();
     if (response.code != null) {
       throw Exception(response.message);
     }
@@ -68,13 +59,13 @@ class DataHelper {
       col = col.where(where);
     }
     if (orderField != null) {
-      if(orderGrow == null) {
+      if (orderGrow == null) {
         // 默认降序
         orderGrow = false;
       }
       col = col.orderBy(orderField, orderGrow ? "asc" : "desc");
     }
-    if(limit == null) {
+    if (limit == null) {
       // 默认拉取数量
       limit = 100;
     }
@@ -85,5 +76,4 @@ class DataHelper {
     }
     return response;
   }
-  
 }

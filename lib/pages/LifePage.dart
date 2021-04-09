@@ -20,7 +20,8 @@ class _PageState extends State<LifePage> {
       getRow(Icons.assignment_turned_in_outlined, "目标", "targetList"),
     ];
     if (UserHelper.curUser.username == "papi") {
-      items.add(getRow(Icons.attach_money, "理财", "regularInvest"));
+      items.add(getRow(Icons.attach_money, "固收", "regularInvest"));
+      items.add(getRow(Icons.attach_money, "股票", "stockList"));
     }
 
     return Scaffold(

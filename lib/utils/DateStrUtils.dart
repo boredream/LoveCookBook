@@ -5,6 +5,12 @@ import 'package:intl/intl.dart';
 
 class DateStrUtils {
 
+  /// 日期转字符串
+  static String date2str(DateTime time) {
+    if (time == null) return null;
+    return DateFormat("yyyy-MM-dd").format(time);
+  }
+
   /// 字符串转日期
   static DateTime str2date(String timeStr) {
     if (StringUtils.isEmpty(timeStr)) return null;

@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'BaseCloudBean.dart';
-
 part 'TargetItem.g.dart';
 
 // flutter packages pub run build_runner watch
