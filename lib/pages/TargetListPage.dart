@@ -24,8 +24,7 @@ class _PageState extends State<TargetListPage> {
   }
 
   void loadData() {
-    DataHelper.loadData(DataHelper.COLLECTION_TARGET, orderGrow: true)
-        .then((value) {
+    DataHelper.loadData(DataHelper.COLLECTION_TARGET, orderGrow: true).then((value) {
       if (!this.mounted) return;
       if (value.code != null) {
         loadDataError(value.message);
@@ -38,10 +37,7 @@ class _PageState extends State<TargetListPage> {
           // FIXME 成员变量是 list object 的 无法直接转？
           List<TargetItem> items = [];
           if (e['items'] != null) {
-            items = (e['items'] as List)
-                .map((e) =>
-                    TargetItem.fromJson(new Map<String, dynamic>.from(e)))
-                .toList();
+            items = (e['items'] as List).map((e) => TargetItem.fromJson(new Map<String, dynamic>.from(e))).toList();
             e['items'] = null;
             if (items != null) {
               items.sort((a, b) {
@@ -110,9 +106,8 @@ class _PageState extends State<TargetListPage> {
     Target data = _dataList[index];
     return ListTile(
         title: Text(data.name),
-        subtitle: Text("当前进度: ${data.getTotalProgress()}%"),
-        onTap: () => MyRouteDelegate.of(context)
-            .push("targetDetail", arguments: {"data": data}));
+        subtitle: Text("当前进度: ${data.getCompleteProgress()} / ${data.totalProgress}"),
+        onTap: () => MyRouteDelegate.of(context).push("targetDetail", arguments: {"data": data}));
   }
 
   void refresh() {

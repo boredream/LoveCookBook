@@ -23,6 +23,7 @@ class _PageState extends State<TargetItemPage> {
   bool _isUpdate = false;
   List<ImageBean> _images = [];
   TextEditingController _titleController;
+  TextEditingController _progressController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ProgressDialog _dialog;
 
@@ -31,6 +32,7 @@ class _PageState extends State<TargetItemPage> {
     super.initState();
 
     _titleController = TextEditingController();
+    _progressController = TextEditingController();
     _dialog = DialogUtils.getProgressDialog(context);
   }
 
@@ -46,7 +48,7 @@ class _PageState extends State<TargetItemPage> {
         // 新增
         _data = TargetItem();
         // 默认数据
-        _data.progress = _target.defaultAddProgress ?? 2;
+        _data.progress = _target.defaultAddProgress ?? 1;
         _data.title = "打卡";
         _data.date = DateFormat("yyyy-MM-dd").format(DateTime.now());
       } else {
@@ -57,6 +59,7 @@ class _PageState extends State<TargetItemPage> {
         }
       }
       _titleController.text = _data.title;
+      _progressController.text = _data.progress.toString();
     }
 
     return Scaffold(
@@ -118,10 +121,23 @@ class _PageState extends State<TargetItemPage> {
               labelText: "标题",
             ),
             validator: (value) {
-              return value.trim().length > 0 ? null : "标题不能为空";
+              return value.trim().length > 0 ? null : "不能为空";
             },
             onSaved: (newValue) {
               _data.title = newValue;
+            },
+          ),
+          TextFormField(
+            controller: _progressController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: "本次新增进度",
+            ),
+            validator: (value) {
+              return value.trim().length > 0 ? null : "不能为空";
+            },
+            onSaved: (newValue) {
+              _data.progress = int.parse(newValue);
             },
           ),
           SizedBox(
@@ -143,27 +159,6 @@ class _PageState extends State<TargetItemPage> {
             ),
             onTap: () {
               selectData();
-            },
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          Text(
-            "本次新增进度：${_data.progress.round()}%",
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          Slider(
-            value: _data.progress.toDouble(),
-            min: 0,
-            max: 100,
-            divisions: 100,
-            label: _data.progress.round().toString(),
-            activeColor: Theme.of(context).primaryColor,
-            inactiveColor: Theme.of(context).primaryColorLight,
-            onChanged: (double value) {
-              setState(() {
-                _data.progress = value.round();
-              });
             },
           ),
           SizedBox(
@@ -190,10 +185,7 @@ class _PageState extends State<TargetItemPage> {
 
   selectData() async {
     var date = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
+        context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2100));
     if (date == null) return;
     var format = DateFormat("yyyy-MM-dd").format(date);
     setState(() {

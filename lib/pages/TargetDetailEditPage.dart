@@ -17,6 +17,8 @@ class _PageState extends State<TargetDetailEditPage> {
   bool _isUpdate = false;
   TextEditingController _titleController;
   TextEditingController _descController;
+  TextEditingController _totalProgressController;
+  TextEditingController _defaultAddProgressController;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   ProgressDialog _dialog;
 
@@ -25,6 +27,8 @@ class _PageState extends State<TargetDetailEditPage> {
     super.initState();
     _titleController = TextEditingController();
     _descController = TextEditingController();
+    _totalProgressController = TextEditingController();
+    _defaultAddProgressController = TextEditingController();
     _dialog = DialogUtils.getProgressDialog(context);
   }
 
@@ -38,6 +42,8 @@ class _PageState extends State<TargetDetailEditPage> {
       if (_data == null) {
         // 新增
         _data = Target();
+        _data.totalProgress = 100;
+        _data.defaultAddProgress = 1;
       } else {
         // 修改
         _isUpdate = true;
@@ -45,6 +51,8 @@ class _PageState extends State<TargetDetailEditPage> {
 
       _titleController.text = _data.name;
       _descController.text = _data.desc;
+      _totalProgressController.text = _data.totalProgress.toString();
+      _defaultAddProgressController.text = _data.defaultAddProgress.toString();
     }
 
     return Scaffold(
@@ -100,7 +108,7 @@ class _PageState extends State<TargetDetailEditPage> {
               labelText: "标题",
             ),
             validator: (value) {
-              return value.trim().length > 0 ? null : "标题不能为空";
+              return value.trim().length > 0 ? null : "不能为空";
             },
             onSaved: (newValue) {
               _data.name = newValue;
@@ -119,29 +127,31 @@ class _PageState extends State<TargetDetailEditPage> {
               _data.desc = newValue;
             },
           ),
-          SizedBox(
-            height: 16,
-          ),
-          Text(
-            "默认新增进度：${_data.defaultAddProgress ?? 2}%",
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          Slider(
-            value: (_data.defaultAddProgress ?? 2).toDouble(),
-            min: 0,
-            max: 100,
-            divisions: 100,
-            label: (_data.defaultAddProgress ?? 2).toDouble().round().toString(),
-            activeColor: Theme.of(context).primaryColor,
-            inactiveColor: Theme.of(context).primaryColorLight,
-            onChanged: (double value) {
-              setState(() {
-                _data.defaultAddProgress = value.round();
-              });
+          TextFormField(
+            controller: _totalProgressController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: "总进度",
+            ),
+            validator: (value) {
+              return value.trim().length > 0 ? null : "不能为空";
+            },
+            onSaved: (newValue) {
+              _data.totalProgress = int.parse(newValue);
             },
           ),
-          SizedBox(
-            height: 8,
+          TextFormField(
+            controller: _defaultAddProgressController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: "默认新增进度",
+            ),
+            validator: (value) {
+              return value.trim().length > 0 ? null : "不能为空";
+            },
+            onSaved: (newValue) {
+              _data.defaultAddProgress = int.parse(newValue);
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -183,14 +193,14 @@ class _PageState extends State<TargetDetailEditPage> {
     String reward = _data.rewardList[index];
     String name = Target.getRewardName(reward);
     String progress = Target.getRewardProgress(reward);
-    String done = _data.getTotalProgress() >= int.parse(progress) ? "已完成" : "未完成";
-    Color color = _data.getTotalProgress() >= int.parse(progress) ? Theme.of(context).primaryColor : Colors.black87;
+    String done = _data.getCompleteProgress() >= int.parse(progress) ? "已完成" : "未完成";
+    Color color = _data.getCompleteProgress() >= int.parse(progress) ? Theme.of(context).primaryColor : Colors.black87;
     return GestureDetector(
       child: Container(
           padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
           child: Row(
             children: [
-              Expanded(child: Text("[$progress%] $name", style: TextStyle().copyWith(color: color))),
+              Expanded(child: Text("[进度$progress] $name", style: TextStyle().copyWith(color: color))),
               Text(done, style: TextStyle().copyWith(color: color)),
             ],
           )),

@@ -14,6 +14,7 @@ class Target extends BaseCloudBean {
   String desc;
   String doneDate;
   int defaultAddProgress;
+  int totalProgress;
   List<TargetItem> items;
   List<String> rewardList;
 
@@ -27,7 +28,7 @@ class Target extends BaseCloudBean {
     return reward.split("::")[1];
   }
 
-  int getTotalProgress() {
+  int getCompleteProgress() {
     int totalProgress = 0;
     for (TargetItem item in items ?? []) {
       totalProgress += item.progress ?? 0;

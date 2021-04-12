@@ -13,6 +13,7 @@ Target _$TargetFromJson(Map<String, dynamic> json) {
     ..desc = json['desc'] as String
     ..doneDate = json['doneDate'] as String
     ..defaultAddProgress = json['defaultAddProgress'] as int
+    ..totalProgress = json['totalProgress'] as int
     ..items = (json['items'] as List)
         ?.map((e) =>
             e == null ? null : TargetItem.fromJson(e as Map<String, dynamic>))
@@ -27,6 +28,7 @@ Map<String, dynamic> _$TargetToJson(Target instance) => <String, dynamic>{
       'desc': instance.desc,
       'doneDate': instance.doneDate,
       'defaultAddProgress': instance.defaultAddProgress,
+      'totalProgress': instance.totalProgress,
       'items': instance.items,
       'rewardList': instance.rewardList,
     };

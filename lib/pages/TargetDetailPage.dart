@@ -41,8 +41,8 @@ class _PageState extends State<TargetDetailPage> {
       String name = Target.getRewardName(reward);
       String progress = Target.getRewardProgress(reward);
       curProgress += int.parse(progress);
-      if(curProgress > _data.getTotalProgress()) {
-        nextReward = "[$progress%] $name";
+      if(curProgress > _data.getCompleteProgress()) {
+        nextReward = "[进度$progress] $name";
         break;
       }
     }
@@ -63,7 +63,7 @@ class _PageState extends State<TargetDetailPage> {
                 children: [
                   Row(),
                   Text("目标名称：${_data.name}"),
-                  Text("总体进度：${_data.getTotalProgress()}%"),
+                  Text("总体进度：${_data.getCompleteProgress()} / ${_data.totalProgress}"),
                   Text("下个奖励：$nextReward"),
                 ],
               )),
@@ -97,7 +97,7 @@ class _PageState extends State<TargetDetailPage> {
         String progress = Target.getRewardProgress(reward);
 
         curTotalProgress += _data.items[targetItemIndex].progress;
-        if (curTotalProgress > int.parse(progress)) {
+        if (curTotalProgress >= int.parse(progress)) {
           // 如果当前累计进度超过奖励所需，记录本次打卡新增奖励信息
           _data.items[targetItemIndex].newReward = name;
           // 判断下个奖励
@@ -117,7 +117,7 @@ class _PageState extends State<TargetDetailPage> {
   getRow(int index) {
     TargetItem data = _data.items[index];
     String titleInfo = "[${data.date}] ${data.title}";
-    String progressInfo = "+ ${data.progress}%";
+    String progressInfo = "+ ${data.progress}";
     if(data.newReward != null) {
       titleInfo += "\n奖励：${data.newReward}";
     }
