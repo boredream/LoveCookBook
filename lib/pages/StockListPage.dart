@@ -64,6 +64,6 @@ class _PageState extends BaseListPageState<Stock, StockListPage> {
   @override
   Widget getRow(int index) {
     Stock data = dataList[index];
-    return StockCardView(data, () => toEditPage(data));
+    return StockCardView(data, false, EdgeInsets.symmetric(vertical: 8, horizontal: 16), () => toEditPage(data));
   }
 }

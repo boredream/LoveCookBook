@@ -30,7 +30,7 @@ class _PageState extends BaseDetailPageState<Stock, StockItem, StockDetailPage> 
 
   @override
   Widget buildInfoCard() {
-    return StockCardView(data, () => toEditPage());
+    return StockCardView(data, true, EdgeInsets.symmetric(vertical: 0, horizontal: 8), () => toEditPage());
   }
 
   @override

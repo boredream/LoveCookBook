@@ -5,9 +5,11 @@ import 'package:flutter_todo/utils/DateStrUtils.dart';
 
 class StockCardView extends StatelessWidget {
   final Stock data;
+  final bool dense;
+  final EdgeInsets contentPadding;
   final Function onClick;
 
-  StockCardView(this.data, this.onClick, {Key key}) : super(key: key);
+  StockCardView(this.data, this.dense, this.contentPadding, this.onClick, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class StockCardView extends StatelessWidget {
     String nextPriceStr = "[未购买]";
     String newestBuyDateStr = "[未购买]";
     String nextBuyDateStr = "[未购买]";
+    String chanceStr = " <=$maxPriceStr 可买入";
     if (newestItem != null) {
       double newestPrice = newestItem.price;
       int buyGapPricePercent = data.buyGapPricePercent ?? 5;
@@ -31,14 +34,29 @@ class StockCardView extends StatelessWidget {
       nextPriceStr = "${nextPrice.toStringAsFixed(2)} [-$buyGapPricePercent%]";
 
       newestBuyDateStr = newestItem.date.substring(2);
-      DateTime newestBuyDate = DateStrUtils.str2date(newestBuyDateStr);
+      DateTime newestBuyDate = DateStrUtils.str2date(newestItem.date);
       DateTime nextBuyDate = newestBuyDate.add(Duration(days: data.buyGapDays ?? 14));
       nextBuyDateStr = DateStrUtils.date2str(nextBuyDate).substring(2);
+
+      if (DateTime.now().isBefore(nextBuyDate)) {
+        // 过机会日期后可<=最高价买入，否则默认<=机会价买入
+        chanceStr = " <=${nextPrice.toStringAsFixed(2)} 可买入";
+      } else {
+        chanceStr += "[过期]";
+      }
     }
 
     return ListTile(
-      title: Text(data.name),
-      dense: true,
+      title: Row(
+        children: [
+          Text(data.name),
+          Text(chanceStr,
+              style: TextStyle(
+                  fontSize: dense ? 12 : 14, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold)),
+        ],
+      ),
+      contentPadding: contentPadding,
+      dense: dense,
       subtitle: Column(
         children: [
           Row(
@@ -61,8 +79,8 @@ class StockCardView extends StatelessWidget {
           ),
           Row(
             children: [
-              Expanded(child: Text("最新日期：$newestBuyDateStr")),
-              Expanded(child: Text("下次日期：$nextBuyDateStr")),
+              Expanded(child: Text("最新买期：$newestBuyDateStr")),
+              Expanded(child: Text("下次买期：$nextBuyDateStr")),
             ],
           ),
         ],

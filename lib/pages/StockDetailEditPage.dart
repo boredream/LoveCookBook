@@ -46,7 +46,10 @@ class _PageState extends BaseDetailEditPageState<Stock, StockDetailEditPage> {
   }
 
   List<Widget> getFormWidgetList() {
-    return [
+    List<Widget> list = [];
+    // TODO
+    // if(data.maxPrice != null && data.targetBuyTimes != null && data.)
+    list.addAll([
       TextFormField(
         controller: _titleController,
         decoration: InputDecoration(
@@ -139,6 +142,7 @@ class _PageState extends BaseDetailEditPageState<Stock, StockDetailEditPage> {
           data.buyGapPricePercent = int.parse(newValue);
         },
       ),
-    ];
+    ]);
+    return list;
   }
 }
