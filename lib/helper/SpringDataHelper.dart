@@ -15,14 +15,17 @@ class SpringDataHelper {
   static const COLLECTION_TARGET = "target";
   static const COLLECTION_STOCK = "stock";
 
-  static Future<DbCreateResponse> saveData(String collection, dynamic data) async {
+  static Future<String> saveData(String collection, dynamic data) async {
     Map<String, dynamic> newData = data.toJson();
-    DbCreateResponse response = await CloudBaseHelper.getDb().collection(collection).add(newData);
     print('saveData $collection\n$newData');
-    if (response.code != null) {
-      throw Exception(response.message);
+
+    Uri uri = Uri.parse("$HOST/$collection");
+
+    http.Response response = await http.post(uri, body: newData);
+    if (response.statusCode != 200) {
+      throw Exception(response.statusCode);
     }
-    return response;
+    return response.body;
   }
 
   static Future<DbUpdateResponse> setData(String collection, String id, dynamic data) async {
@@ -58,17 +61,11 @@ class SpringDataHelper {
       {dynamic where, String orderField, bool orderGrow, int limit}) async {
     print('loadData $collection');
 
-    String responseContent;
-    try {
-      Uri uri = Uri.parse("$HOST/$collection");
+    Uri uri = Uri.parse("$HOST/$collection");
 
-      http.Response response = await http.get(uri);
-      if (response.statusCode != 200) {
-        throw Exception(response.statusCode);
-      }
-      responseContent = response.body;
-    } catch (e) {
-      throw e;
+    http.Response response = await http.get(uri);
+    if (response.statusCode != 200) {
+      throw Exception(response.statusCode);
     }
 
     // dynamic col = CloudBaseHelper.getDb().collection(collection);
@@ -92,6 +89,6 @@ class SpringDataHelper {
     //   throw Exception(response.message);
     // }
 
-    return responseContent;
+    return response.body;
   }
 }

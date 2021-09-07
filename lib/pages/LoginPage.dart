@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_todo/helper/SpringDataHelper.dart';
 import 'package:flutter_todo/helper/UserHelper.dart';
 import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/DialogUtils.dart';
@@ -118,10 +119,17 @@ class _PageState extends State<LoginPage> {
     if (!_formKey.currentState.validate()) return;
     // 验证通过提交数据
     _formKey.currentState.save();
-    _dialog.show();
-    UserHelper.login(_usernameController.text, _passwordController.text)
-        .then((value) => loginSuccess())
-        .catchError((error) => requestError(error));
+
+    // FIXME
+    // _dialog.show();
+    // UserHelper.login(_usernameController.text, _passwordController.text)
+    //     .then((value) => loginSuccess())
+    //     .catchError((error) => requestError(error));
+
+    SpringDataHelper.loadData("user")
+      .then((value) => {
+        print('done')
+    });
   }
 
   register() async {

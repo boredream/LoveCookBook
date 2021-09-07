@@ -25,6 +25,12 @@ PODS:
   - FMDB/standard (2.7.5)
   - image_picker (0.0.1):
     - Flutter
+  - JCore (2.7.1)
+  - JMessage (3.9.1):
+    - JCore (< 3.0.0, >= 2.0.0)
+  - jmessage_flutter (0.0.1):
+    - Flutter
+    - JMessage
   - libwebp (1.1.0):
     - libwebp/demux (= 1.1.0)
     - libwebp/mux (= 1.1.0)
@@ -66,6 +72,7 @@ DEPENDENCIES:
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - jmessage_flutter (from `.symlinks/plugins/jmessage_flutter/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -78,6 +85,8 @@ SPEC REPOS:
     - Aspects
     - Bugly
     - FMDB
+    - JCore
+    - JMessage
     - libwebp
     - Mantle
     - SDWebImage
@@ -102,6 +111,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  jmessage_flutter:
+    :path: ".symlinks/plugins/jmessage_flutter/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
@@ -127,6 +138,9 @@ SPEC CHECKSUMS:
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
+  JCore: 9d5bda3a172c65bbe14f2806ab0f6246f8a06065
+  JMessage: 43dfcd5348573b2f4f24357b12e9b19076322606
+  jmessage_flutter: eb7c42cb2444efae6aa14c2083dc84929ca3c80a
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   Mantle: 4c0ed6ce47c96eccc4dc3bb071deb3def0e2c3be
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62

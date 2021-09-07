@@ -31,6 +31,12 @@ class _PageState extends State<SplashPage> {
 
   void autoLogin() async {
     try {
+      if(true) {
+        // FIXME
+        MyRouteDelegate.of(context).push("login");
+        return;
+      }
+
       int startTime = DateTime.now().millisecond;
 
       // TODO iOS app id
